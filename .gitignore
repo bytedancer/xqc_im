@@ -1,0 +1,35 @@
+# Non-project-specific build files:
+build.xml
+local.properties
+/gradlew
+/gradlew.bat
+/gradle
+# Ant builds
+ant-build
+ant-gen
+# Eclipse builds
+gen
+out
+# Gradle builds
+/build
+/dist
+
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+/gradle
+.externalNativeBuild
+.idea
+local.properties
+/assets/*.manifest
+/infer-out
+/freeline
+/freeline_core
+freeline.py
+freeline_project_description.json
+

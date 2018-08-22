@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">xqc_android_im</string>
+
+    <string name="more">更多</string>
+    <string name="common_ok">确定</string>
+    <string name="common_cancel">取消</string>
+
+    <string name="home_tab_conversation">消息</string>
+    <string name="home_tab_contacts">通讯录</string>
+    <string name="home_tab_discover">发现</string>
+    <string name="home_tab_mine">我</string>
+    <string name="home_title_conversation">消息(%1$s)</string>
+
+    <string name="scan_qrcode_title">二维码</string>
+    <string name="scan_qrcode_photo">相册</string>
+    <string name="scan_qrcode_hint">将取景框对准二维码，即可自动扫描</string>
+    <string name="scan_qrcode_light_on">轻触照亮</string>
+    <string name="scan_qrcode_light_off">轻触关闭</string>
+
+    <string name="cp_search_hint_text">城市中文名或拼音</string>
+    <string name="cp_cancel">取消</string>
+    <string name="cp_no_result">没有找到，换个词试试~</string>
+    <string name="cp_locate_failed">定位失败</string>
+    <string name="cp_locating">正在定位…</string>
+
+    <string name="msg_count_unit">条</string>
+
+</resources>

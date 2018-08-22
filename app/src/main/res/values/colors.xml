@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#303030</color>
+    <color name="colorPrimaryDark">#303030</color>
+    <color name="colorAccent">#BA8833</color>
+
+    <color name="tab_unselect">#757575</color>
+    <color name="window_background_color">#eaeef1</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="transparent">@android:color/transparent</color>
+
+    <color name="dialog_press">#204ac0f0</color>
+    <color name="c_e3f5fc">#e3f5fc</color>
+    <color name="c_333333">#333333</color>
+    <color name="c_666666">#666666</color>
+
+    <!-- 分割线颜色 -->
+    <color name="divider_line">@color/colorAccent</color>
+
+    <color name="cp_colorPrimary">#3F51B5</color>
+    <color name="cp_colorPrimaryDark">#303F9F</color>
+    <color name="cp_colorAccent">#3F51B5</color>
+
+    <color name="cp_color_gray_light">#cdcdcd</color>
+    <color name="cp_color_gray">#999999</color>
+    <color name="cp_color_gray_deep">#666666</color>
+    <color name="cp_color_gray_dark">#333333</color>
+    <color name="cp_color_section_bg">#EDEDED</color>
+    <color name="cp_color_grid_item_bg">#f5f5f5</color>
+</resources>
