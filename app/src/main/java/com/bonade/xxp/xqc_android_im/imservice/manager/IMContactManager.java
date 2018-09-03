@@ -7,7 +7,6 @@ import com.bonade.xxp.xqc_android_im.imservice.event.UserInfoEvent;
 import com.bonade.xxp.xqc_android_im.protobuf.IMBaseDefine;
 import com.bonade.xxp.xqc_android_im.protobuf.IMBuddy;
 import com.bonade.xxp.xqc_android_im.protobuf.helper.ProtoBuf2JavaBean;
-import com.bonade.xxp.xqc_android_im.util.IMUIHelper;
 import com.bonade.xxp.xqc_android_im.util.Logger;
 import com.bonade.xxp.xqc_android_im.util.pinyin.PinYin;
 
@@ -125,12 +124,12 @@ public class IMContactManager extends IMManager {
         logger.i("contact#reqGetAllUsers");
         int userId = IMLoginManager.getInstance().getLoginId();
 
-        IMBuddy.IMAllUserReq imAllUserReq  = IMBuddy.IMAllUserReq.newBuilder()
-                .setUserId(userId)
-                .setLatestUpdateTime(lastUpdateTime).build();
-        int sid = IMBaseDefine.ServiceID.SID_BUDDY_LIST_VALUE;
-        int cid = IMBaseDefine.BuddyListCmdID.CID_BUDDY_LIST_ALL_USER_REQUEST_VALUE;
-        imSocketManager.sendRequest(imAllUserReq, sid, cid);
+//        IMBuddy.IMAllUserReq imAllUserReq  = IMBuddy.IMAllUserReq.newBuilder()
+//                .setUserId(userId)
+//                .setLatestUpdateTime(lastUpdateTime).build();
+//        int sid = IMBaseDefine.ServiceID.SID_BUDDY_LIST_VALUE;
+//        int cid = IMBaseDefine.BuddyListCmdID.CID_BUDDY_LIST_ALL_USER_REQUEST_VALUE;
+//        imSocketManager.sendRequest(imAllUserReq, sid, cid);
     }
 
     /**
@@ -182,20 +181,20 @@ public class IMContactManager extends IMManager {
      * @param userIds
      */
     public void reqGetDetaillUsers(ArrayList<Integer> userIds){
-        logger.i("contact#contact#reqGetDetaillUsers");
-        if(null == userIds || userIds.size() <=0){
-            logger.i("contact#contact#reqGetDetaillUsers return,cause by null or empty");
-            return;
-        }
-        int loginId = IMLoginManager.getInstance().getLoginId();
-        IMBuddy.IMUsersInfoReq imUsersInfoReq  =  IMBuddy.IMUsersInfoReq.newBuilder()
-                .setUserId(loginId)
-                .addAllUserIdList(userIds)
-                .build();
-
-        int sid = IMBaseDefine.ServiceID.SID_BUDDY_LIST_VALUE;
-        int cid = IMBaseDefine.BuddyListCmdID.CID_BUDDY_LIST_USER_INFO_REQUEST_VALUE;
-        imSocketManager.sendRequest(imUsersInfoReq, sid, cid);
+//        logger.i("contact#contact#reqGetDetaillUsers");
+//        if(null == userIds || userIds.size() <=0){
+//            logger.i("contact#contact#reqGetDetaillUsers return,cause by null or empty");
+//            return;
+//        }
+//        int loginId = IMLoginManager.getInstance().getLoginId();
+//        IMBuddy.IMUsersInfoReq imUsersInfoReq  =  IMBuddy.IMUsersInfoReq.newBuilder()
+//                .setUserId(loginId)
+//                .addAllUserIdList(userIds)
+//                .build();
+//
+//        int sid = IMBaseDefine.ServiceID.SID_BUDDY_LIST_VALUE;
+//        int cid = IMBaseDefine.BuddyListCmdID.CID_BUDDY_LIST_USER_INFO_REQUEST_VALUE;
+//        imSocketManager.sendRequest(imUsersInfoReq, sid, cid);
     }
 
     /**
@@ -346,15 +345,15 @@ public class IMContactManager extends IMManager {
 
     // 更新的方式与userInfo一直，根据时间点
     public void reqGetDepartment(int lastUpdateTime){
-        logger.i("contact#reqGetDepartment");
-        int userId = IMLoginManager.getInstance().getLoginId();
-
-        IMBuddy.IMDepartmentReq imDepartmentReq  = IMBuddy.IMDepartmentReq.newBuilder()
-                .setUserId(userId)
-                .setLatestUpdateTime(lastUpdateTime).build();
-        int sid = IMBaseDefine.ServiceID.SID_BUDDY_LIST_VALUE;
-        int cid = IMBaseDefine.BuddyListCmdID.CID_BUDDY_LIST_DEPARTMENT_REQUEST_VALUE;
-        imSocketManager.sendRequest(imDepartmentReq,sid,cid);
+//        logger.i("contact#reqGetDepartment");
+//        int userId = IMLoginManager.getInstance().getLoginId();
+//
+//        IMBuddy.IMDepartmentReq imDepartmentReq  = IMBuddy.IMDepartmentReq.newBuilder()
+//                .setUserId(userId)
+//                .setLatestUpdateTime(lastUpdateTime).build();
+//        int sid = IMBaseDefine.ServiceID.SID_BUDDY_LIST_VALUE;
+//        int cid = IMBaseDefine.BuddyListCmdID.CID_BUDDY_LIST_DEPARTMENT_REQUEST_VALUE;
+//        imSocketManager.sendRequest(imDepartmentReq,sid,cid);
     }
 
     public void onRepDepartment(IMBuddy.IMDepartmentRsp imDepartmentRsp){

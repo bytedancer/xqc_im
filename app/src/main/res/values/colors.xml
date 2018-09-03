@@ -9,11 +9,21 @@
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="transparent">@android:color/transparent</color>
+    <color name="default_light_black_color">#424242</color>
+    <color name="default_line_color">#cccccc</color>
 
     <color name="dialog_press">#204ac0f0</color>
     <color name="c_e3f5fc">#e3f5fc</color>
     <color name="c_333333">#333333</color>
     <color name="c_666666">#666666</color>
+
+    <color name="conversation_name_color">#222222</color>
+
+    <color name="message_body_text_color">#999999</color>
+    <color name="message_time_color">#a0a0a0</color>
+
+    <color name="list_item_top_color">#F3F3F7</color>
+    <color name="list_item_select_color">#D9D9D9</color>
 
     <!-- 分割线颜色 -->
     <color name="divider_line">@color/colorAccent</color>

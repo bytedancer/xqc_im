@@ -40,4 +40,16 @@
     <attr name="cpOverlayTextColor" format="color|reference"/>
     <attr name="cpOverlayBackground" format="color|reference"/>
 
+    <declare-styleable name="RedImageView">
+        <attr name="r_percent" format="float" />
+        <attr name="marginRight" format="dimension" />
+        <attr name="marginTop" format="dimension" />
+        <attr name="isTop" format="boolean" />
+        <attr name="isShowRedText" format="boolean" />
+        <attr name="shape" format="integer">
+            <enum name="circular" value="1" />
+            <enum name="square" value="2" />
+        </attr>
+    </declare-styleable>
+
 </resources>

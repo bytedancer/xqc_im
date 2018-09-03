@@ -6,4 +6,6 @@ option optimize_for = LITE_RUNTIME;
 
 message IMHeartBeat{
 	//cmd id:  		0x0701
+	required string userId = 1; // 用户id
+    required int64 timestamp = 2; // 时间戳 毫秒
 }

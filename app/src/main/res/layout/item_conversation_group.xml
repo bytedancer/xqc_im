@@ -1,0 +1,84 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="68dp"
+    android:id="@+id/rl_root"
+    android:gravity="center_vertical"
+    android:background="@drawable/im_conversation_default_item_bg">
+
+    <ImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginBottom="9dp"
+        android:layout_marginLeft="10dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/friend_info_btn_bg" />
+
+    <TextView
+        android:id="@+id/tv_message_count_notify"
+        android:layout_width="wrap_content"
+        android:minWidth="18dp"
+        android:layout_height="18dp"
+        android:layout_toRightOf="@id/iv_avatar"
+        android:background="@mipmap/im_message_notify"
+        android:gravity="center"
+        android:layout_marginLeft="-10dp"
+        android:layout_marginTop="3dp"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp"
+        android:textColor="#FFFFFF"
+        android:textSize="11sp" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/iv_avatar"
+        android:layout_toRightOf="@id/iv_avatar"
+        android:layout_marginLeft="11dp"
+        android:background="@android:color/transparent"
+        android:ellipsize="end"
+        android:includeFontPadding="false"
+        android:maxEms="12"
+        android:paddingTop="3dp"
+        android:singleLine="true"
+        android:textColor="@color/conversation_name_color"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/tv_message_body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/iv_avatar"
+        android:layout_marginLeft="11dp"
+        android:layout_marginRight="10dp"
+        android:layout_toRightOf="@id/iv_avatar"
+        android:background="@android:color/transparent"
+        android:ellipsize="end"
+        android:ems="17"
+        android:singleLine="true"
+        android:paddingBottom="3dp"
+        android:textColor="@color/message_body_text_color"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_message_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/tv_name"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:textColor="@color/message_time_color"
+        android:textSize="12sp" />
+
+    <ImageView
+        android:id="@+id/iv_no_disturb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@id/tv_message_body"
+        android:src="@mipmap/im_no_disturb"
+        android:layout_marginRight="10dp" />
+</RelativeLayout>

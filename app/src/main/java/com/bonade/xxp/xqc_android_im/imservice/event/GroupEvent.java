@@ -61,7 +61,7 @@ public class GroupEvent {
         NONE,
 
         // 改变群信息
-        GROUP_INFO_OK,
+        GROUP_INFO_SUCCESS,
         GROUP_INFO_UPDATED,
 
         // 改变群成员

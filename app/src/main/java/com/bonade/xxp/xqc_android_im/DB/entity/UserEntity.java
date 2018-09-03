@@ -22,30 +22,22 @@ public class UserEntity extends PeerEntity {
 
     private Integer gender;
 
-    /**
-     * Not-null value.
-     */
     private String pinyinName;
 
-    /**
-     * Not-null value.
-     */
     private String realName;
 
-    /**
-     * Not-null value.
-     */
     private String phone;
 
-    /**
-     * Not-null value.
-     */
     private String email;
+
     private Integer departmentId;
+
     private Integer status;
 
     private Integer isFriend;
+
     private String area;
+
     private String momentcover;
 
     // KEEP FIELDS - put your custom fields here
@@ -56,12 +48,12 @@ public class UserEntity extends PeerEntity {
     public UserEntity() {
     }
 
-    public UserEntity(Long id) {
-        this.id = id;
+    public UserEntity(Long cid) {
+        this.cid = cid;
     }
 
-    public UserEntity(Long id, int peerId, Integer gender, String mainName, String pinyinName, String realName, String avatar, String phone, String email, Integer departmentId, Integer status, Integer isFriend, String area, String momentcover, Integer created, Integer updated) {
-        this.id = id;
+    public UserEntity(Long cid, int peerId, Integer gender, String mainName, String pinyinName, String realName, String avatar, String phone, String email, Integer departmentId, Integer status, Integer isFriend, String area, String momentcover, Integer created, Integer updated) {
+        this.cid = cid;
         this.peerId = peerId;
         this.gender = gender;
         this.mainName = mainName;
@@ -79,21 +71,6 @@ public class UserEntity extends PeerEntity {
         this.updated = updated;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public int getPeerId() {
-        return peerId;
-    }
-
-    public void setPeerId(int peerId) {
-        this.peerId = peerId;
-    }
 
     public Integer getGender() {
         return gender;
@@ -103,15 +80,7 @@ public class UserEntity extends PeerEntity {
         this.gender = gender;
     }
 
-    public String getMainName() {
-        return mainName;
-    }
-
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setMainName(@NotNull String mainName) {
-        this.mainName = mainName;
-    }
-
+    @NotNull
     public String getPinyinName() {
         return pinyinName;
     }
@@ -121,6 +90,7 @@ public class UserEntity extends PeerEntity {
         this.pinyinName = pinyinName;
     }
 
+    @NotNull
     public String getRealName() {
         return realName;
     }
@@ -130,15 +100,7 @@ public class UserEntity extends PeerEntity {
         this.realName = realName;
     }
 
-    public String getAvatar() {
-        return avatar;
-    }
-
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setAvatar(@NotNull String avatar) {
-        this.avatar = avatar;
-    }
-
+    @NotNull
     public String getPhone() {
         return phone;
     }
@@ -148,6 +110,7 @@ public class UserEntity extends PeerEntity {
         this.phone = phone;
     }
 
+    @NotNull
     public String getEmail() {
         return email;
     }
@@ -195,22 +158,6 @@ public class UserEntity extends PeerEntity {
 
     public void setMomentcover(String momentcover) {
         this.momentcover = momentcover;
-    }
-
-    public int getCreated() {
-        return created;
-    }
-
-    public void setCreated(Integer created) {
-        this.created = created;
-    }
-
-    public int getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(Integer updated) {
-        this.updated = updated;
     }
 
     // KEEP METHODS - put your custom methods here

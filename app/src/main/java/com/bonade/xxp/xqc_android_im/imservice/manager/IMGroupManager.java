@@ -73,7 +73,7 @@ public class IMGroupManager extends IMManager {
             groupMap.put(groupInfo.getPeerId(), groupInfo);
         }
 
-        triggerEvent(new GroupEvent(GroupEvent.Event.GROUP_INFO_OK));
+        triggerEvent(new GroupEvent(GroupEvent.Event.GROUP_INFO_SUCCESS));
     }
 
     public void onLocalNetOk() {
@@ -103,7 +103,7 @@ public class IMGroupManager extends IMManager {
      */
     public synchronized void triggerEvent(GroupEvent event) {
         switch (event.getEvent()) {
-            case GROUP_INFO_OK:
+            case GROUP_INFO_SUCCESS:
                 isGroupReady = true;
                 break;
             case GROUP_INFO_UPDATED:
@@ -151,15 +151,15 @@ public class IMGroupManager extends IMManager {
      * todo 正式群与临时群逻辑上的分开的，但是底层应该是想通的
      */
     private void reqGetNormalGroupList() {
-        logger.i("group#reqGetNormalGroupList");
-        int loginId = imLoginManager.getLoginId();
-        IMGroup.IMNormalGroupListReq  normalGroupListReq = IMGroup.IMNormalGroupListReq.newBuilder()
-                .setUserId(loginId)
-                .build();
-        int sid = IMBaseDefine.ServiceID.SID_GROUP_VALUE;
-        int cid = IMBaseDefine.GroupCmdID.CID_GROUP_NORMAL_LIST_REQUEST_VALUE;
-        imSocketManager.sendRequest(normalGroupListReq,sid,cid);
-        logger.i("group#send packet to server");
+//        logger.i("group#reqGetNormalGroupList");
+//        int loginId = imLoginManager.getLoginId();
+//        IMGroup.IMNormalGroupListReq  normalGroupListReq = IMGroup.IMNormalGroupListReq.newBuilder()
+//                .setUserId(loginId)
+//                .build();
+//        int sid = IMBaseDefine.ServiceID.SID_GROUP_VALUE;
+//        int cid = IMBaseDefine.GroupCmdID.CID_GROUP_NORMAL_LIST_REQUEST_VALUE;
+//        imSocketManager.sendRequest(normalGroupListReq,sid,cid);
+//        logger.i("group#send packet to server");
     }
 
     public void onRepNormalGroupList(IMGroup.IMNormalGroupListRsp normalGroupListRsp) {
@@ -206,20 +206,20 @@ public class IMGroupManager extends IMManager {
      * @param versionInfoList
      */
     public void reqGetGroupDetailInfo(List<IMBaseDefine.GroupVersionInfo> versionInfoList) {
-        logger.i("group#reqGetGroupDetailInfo");
-        if(versionInfoList == null || versionInfoList.size()<= 0){
-            logger.e("group#reqGetGroupDetailInfo# please check your params,cause by empty/null");
-            return ;
-        }
-        int loginId = imLoginManager.getLoginId();
-        IMGroup.IMGroupInfoListReq  groupInfoListReq = IMGroup.IMGroupInfoListReq.newBuilder()
-                .setUserId(loginId)
-                .addAllGroupVersionList(versionInfoList)
-                .build();
-
-        int sid = IMBaseDefine.ServiceID.SID_GROUP_VALUE;
-        int cid = IMBaseDefine.GroupCmdID.CID_GROUP_INFO_REQUEST_VALUE;
-        imSocketManager.sendRequest(groupInfoListReq,sid,cid);
+//        logger.i("group#reqGetGroupDetailInfo");
+//        if(versionInfoList == null || versionInfoList.size()<= 0){
+//            logger.e("group#reqGetGroupDetailInfo# please check your params,cause by empty/null");
+//            return ;
+//        }
+//        int loginId = imLoginManager.getLoginId();
+//        IMGroup.IMGroupInfoListReq  groupInfoListReq = IMGroup.IMGroupInfoListReq.newBuilder()
+//                .setUserId(loginId)
+//                .addAllGroupVersionList(versionInfoList)
+//                .build();
+//
+//        int sid = IMBaseDefine.ServiceID.SID_GROUP_VALUE;
+//        int cid = IMBaseDefine.GroupCmdID.CID_GROUP_INFO_REQUEST_VALUE;
+//        imSocketManager.sendRequest(groupInfoListReq,sid,cid);
     }
 
     public void onRepGroupDetailInfo(IMGroup.IMGroupInfoListRsp groupInfoListRsp) {
@@ -253,42 +253,42 @@ public class IMGroupManager extends IMManager {
      * @param memberList
      */
     public void reqCreateTempGroup(String groupName, Set<Integer> memberList) {
-        logger.i("group#reqCreateTempGroup, tempGroupName = %s", groupName);
-
-        int loginId = imLoginManager.getLoginId();
-
-        IMGroup.IMGroupCreateReq groupCreateReq = IMGroup.IMGroupCreateReq.newBuilder()
-                .setUserId(loginId)
-                .setGroupType(IMBaseDefine.GroupType.GROUP_TYPE_TMP)
-                .setGroupName(groupName)
-                .setGroupAvatar("")// todo 群头像 现在是四宫格
-                .addAllMemberIdList(memberList)
-                .build();
-
-        int sid = IMBaseDefine.ServiceID.SID_GROUP_VALUE;
-        int cid = IMBaseDefine.GroupCmdID.CID_GROUP_CREATE_REQUEST_VALUE;
-        imSocketManager.sendRequest(groupCreateReq, sid, cid, new Packetlistener() {
-            @Override
-            public void onSuccess(Object response) {
-                try {
-                    IMGroup.IMGroupCreateRsp groupCreateRsp  = IMGroup.IMGroupCreateRsp.parseFrom((CodedInputStream)response);
-                    IMGroupManager.getInstance().onReqCreateTempGroup(groupCreateRsp);
-                } catch (IOException e) {
-                    logger.e("reqCreateTempGroup parse error");
-                    triggerEvent(new GroupEvent(GroupEvent.Event.CREATE_GROUP_FAIL));
-                }
-            }
-
-            @Override
-            public void onFaild() {
-                triggerEvent(new GroupEvent(GroupEvent.Event.CREATE_GROUP_FAIL));
-            }
-
-            @Override
-            public void onTimeout() {
-                triggerEvent(new GroupEvent(GroupEvent.Event.CREATE_GROUP_TIMEOUT));
-            }
-        });
+//        logger.i("group#reqCreateTempGroup, tempGroupName = %s", groupName);
+//
+//        int loginId = imLoginManager.getLoginId();
+//
+//        IMGroup.IMGroupCreateReq groupCreateReq = IMGroup.IMGroupCreateReq.newBuilder()
+//                .setUserId(loginId)
+//                .setGroupType(IMBaseDefine.GroupType.GROUP_TYPE_TMP)
+//                .setGroupName(groupName)
+//                .setGroupAvatar("")// todo 群头像 现在是四宫格
+//                .addAllMemberIdList(memberList)
+//                .build();
+//
+//        int sid = IMBaseDefine.ServiceID.SID_GROUP_VALUE;
+//        int cid = IMBaseDefine.GroupCmdID.CID_GROUP_CREATE_REQUEST_VALUE;
+//        imSocketManager.sendRequest(groupCreateReq, sid, cid, new Packetlistener() {
+//            @Override
+//            public void onSuccess(Object response) {
+//                try {
+//                    IMGroup.IMGroupCreateRsp groupCreateRsp  = IMGroup.IMGroupCreateRsp.parseFrom((CodedInputStream)response);
+//                    IMGroupManager.getInstance().onReqCreateTempGroup(groupCreateRsp);
+//                } catch (IOException e) {
+//                    logger.e("reqCreateTempGroup parse error");
+//                    triggerEvent(new GroupEvent(GroupEvent.Event.CREATE_GROUP_FAIL));
+//                }
+//            }
+//
+//            @Override
+//            public void onFaild() {
+//                triggerEvent(new GroupEvent(GroupEvent.Event.CREATE_GROUP_FAIL));
+//            }
+//
+//            @Override
+//            public void onTimeout() {
+//                triggerEvent(new GroupEvent(GroupEvent.Event.CREATE_GROUP_TIMEOUT));
+//            }
+//        });
     }
 
     public void onReqCreateTempGroup(IMGroup.IMGroupCreateRsp groupCreateRsp) {
@@ -333,40 +333,40 @@ public class IMGroupManager extends IMManager {
     }
 
     public void reqChangeGroupMember(int groupId, IMBaseDefine.GroupModifyType groupModifyType, Set<Integer> changeMemberList) {
-        logger.i("group#reqChangeGroupMember, changeGroupMemberType = %s", groupModifyType.toString());
-
-        final int loginId = imLoginManager.getLoginId();
-        IMGroup.IMGroupChangeMemberReq groupChangeMemberReq = IMGroup.IMGroupChangeMemberReq.newBuilder()
-                .setUserId(loginId)
-                .setChangeType(groupModifyType)
-                .addAllMemberIdList(changeMemberList)
-                .setGroupId(groupId)
-                .build();
-
-        int sid = IMBaseDefine.ServiceID.SID_GROUP_VALUE;
-        int cid = IMBaseDefine.GroupCmdID.CID_GROUP_CHANGE_MEMBER_REQUEST_VALUE;
-        imSocketManager.sendRequest(groupChangeMemberReq, sid, cid,new Packetlistener() {
-            @Override
-            public void onSuccess(Object response) {
-                try {
-                    IMGroup.IMGroupChangeMemberRsp groupChangeMemberRsp = IMGroup.IMGroupChangeMemberRsp.parseFrom((CodedInputStream)response);
-                    IMGroupManager.getInstance().onReqChangeGroupMember(groupChangeMemberRsp);
-                } catch (IOException e) {
-                    logger.e("reqChangeGroupMember parse error!");
-                    triggerEvent(new GroupEvent(GroupEvent.Event.CHANGE_GROUP_MEMBER_FAIL));
-                }
-            }
-
-            @Override
-            public void onFaild() {
-                triggerEvent(new GroupEvent(GroupEvent.Event.CHANGE_GROUP_MEMBER_FAIL));
-            }
-
-            @Override
-            public void onTimeout() {
-                triggerEvent(new GroupEvent(GroupEvent.Event.CHANGE_GROUP_MEMBER_TIMEOUT));
-            }
-        });
+//        logger.i("group#reqChangeGroupMember, changeGroupMemberType = %s", groupModifyType.toString());
+//
+//        final int loginId = imLoginManager.getLoginId();
+//        IMGroup.IMGroupChangeMemberReq groupChangeMemberReq = IMGroup.IMGroupChangeMemberReq.newBuilder()
+//                .setUserId(loginId)
+//                .setChangeType(groupModifyType)
+//                .addAllMemberIdList(changeMemberList)
+//                .setGroupId(groupId)
+//                .build();
+//
+//        int sid = IMBaseDefine.ServiceID.SID_GROUP_VALUE;
+//        int cid = IMBaseDefine.GroupCmdID.CID_GROUP_CHANGE_MEMBER_REQUEST_VALUE;
+//        imSocketManager.sendRequest(groupChangeMemberReq, sid, cid,new Packetlistener() {
+//            @Override
+//            public void onSuccess(Object response) {
+//                try {
+//                    IMGroup.IMGroupChangeMemberRsp groupChangeMemberRsp = IMGroup.IMGroupChangeMemberRsp.parseFrom((CodedInputStream)response);
+//                    IMGroupManager.getInstance().onReqChangeGroupMember(groupChangeMemberRsp);
+//                } catch (IOException e) {
+//                    logger.e("reqChangeGroupMember parse error!");
+//                    triggerEvent(new GroupEvent(GroupEvent.Event.CHANGE_GROUP_MEMBER_FAIL));
+//                }
+//            }
+//
+//            @Override
+//            public void onFaild() {
+//                triggerEvent(new GroupEvent(GroupEvent.Event.CHANGE_GROUP_MEMBER_FAIL));
+//            }
+//
+//            @Override
+//            public void onTimeout() {
+//                triggerEvent(new GroupEvent(GroupEvent.Event.CHANGE_GROUP_MEMBER_TIMEOUT));
+//            }
+//        });
     }
 
     public void onReqChangeGroupMember(IMGroup.IMGroupChangeMemberRsp groupChangeMemberRsp) {
@@ -400,57 +400,57 @@ public class IMGroupManager extends IMManager {
      * @param shieldType
      */
     public void reqShieldGroup(final int groupId, final int shieldType) {
-        final GroupEntity groupEntity =  groupMap.get(groupId);
-        if (groupEntity == null) {
-            logger.i("GroupEntity do not exist!");
-            return;
-        }
-
-        final int loginId = IMLoginManager.getInstance().getLoginId();
-        IMGroup.IMGroupShieldReq shieldReq = IMGroup.IMGroupShieldReq.newBuilder()
-                .setShieldStatus(shieldType)
-                .setGroupId(groupId)
-                .setUserId(loginId)
-                .build();
-        int sid = IMBaseDefine.ServiceID.SID_GROUP_VALUE;
-        int cid = IMBaseDefine.GroupCmdID.CID_GROUP_SHIELD_GROUP_REQUEST_VALUE;
-        imSocketManager.sendRequest(shieldReq,sid,cid,new Packetlistener() {
-            @Override
-            public void onSuccess(Object response) {
-                try {
-                    IMGroup.IMGroupShieldRsp groupShieldRsp = IMGroup.IMGroupShieldRsp.parseFrom((CodedInputStream)response);
-                    int resCode = groupShieldRsp.getResultCode();
-                    if(resCode !=0){
-                        triggerEvent(new GroupEvent(GroupEvent.Event.SHIELD_GROUP_FAIL));
-                        return;
-                    }
-                    if(groupShieldRsp.getGroupId() != groupId || groupShieldRsp.getUserId()!=loginId){
-                        return;
-                    }
-                    // 更新DB状态
-                    groupEntity.setStatus(shieldType);
-                    dbInterface.insertOrUpdateGroup(groupEntity);
-                    // 更改未读计数状态
-                    boolean isFor = shieldType == DBConstant.GROUP_STATUS_SHIELD;
-                    IMUnreadMsgManager.getInstance().setForbidden(
-                            EntityChangeEngine.getSessionKey(groupId,DBConstant.SESSION_TYPE_GROUP), isFor);
-                    triggerEvent(new GroupEvent(groupEntity, GroupEvent.Event.SHIELD_GROUP_SUCCESS));
-
-                } catch (IOException e) {
-                    logger.e("reqChangeGroupMember parse error!");
-                    triggerEvent(new GroupEvent(GroupEvent.Event.SHIELD_GROUP_FAIL));
-                }
-            }
-            @Override
-            public void onFaild() {
-                triggerEvent(new GroupEvent(GroupEvent.Event.SHIELD_GROUP_FAIL));
-            }
-
-            @Override
-            public void onTimeout() {
-                triggerEvent(new GroupEvent(GroupEvent.Event.SHIELD_GROUP_TIMEOUT));
-            }
-        });
+//        final GroupEntity groupEntity =  groupMap.get(groupId);
+//        if (groupEntity == null) {
+//            logger.i("GroupEntity do not exist!");
+//            return;
+//        }
+//
+//        final int loginId = IMLoginManager.getInstance().getLoginId();
+//        IMGroup.IMGroupShieldReq shieldReq = IMGroup.IMGroupShieldReq.newBuilder()
+//                .setShieldStatus(shieldType)
+//                .setGroupId(groupId)
+//                .setUserId(loginId)
+//                .build();
+//        int sid = IMBaseDefine.ServiceID.SID_GROUP_VALUE;
+//        int cid = IMBaseDefine.GroupCmdID.CID_GROUP_SHIELD_GROUP_REQUEST_VALUE;
+//        imSocketManager.sendRequest(shieldReq,sid,cid,new Packetlistener() {
+//            @Override
+//            public void onSuccess(Object response) {
+//                try {
+//                    IMGroup.IMGroupShieldRsp groupShieldRsp = IMGroup.IMGroupShieldRsp.parseFrom((CodedInputStream)response);
+//                    int resCode = groupShieldRsp.getResultCode();
+//                    if(resCode !=0){
+//                        triggerEvent(new GroupEvent(GroupEvent.Event.SHIELD_GROUP_FAIL));
+//                        return;
+//                    }
+//                    if(groupShieldRsp.getGroupId() != groupId || groupShieldRsp.getUserId()!=loginId){
+//                        return;
+//                    }
+//                    // 更新DB状态
+//                    groupEntity.setStatus(shieldType);
+//                    dbInterface.insertOrUpdateGroup(groupEntity);
+//                    // 更改未读计数状态
+//                    boolean isFor = shieldType == DBConstant.GROUP_STATUS_SHIELD;
+//                    IMUnreadMsgManager.getInstance().setForbidden(
+//                            EntityChangeEngine.getSessionKey(groupId,DBConstant.SESSION_TYPE_GROUP), isFor);
+//                    triggerEvent(new GroupEvent(groupEntity, GroupEvent.Event.SHIELD_GROUP_SUCCESS));
+//
+//                } catch (IOException e) {
+//                    logger.e("reqChangeGroupMember parse error!");
+//                    triggerEvent(new GroupEvent(GroupEvent.Event.SHIELD_GROUP_FAIL));
+//                }
+//            }
+//            @Override
+//            public void onFaild() {
+//                triggerEvent(new GroupEvent(GroupEvent.Event.SHIELD_GROUP_FAIL));
+//            }
+//
+//            @Override
+//            public void onTimeout() {
+//                triggerEvent(new GroupEvent(GroupEvent.Event.SHIELD_GROUP_TIMEOUT));
+//            }
+//        });
     }
 
     /**

@@ -75,7 +75,7 @@ public class IMSocketManager extends IMManager {
     }
 
     public void sendRequest(GeneratedMessageLite requset, int sid, int cid) {
-        sendRequest(requset,sid,cid,null);
+        sendRequest(requset, sid, cid,null);
     }
 
     public void sendRequest(GeneratedMessageLite requset, int sid, int cid, Packetlistener packetlistener) {
@@ -83,6 +83,30 @@ public class IMSocketManager extends IMManager {
         try {
             // 组装包头 header
             Header header = new DefaultHeader(sid, cid);
+            int bodySize = requset.getSerializedSize();
+            header.setLength(SysConstant.PROTOCOL_HEADER_LENGTH + bodySize);
+            seqNo = header.getSeqnum();
+            listenerQueue.push(seqNo, packetlistener);
+            msgServerThread.sendRequest(requset, header);
+        } catch (Exception e) {
+            if (packetlistener != null) {
+                packetlistener.onFaild();
+            }
+            listenerQueue.pop(seqNo);
+            logger.e("#sendRequest#channel is close!");
+        }
+    }
+
+    // todo 增加flag
+    public void sendRequest(GeneratedMessageLite requset, short flag, int sid, int cid) {
+        sendRequest(requset, flag, sid, cid,null);
+    }
+
+    public void sendRequest(GeneratedMessageLite requset, short flag, int sid, int cid, Packetlistener packetlistener) {
+        int seqNo = 0;
+        try {
+            // 组装包头 header
+            Header header = new DefaultHeader(flag, sid, cid);
             int bodySize = requset.getSerializedSize();
             header.setLength(SysConstant.PROTOCOL_HEADER_LENGTH + bodySize);
             seqNo = header.getSeqnum();
@@ -136,8 +160,8 @@ public class IMSocketManager extends IMManager {
 
     public void reqMsgServerAddrs() {
         MsgServerAddrsEntity msgServer = new MsgServerAddrsEntity();
-        msgServer.priorIP = "192.168.12.132";
-        msgServer.port = 18080;
+        msgServer.priorIP = SysConstant.MSG_SERVER_IP;
+        msgServer.port = SysConstant.MSG_SERVER_PORT;
         if(msgServer == null){
             triggerEvent(SocketEvent.REQ_MSG_SERVER_ADDRS_FAILED);
             return;

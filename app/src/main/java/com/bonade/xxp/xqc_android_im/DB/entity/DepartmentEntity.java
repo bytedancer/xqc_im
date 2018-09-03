@@ -13,11 +13,19 @@ import org.greenrobot.greendao.annotation.*;
 /**
  * Entity mapped to table "Department".
  */
+@Entity(nameInDb = "Department")
 public class DepartmentEntity {
 
+    @Id(autoincrement = true)
     private Long id;
+
+    @Unique
+    @Index
     private int departId;
-    /** Not-null value. */
+
+    @NotNull
+    @Unique
+    @Index
     private String departName;
     private int priority;
     private int status;
@@ -29,6 +37,7 @@ public class DepartmentEntity {
     private SearchElement searchElement = new SearchElement();
     // KEEP FIELDS END
 
+    @Generated
     public DepartmentEntity() {
     }
 
@@ -36,6 +45,7 @@ public class DepartmentEntity {
         this.id = id;
     }
 
+    @Generated
     public DepartmentEntity(Long id, int departId, String departName, int priority, int status, int created, int updated) {
         this.id = id;
         this.departId = departId;

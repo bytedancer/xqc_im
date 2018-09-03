@@ -5,19 +5,12 @@ import com.bonade.xxp.xqc_android_im.DB.entity.MessageEntity;
 import com.bonade.xxp.xqc_android_im.DB.entity.SessionEntity;
 import com.bonade.xxp.xqc_android_im.DB.entity.UserEntity;
 import com.bonade.xxp.xqc_android_im.config.DBConstant;
-import com.bonade.xxp.xqc_android_im.config.MessageConstant;
 import com.bonade.xxp.xqc_android_im.imservice.entity.MsgAnalyzeEngine;
 import com.bonade.xxp.xqc_android_im.imservice.entity.UnreadEntity;
 import com.bonade.xxp.xqc_android_im.protobuf.IMBaseDefine;
 import com.bonade.xxp.xqc_android_im.protobuf.IMGroup;
 import com.bonade.xxp.xqc_android_im.protobuf.IMMessage;
 import com.bonade.xxp.xqc_android_im.util.pinyin.PinYin;
-import com.google.protobuf.ByteString;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
 
 public class ProtoBuf2JavaBean {
 

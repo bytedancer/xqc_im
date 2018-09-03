@@ -5,10 +5,17 @@ import android.text.TextUtils;
 import com.bonade.xxp.xqc_android_im.DB.DBInterface;
 import com.bonade.xxp.xqc_android_im.DB.entity.UserEntity;
 import com.bonade.xxp.xqc_android_im.DB.sp.LoginSp;
+import com.bonade.xxp.xqc_android_im.config.SysConstant;
+import com.bonade.xxp.xqc_android_im.imservice.callback.Packetlistener;
 import com.bonade.xxp.xqc_android_im.imservice.event.LoginEvent;
+import com.bonade.xxp.xqc_android_im.protobuf.IMBaseDefine;
+import com.bonade.xxp.xqc_android_im.protobuf.IMLogin;
 import com.bonade.xxp.xqc_android_im.util.Logger;
+import com.google.protobuf.CodedInputStream;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.io.IOException;
 
 /**
  * 很多情况下都是一种权衡
@@ -116,14 +123,7 @@ public class IMLoginManager extends IMManager {
      * 4.验证登录信息
      */
     public void relogin() {
-        if (!TextUtils.isEmpty(loginUserName) && !TextUtils.isEmpty(loginPwd)) {
-            logger.d("reconnect#login#relogin");
-            imSocketManager.reqMsgServerAddrs();
-        } else {
-            logger.d("reconnect#login#userName or loginPwd is null!!");
-            everLogined = false;
-            triggerEvent(LoginEvent.LOGIN_AUTH_FAILED);
-        }
+        imSocketManager.reqMsgServerAddrs();
     }
 
     /**
@@ -138,7 +138,7 @@ public class IMLoginManager extends IMManager {
 //        loginPwd = identity.getPwd();
         identityChanged = false;
 
-        int loginId = identity.getLoginId();
+        long loginId = identity.getLoginId();
         // 初始化数据库
         DBInterface.getInstance().initDbHelp(context, loginId);
         UserEntity loginEntity = DBInterface.getInstance().getByLoginId(loginId);
@@ -157,7 +157,7 @@ public class IMLoginManager extends IMManager {
         imSocketManager.reqMsgServerAddrs();
     }
 
-    public void login(String userId) {
+    public void login(int userId) {
         logger.i("login#login -> userId:%s", userId);
 
         LoginSp.SpLoginIdentity identity = LoginSp.getInstance().getLoginIdentity();
@@ -173,6 +173,7 @@ public class IMLoginManager extends IMManager {
 
 //        loginUserName = userName;
 //        loginPwd = password;
+        loginId = userId;
         identityChanged = true;
         imSocketManager.reqMsgServerAddrs();
     }
@@ -181,14 +182,70 @@ public class IMLoginManager extends IMManager {
      * 连接成功之后
      */
     public void reqLoginMsgServer() {
-        int i = 0;
+        logger.i("login#reqLoginMsgServer");
+        triggerEvent(LoginEvent.LOGINING);
+        String userId = String.valueOf(loginId);
+        long timestamp = System.currentTimeMillis();
+
+        IMLogin.IMLoginReq imLoginReq = IMLogin.IMLoginReq.newBuilder()
+                .setUserId(userId)
+                .setTimestamp(timestamp)
+                .build();
+
+        short flag = SysConstant.PROTOCOL_FLAG_LOGIN;
+        int sid = IMBaseDefine.ServiceID.SID_LOGIN_VALUE;
+        int cid = IMBaseDefine.LoginCmdID.CID_LOGIN_REQ_USERLOGIN_VALUE;
+        imSocketManager.sendRequest(imLoginReq, flag, sid, cid, new Packetlistener() {
+            @Override
+            public void onSuccess(Object response) {
+                try {
+                    IMLogin.IMLoginRes imLoginRes = IMLogin.IMLoginRes.parseFrom((CodedInputStream)response);
+                    onRepMsgServerLogin(imLoginRes);
+                } catch (IOException e) {
+                    triggerEvent(LoginEvent.LOGIN_INNER_FAILED);
+                    logger.e("login failed,cause by %s"+e.getCause());
+                }
+            }
+
+            @Override
+            public void onFaild() {
+                triggerEvent(LoginEvent.LOGIN_INNER_FAILED);
+            }
+
+            @Override
+            public void onTimeout() {
+                triggerEvent(LoginEvent.LOGIN_INNER_FAILED);
+            }
+        });
     }
 
     /**
      * 验证登陆信息结果
      */
-    public void onRepMsgServerLogin() {
+    public void onRepMsgServerLogin(IMLogin.IMLoginRes loginRes) {
+        logger.i("login#onRepMsgServerLogin");
 
+        if (loginRes == null) {
+            logger.e("login#decode LoginResponse failed");
+            triggerEvent(LoginEvent.LOGIN_AUTH_FAILED);
+            return;
+        }
+
+        int result = loginRes.getResult();
+        switch (result) {
+            case 1:
+                loginId = Integer.parseInt(loginRes.getUserId());
+                onLoginOk();
+                break;
+            case 0:
+                logger.e("login#login msg server failed, result:%s"+ result);
+                triggerEvent(LoginEvent.LOGIN_AUTH_FAILED);
+                break;
+            default:
+                logger.e("login#login msg server failed, result:%s"+ result);
+                triggerEvent(LoginEvent.LOGIN_AUTH_FAILED);
+                break;
+        }
     }
 
     public void onLoginOk() {
@@ -205,7 +262,7 @@ public class IMLoginManager extends IMManager {
         }
 
         if (identityChanged) {
-            LoginSp.getInstance().setLoginInfo(loginUserName,loginPwd,loginId);
+            LoginSp.getInstance().setLoginInfo(loginId);
             identityChanged = false;
         }
     }

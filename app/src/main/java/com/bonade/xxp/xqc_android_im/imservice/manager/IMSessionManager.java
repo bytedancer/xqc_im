@@ -23,7 +23,6 @@ import com.bonade.xxp.xqc_android_im.util.Logger;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -102,24 +101,24 @@ public class IMSessionManager extends IMManager {
     }
 
     /**
-     * 请求最近回话
+     * 请求最近会话
      * @param latestUpdateTime
      */
     private void reqGetRecentContacts(int latestUpdateTime) {
-        logger.i("session#reqGetRecentContacts");
-        int loginId = IMLoginManager.getInstance().getLoginId();
-        IMBuddy.IMRecentContactSessionReq recentContactSessionReq = IMBuddy.IMRecentContactSessionReq
-                .newBuilder()
-                .setLatestUpdateTime(latestUpdateTime)
-                .setUserId(loginId)
-                .build();
-        int sid = IMBaseDefine.ServiceID.SID_BUDDY_LIST_VALUE;
-        int cid = IMBaseDefine.BuddyListCmdID.CID_BUDDY_LIST_RECENT_CONTACT_SESSION_REQUEST_VALUE;
-        imSocketManager.sendRequest(recentContactSessionReq, sid, cid);
+//        logger.i("session#reqGetRecentContacts");
+//        int loginId = IMLoginManager.getInstance().getLoginId();
+//        IMBuddy.IMRecentContactSessionReq recentContactSessionReq = IMBuddy.IMRecentContactSessionReq
+//                .newBuilder()
+//                .setLatestUpdateTime(latestUpdateTime)
+//                .setUserId(loginId)
+//                .build();
+//        int sid = IMBaseDefine.ServiceID.SID_BUDDY_LIST_VALUE;
+//        int cid = IMBaseDefine.BuddyListCmdID.CID_BUDDY_LIST_RECENT_CONTACT_SESSION_REQUEST_VALUE;
+//        imSocketManager.sendRequest(recentContactSessionReq, sid, cid);
     }
 
     /**
-     * 最近回话返回
+     * 最近会话返回
      * 与本地的进行merge
      * @param recentContactSessionRsp
      */
@@ -153,7 +152,7 @@ public class IMSessionManager extends IMManager {
      */
     public void reqRemoveSession(RecentInfo recentInfo) {
         logger.i("session#reqRemoveSession");
-
+//
         int loginId = imLoginManager.getLoginId();
         String sessionKey = recentInfo.getSessionKey();
         // 直接本地先删除，清除未读消息
@@ -161,19 +160,19 @@ public class IMSessionManager extends IMManager {
             sessionMap.remove(sessionKey);
             IMUnreadMsgManager.getInstance().readUnreadSession(sessionKey);
             dbInterface.deleteSession(sessionKey);
-            ConfigurationSp.getInstance(context, loginId).setSessionTop(sessionKey,false);
+            ConfigurationSp.getInstance(context, loginId).setSessionTop(sessionKey, false);
             triggerEvent(SessionEvent.RECENT_SESSION_LIST_UPDATE);
         }
 
-        IMBuddy.IMRemoveSessionReq removeSessionReq = IMBuddy.IMRemoveSessionReq
-                .newBuilder()
-                .setUserId(loginId)
-                .setSessionId(recentInfo.getPeerId())
-                .setSessionType(Java2ProtoBuf.getProtoSessionType(recentInfo.getSessionType()))
-                .build();
-        int sid = IMBaseDefine.ServiceID.SID_BUDDY_LIST_VALUE;
-        int cid = IMBaseDefine.BuddyListCmdID.CID_BUDDY_LIST_REMOVE_SESSION_REQ_VALUE;
-        imSocketManager.sendRequest(removeSessionReq, sid, cid);
+//        IMBuddy.IMRemoveSessionReq removeSessionReq = IMBuddy.IMRemoveSessionReq
+//                .newBuilder()
+//                .setUserId(loginId)
+//                .setSessionId(recentInfo.getPeerId())
+//                .setSessionType(Java2ProtoBuf.getProtoSessionType(recentInfo.getSessionType()))
+//                .build();
+//        int sid = IMBaseDefine.ServiceID.SID_BUDDY_LIST_VALUE;
+//        int cid = IMBaseDefine.BuddyListCmdID.CID_BUDDY_LIST_REMOVE_SESSION_REQ_VALUE;
+//        imSocketManager.sendRequest(removeSessionReq, sid, cid);
     }
 
     /**

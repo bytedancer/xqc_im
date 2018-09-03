@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.bonade.xxp.xqc_android_im.ui.widget.message.AudioRenderView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:paddingBottom="20dp"
+    android:paddingRight="10dp" >
+
+    <ImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/im_default_user_avatar" />
+
+    <RelativeLayout
+        android:id="@+id/content_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/iv_avatar"
+        android:layout_marginTop="2dp"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="4dp"
+        android:layout_toLeftOf="@id/iv_avatar" >
+
+        <LinearLayout
+            android:id="@+id/message_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="0dp"
+            android:background="@mipmap/im_my_message_bg"
+            android:gravity="right"
+            android:orientation="vertical"
+            android:paddingBottom="13dp"
+            android:paddingLeft="13dp"
+            android:paddingRight="21dp"
+            android:paddingTop="13dp" >
+
+            <View
+                android:id="@+id/view_audio_antt"
+                android:layout_width="11dp"
+                android:layout_height="17dp"
+                android:background="@drawable/voice_play_mine" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_audio_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/message_layout"
+            android:layout_marginBottom="13dp"
+            android:layout_marginRight="7dp"
+            android:text=""
+            android:textSize="14sp" />
+
+        <View
+            android:id="@+id/view_audio_unread_notify"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_toLeftOf="@id/message_layout"
+            android:background="@mipmap/im_unread_message_notify_bg"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/iv_message_state_failed"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_alignBottom="@id/message_layout"
+            android:layout_marginBottom="13dp"
+            android:layout_marginRight="16dp"
+            android:adjustViewBounds="true"
+            android:src="@mipmap/im_msg_tip"
+            android:visibility="visible" />
+
+        <ProgressBar
+            android:id="@+id/pb_loading"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_alignBottom="@id/message_layout"
+            android:layout_marginBottom="13dp"
+            android:layout_marginRight="10dp"
+            android:adjustViewBounds="true"
+            android:src="@mipmap/im_msg_tip"
+            android:visibility="visible" />
+    </RelativeLayout>
+
+</com.bonade.xxp.xqc_android_im.ui.widget.message.AudioRenderView>

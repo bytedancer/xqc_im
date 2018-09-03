@@ -321,6 +321,11 @@ public class CommonUtil {
         return (int) (pxValue / scale + 0.5f);
     }
 
+    public static int dip2px(Context context, int dip){
+        float density = context.getResources().getDisplayMetrics().density;
+        return (int)(dip * density + 0.5);
+    }
+
     public static String getAudioSavePath(int userId) {
         String path = getSavePath(SysConstant.FILE_SAVE_TYPE_AUDIO) + userId
                 + "_" + String.valueOf(System.currentTimeMillis())

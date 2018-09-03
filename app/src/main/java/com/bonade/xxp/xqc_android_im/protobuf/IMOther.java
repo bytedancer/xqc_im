@@ -11,13 +11,52 @@ public final class IMOther {
   public interface IMHeartBeatOrBuilder extends
       // @@protoc_insertion_point(interface_extends:IM.Other.IMHeartBeat)
       com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>required string userId = 1;</code>
+     *
+     * <pre>
+     *cmd id:  		0x0701
+     * </pre>
+     */
+    boolean hasUserId();
+    /**
+     * <code>required string userId = 1;</code>
+     *
+     * <pre>
+     *cmd id:  		0x0701
+     * </pre>
+     */
+    String getUserId();
+    /**
+     * <code>required string userId = 1;</code>
+     *
+     * <pre>
+     *cmd id:  		0x0701
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getUserIdBytes();
+
+    /**
+     * <code>required int64 timestamp = 2;</code>
+     *
+     * <pre>
+     * 时间戳 毫秒
+     * </pre>
+     */
+    boolean hasTimestamp();
+    /**
+     * <code>required int64 timestamp = 2;</code>
+     *
+     * <pre>
+     * 时间戳 毫秒
+     * </pre>
+     */
+    long getTimestamp();
   }
   /**
    * Protobuf type {@code IM.Other.IMHeartBeat}
-   *
-   * <pre>
-   *cmd id:  		0x0701
-   * </pre>
    */
   public static final class IMHeartBeat extends
       com.google.protobuf.GeneratedMessageLite implements
@@ -45,6 +84,7 @@ public final class IMOther {
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       initFields();
+      int mutable_bitField0_ = 0;
       com.google.protobuf.ByteString.Output unknownFieldsOutput =
           com.google.protobuf.ByteString.newOutput();
       com.google.protobuf.CodedOutputStream unknownFieldsCodedOutput =
@@ -63,6 +103,17 @@ public final class IMOther {
                                      extensionRegistry, tag)) {
                 done = true;
               }
+              break;
+            }
+            case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000001;
+              userId_ = bs;
+              break;
+            }
+            case 16: {
+              bitField0_ |= 0x00000002;
+              timestamp_ = input.readInt64();
               break;
             }
           }
@@ -98,7 +149,87 @@ public final class IMOther {
       return PARSER;
     }
 
+    private int bitField0_;
+    public static final int USERID_FIELD_NUMBER = 1;
+    private Object userId_;
+    /**
+     * <code>required string userId = 1;</code>
+     *
+     * <pre>
+     *cmd id:  		0x0701
+     * </pre>
+     */
+    public boolean hasUserId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required string userId = 1;</code>
+     *
+     * <pre>
+     *cmd id:  		0x0701
+     * </pre>
+     */
+    public String getUserId() {
+      Object ref = userId_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          userId_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string userId = 1;</code>
+     *
+     * <pre>
+     *cmd id:  		0x0701
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getUserIdBytes() {
+      Object ref = userId_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        userId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int TIMESTAMP_FIELD_NUMBER = 2;
+    private long timestamp_;
+    /**
+     * <code>required int64 timestamp = 2;</code>
+     *
+     * <pre>
+     * 时间戳 毫秒
+     * </pre>
+     */
+    public boolean hasTimestamp() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required int64 timestamp = 2;</code>
+     *
+     * <pre>
+     * 时间戳 毫秒
+     * </pre>
+     */
+    public long getTimestamp() {
+      return timestamp_;
+    }
+
     private void initFields() {
+      userId_ = "";
+      timestamp_ = 0L;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -106,6 +237,14 @@ public final class IMOther {
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
 
+      if (!hasUserId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasTimestamp()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -113,6 +252,12 @@ public final class IMOther {
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getUserIdBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeInt64(2, timestamp_);
+      }
       output.writeRawBytes(unknownFields);
     }
 
@@ -122,6 +267,14 @@ public final class IMOther {
       if (size != -1) return size;
 
       size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, getUserIdBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(2, timestamp_);
+      }
       size += unknownFields.size();
       memoizedSerializedSize = size;
       return size;
@@ -196,10 +349,6 @@ public final class IMOther {
 
     /**
      * Protobuf type {@code IM.Other.IMHeartBeat}
-     *
-     * <pre>
-     *cmd id:  		0x0701
-     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageLite.Builder<
@@ -220,6 +369,10 @@ public final class IMOther {
 
       public Builder clear() {
         super.clear();
+        userId_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        timestamp_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
 
@@ -241,17 +394,44 @@ public final class IMOther {
 
       public IMHeartBeat buildPartial() {
         IMHeartBeat result = new IMHeartBeat(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.userId_ = userId_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.timestamp_ = timestamp_;
+        result.bitField0_ = to_bitField0_;
         return result;
       }
 
       public Builder mergeFrom(IMHeartBeat other) {
         if (other == IMHeartBeat.getDefaultInstance()) return this;
+        if (other.hasUserId()) {
+          bitField0_ |= 0x00000001;
+          userId_ = other.userId_;
+          
+        }
+        if (other.hasTimestamp()) {
+          setTimestamp(other.getTimestamp());
+        }
         setUnknownFields(
             getUnknownFields().concat(other.unknownFields));
         return this;
       }
 
       public final boolean isInitialized() {
+        if (!hasUserId()) {
+          
+          return false;
+        }
+        if (!hasTimestamp()) {
+          
+          return false;
+        }
         return true;
       }
 
@@ -270,6 +450,155 @@ public final class IMOther {
             mergeFrom(parsedMessage);
           }
         }
+        return this;
+      }
+      private int bitField0_;
+
+      private Object userId_ = "";
+      /**
+       * <code>required string userId = 1;</code>
+       *
+       * <pre>
+       *cmd id:  		0x0701
+       * </pre>
+       */
+      public boolean hasUserId() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required string userId = 1;</code>
+       *
+       * <pre>
+       *cmd id:  		0x0701
+       * </pre>
+       */
+      public String getUserId() {
+        Object ref = userId_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            userId_ = s;
+          }
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <code>required string userId = 1;</code>
+       *
+       * <pre>
+       *cmd id:  		0x0701
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getUserIdBytes() {
+        Object ref = userId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          userId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string userId = 1;</code>
+       *
+       * <pre>
+       *cmd id:  		0x0701
+       * </pre>
+       */
+      public Builder setUserId(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        userId_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>required string userId = 1;</code>
+       *
+       * <pre>
+       *cmd id:  		0x0701
+       * </pre>
+       */
+      public Builder clearUserId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        userId_ = getDefaultInstance().getUserId();
+        
+        return this;
+      }
+      /**
+       * <code>required string userId = 1;</code>
+       *
+       * <pre>
+       *cmd id:  		0x0701
+       * </pre>
+       */
+      public Builder setUserIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        userId_ = value;
+        
+        return this;
+      }
+
+      private long timestamp_ ;
+      /**
+       * <code>required int64 timestamp = 2;</code>
+       *
+       * <pre>
+       * 时间戳 毫秒
+       * </pre>
+       */
+      public boolean hasTimestamp() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required int64 timestamp = 2;</code>
+       *
+       * <pre>
+       * 时间戳 毫秒
+       * </pre>
+       */
+      public long getTimestamp() {
+        return timestamp_;
+      }
+      /**
+       * <code>required int64 timestamp = 2;</code>
+       *
+       * <pre>
+       * 时间戳 毫秒
+       * </pre>
+       */
+      public Builder setTimestamp(long value) {
+        bitField0_ |= 0x00000002;
+        timestamp_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>required int64 timestamp = 2;</code>
+       *
+       * <pre>
+       * 时间戳 毫秒
+       * </pre>
+       */
+      public Builder clearTimestamp() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        timestamp_ = 0L;
+        
         return this;
       }
 

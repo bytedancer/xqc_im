@@ -19,4 +19,14 @@ public class DefaultHeader extends Header {
 
         logger.d("packet#construct Default Header -> serviceId:%d, commandId:%d, seqNo:%d", serviceId, commandId, seqNo);
     }
+
+    public DefaultHeader(short flag, int serviceId, int commandId) {
+        setVersion((short) SysConstant.PROTOCOL_VERSION);
+        setFlag(flag);
+        setServiceId((short)serviceId);
+        setCommandId((short)commandId);
+        short seqNo = SequenceNumberMaker.getInstance().make();
+        setSeqnum(seqNo);
+        setReserved((short)SysConstant.PROTOCOL_RESERVED);
+    }
 }

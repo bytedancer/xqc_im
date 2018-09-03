@@ -24,7 +24,7 @@ public class UserDao extends AbstractDao<UserEntity, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property Cid = new Property(0, Long.class, "cid", true, "CID");
         public final static Property PeerId = new Property(1, int.class, "peerId", false, "PEER_ID");
         public final static Property Gender = new Property(2, Integer.class, "gender", false, "GENDER");
         public final static Property MainName = new Property(3, String.class, "mainName", false, "MAIN_NAME");
@@ -55,7 +55,7 @@ public class UserDao extends AbstractDao<UserEntity, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"UserInfo\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
+                "\"CID\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: cid
                 "\"PEER_ID\" INTEGER NOT NULL UNIQUE ," + // 1: peerId
                 "\"GENDER\" INTEGER," + // 2: gender
                 "\"MAIN_NAME\" TEXT NOT NULL ," + // 3: mainName
@@ -86,9 +86,9 @@ public class UserDao extends AbstractDao<UserEntity, Long> {
     protected final void bindValues(DatabaseStatement stmt, UserEntity entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
+        Long cid = entity.getCid();
+        if (cid != null) {
+            stmt.bindLong(1, cid);
         }
         stmt.bindLong(2, entity.getPeerId());
  
@@ -143,9 +143,9 @@ public class UserDao extends AbstractDao<UserEntity, Long> {
     protected final void bindValues(SQLiteStatement stmt, UserEntity entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
+        Long cid = entity.getCid();
+        if (cid != null) {
+            stmt.bindLong(1, cid);
         }
         stmt.bindLong(2, entity.getPeerId());
  
@@ -204,7 +204,7 @@ public class UserDao extends AbstractDao<UserEntity, Long> {
     @Override
     public UserEntity readEntity(Cursor cursor, int offset) {
         UserEntity entity = new UserEntity( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // cid
             cursor.getInt(offset + 1), // peerId
             cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2), // gender
             cursor.getString(offset + 3), // mainName
@@ -226,7 +226,7 @@ public class UserDao extends AbstractDao<UserEntity, Long> {
      
     @Override
     public void readEntity(Cursor cursor, UserEntity entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setCid(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setPeerId(cursor.getInt(offset + 1));
         entity.setGender(cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2));
         entity.setMainName(cursor.getString(offset + 3));
@@ -246,14 +246,14 @@ public class UserDao extends AbstractDao<UserEntity, Long> {
     
     @Override
     protected final Long updateKeyAfterInsert(UserEntity entity, long rowId) {
-        entity.setId(rowId);
+        entity.setCid(rowId);
         return rowId;
     }
     
     @Override
     public Long getKey(UserEntity entity) {
         if(entity != null) {
-            return entity.getId();
+            return entity.getCid();
         } else {
             return null;
         }
@@ -261,7 +261,7 @@ public class UserDao extends AbstractDao<UserEntity, Long> {
 
     @Override
     public boolean hasKey(UserEntity entity) {
-        return entity.getId() != null;
+        return entity.getCid() != null;
     }
 
     @Override

@@ -20,6 +20,9 @@ import com.bonade.xxp.xqc_android_im.ui.widget.BottomBarTab;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.yokeyword.fragmentation.SupportFragment;
@@ -51,6 +54,7 @@ public class HomeActivity extends BaseActivity {
     @BindView(R.id.bottom_bar)
     BottomBar mBottomBar;
 
+    private List<BottomBarTab> mBottomBarTabs = new ArrayList<>();
     private String[] mTabTexts;
     private SupportFragment[] mFragments = new SupportFragment[4];
 
@@ -101,7 +105,9 @@ public class HomeActivity extends BaseActivity {
 
     private void setupBottomBar() {
         for (int i = 0; i < mTabTexts.length; i++) {
-            mBottomBar.addItem(new BottomBarTab(this, TAB_ICON_RES[i], mTabTexts[i]));
+            BottomBarTab bottomBarTab = new BottomBarTab(this, TAB_ICON_RES[i], mTabTexts[i]);
+            mBottomBarTabs.add(bottomBarTab);
+            mBottomBar.addItem(bottomBarTab);
         }
 
         mBottomBar.setOnTabSelectedListener(new BottomBar.OnTabSelectedListener() {
@@ -124,5 +130,10 @@ public class HomeActivity extends BaseActivity {
                 EventBus.getDefault().post(new TabSelectedEvent(position));
             }
         });
+    }
+
+    public void setUnreadMessageCount(int unreadCount) {
+        unreadCount = 19;
+        mBottomBarTabs.get(0).setRedPointCount(unreadCount);
     }
 }

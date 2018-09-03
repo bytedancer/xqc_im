@@ -32,10 +32,13 @@ public class IMUnreadMsgManager extends IMManager {
     private Logger logger = Logger.getLogger(IMUnreadMsgManager.class);
 
     private static IMUnreadMsgManager instance = new IMUnreadMsgManager();
+
     public static IMUnreadMsgManager getInstance() {
         return instance;
     }
-    private IMUnreadMsgManager(){}
+
+    private IMUnreadMsgManager() {
+    }
 
     private IMSocketManager imSocketManager = IMSocketManager.getInstance();
     private IMLoginManager imLoginManager = IMLoginManager.getInstance();
@@ -74,10 +77,11 @@ public class IMUnreadMsgManager extends IMManager {
 
     /**
      * 继承该方法实现自身的事件驱动
+     *
      * @param event
      */
     public synchronized void triggerEvent(UnreadEvent event) {
-        switch (event.getEvent()){
+        switch (event.getEvent()) {
             case UNREAD_MSG_LIST_OK:
                 unreadListReady = true;
                 break;
@@ -90,24 +94,24 @@ public class IMUnreadMsgManager extends IMManager {
      * 请求未读消息列表
      */
     private void reqUnreadMsgContactList() {
-        logger.i("unread#1reqUnreadMsgContactList");
-        int loginId = IMLoginManager.getInstance().getLoginId();
-        IMMessage.IMUnreadMsgCntReq  unreadMsgCntReq  = IMMessage.IMUnreadMsgCntReq
-                .newBuilder()
-                .setUserId(loginId)
-                .build();
-        int sid = IMBaseDefine.ServiceID.SID_MSG_VALUE;
-        int cid = IMBaseDefine.MessageCmdID.CID_MSG_UNREAD_CNT_REQUEST_VALUE;
-        imSocketManager.sendRequest(unreadMsgCntReq,sid,cid);
+//        logger.i("unread#1reqUnreadMsgContactList");
+//        int loginId = IMLoginManager.getInstance().getLoginId();
+//        IMMessage.IMUnreadMsgCntReq  unreadMsgCntReq  = IMMessage.IMUnreadMsgCntReq
+//                .newBuilder()
+//                .setUserId(loginId)
+//                .build();
+//        int sid = IMBaseDefine.ServiceID.SID_MSG_VALUE;
+//        int cid = IMBaseDefine.MessageCmdID.CID_MSG_UNREAD_CNT_REQUEST_VALUE;
+//        imSocketManager.sendRequest(unreadMsgCntReq,sid,cid);
     }
 
     public void onRepUnreadMsgContactList(IMMessage.IMUnreadMsgCntRsp unreadMsgCntRsp) {
         logger.i("unread#2onRepUnreadMsgContactList");
         totalUnreadCount = unreadMsgCntRsp.getTotalCnt();
-        List<IMBaseDefine.UnreadInfo> unreadInfoList =  unreadMsgCntRsp.getUnreadinfoListList();
-        logger.i("unread#unreadMsgCnt:%d, unreadMsgInfoCnt:%d",unreadInfoList.size(), totalUnreadCount);
+        List<IMBaseDefine.UnreadInfo> unreadInfoList = unreadMsgCntRsp.getUnreadinfoListList();
+        logger.i("unread#unreadMsgCnt:%d, unreadMsgInfoCnt:%d", unreadInfoList.size(), totalUnreadCount);
 
-        for(IMBaseDefine.UnreadInfo unreadInfo:unreadInfoList){
+        for (IMBaseDefine.UnreadInfo unreadInfo : unreadInfoList) {
             UnreadEntity unreadEntity = ProtoBuf2JavaBean.getUnreadEntity(unreadInfo);
             //屏蔽的设定
             addIsForbidden(unreadEntity);
@@ -130,6 +134,7 @@ public class IMUnreadMsgManager extends IMManager {
 
     /**
      * 设定未读回话为屏蔽回话 仅限于群组
+     *
      * @param sessionKey
      * @param isFor
      */
@@ -167,7 +172,7 @@ public class IMUnreadMsgManager extends IMManager {
                 return;
             }
             unreadEntity.setUnReadCount(unreadEntity.getUnReadCount() + 1);
-        }else{
+        } else {
             isFirst = true;
             unreadEntity = new UnreadEntity();
             unreadEntity.setUnReadCount(1);
@@ -184,7 +189,7 @@ public class IMUnreadMsgManager extends IMManager {
         unreadMsgMap.put(unreadEntity.getSessionKey(), unreadEntity);
 
         /**没有被屏蔽才会发送广播*/
-        if(!unreadEntity.isForbidden() || isFirst) {
+        if (!unreadEntity.isForbidden() || isFirst) {
             UnreadEvent unreadEvent = new UnreadEvent();
             unreadEvent.setEvent(UnreadEvent.Event.UNREAD_MSG_RECEIVED);
             unreadEvent.setUnreadEntity(unreadEntity);
@@ -193,37 +198,38 @@ public class IMUnreadMsgManager extends IMManager {
     }
 
     public void ackReadMsg(MessageEntity msg) {
-        logger.d("chat#ackReadMsg -> msg:%s", msg);
-        int loginId = imLoginManager.getLoginId();
-        IMBaseDefine.SessionType sessionType = Java2ProtoBuf.getProtoSessionType(msg.getSessionType());
-        IMMessage.IMMsgDataReadAck readAck = IMMessage.IMMsgDataReadAck.newBuilder()
-                .setMsgId(msg.getMsgId())
-                .setSessionId(msg.getPeerId(false))
-                .setSessionType(sessionType)
-                .setUserId(loginId)
-                .build();
-        int sid = IMBaseDefine.ServiceID.SID_MSG_VALUE;
-        int cid = IMBaseDefine.MessageCmdID.CID_MSG_READ_ACK_VALUE;
-        imSocketManager.sendRequest(readAck,sid,cid);
+//        logger.d("chat#ackReadMsg -> msg:%s", msg);
+//        int loginId = imLoginManager.getLoginId();
+//        IMBaseDefine.SessionType sessionType = Java2ProtoBuf.getProtoSessionType(msg.getSessionType());
+//        IMMessage.IMMsgDataReadAck readAck = IMMessage.IMMsgDataReadAck.newBuilder()
+//                .setMsgId(msg.getMsgId())
+//                .setSessionId(msg.getPeerId(false))
+//                .setSessionType(sessionType)
+//                .setUserId(loginId)
+//                .build();
+//        int sid = IMBaseDefine.ServiceID.SID_MSG_VALUE;
+//        int cid = IMBaseDefine.MessageCmdID.CID_MSG_READ_ACK_VALUE;
+//        imSocketManager.sendRequest(readAck,sid,cid);
     }
 
-    public void ackReadMsg(UnreadEntity unreadEntity){
-        logger.d("chat#ackReadMsg -> msg:%s", unreadEntity);
-        int loginId = imLoginManager.getLoginId();
-        IMBaseDefine.SessionType sessionType = Java2ProtoBuf.getProtoSessionType(unreadEntity.getSessionType());
-        IMMessage.IMMsgDataReadAck readAck = IMMessage.IMMsgDataReadAck.newBuilder()
-                .setMsgId(unreadEntity.getLatestMsgId())
-                .setSessionId(unreadEntity.getPeerId())
-                .setSessionType(sessionType)
-                .setUserId(loginId)
-                .build();
-        int sid = IMBaseDefine.ServiceID.SID_MSG_VALUE;
-        int cid = IMBaseDefine.MessageCmdID.CID_MSG_READ_ACK_VALUE;
-        imSocketManager.sendRequest(readAck,sid,cid);
+    public void ackReadMsg(UnreadEntity unreadEntity) {
+//        logger.d("chat#ackReadMsg -> msg:%s", unreadEntity);
+//        int loginId = imLoginManager.getLoginId();
+//        IMBaseDefine.SessionType sessionType = Java2ProtoBuf.getProtoSessionType(unreadEntity.getSessionType());
+//        IMMessage.IMMsgDataReadAck readAck = IMMessage.IMMsgDataReadAck.newBuilder()
+//                .setMsgId(unreadEntity.getLatestMsgId())
+//                .setSessionId(unreadEntity.getPeerId())
+//                .setSessionType(sessionType)
+//                .setUserId(loginId)
+//                .build();
+//        int sid = IMBaseDefine.ServiceID.SID_MSG_VALUE;
+//        int cid = IMBaseDefine.MessageCmdID.CID_MSG_READ_ACK_VALUE;
+//        imSocketManager.sendRequest(readAck,sid,cid);
     }
 
     /**
      * 服务端主动发送已读通知
+     *
      * @param readNotify
      */
     public void onNotifyRead(IMMessage.IMMsgDataReadNotify readNotify) {
@@ -232,7 +238,7 @@ public class IMUnreadMsgManager extends IMManager {
         int trigerId = readNotify.getUserId();
         int loginId = IMLoginManager.getInstance().getLoginId();
         if (trigerId != loginId) {
-            logger.i("onNotifyRead# trigerId:%s,loginId:%s not Equal",trigerId,loginId);
+            logger.i("onNotifyRead# trigerId:%s,loginId:%s not Equal", trigerId, loginId);
             return;
         }
         // 现在的逻辑是msgId之后的 全部都是已读的
@@ -240,7 +246,7 @@ public class IMUnreadMsgManager extends IMManager {
         int msgId = readNotify.getMsgId();
         int peerId = readNotify.getSessionId();
         int sessionType = ProtoBuf2JavaBean.getJavaSessionType(readNotify.getSessionType());
-        String sessionKey = EntityChangeEngine.getSessionKey(peerId,sessionType);
+        String sessionKey = EntityChangeEngine.getSessionKey(peerId, sessionType);
 
         // 通知栏也要去除掉
         NotificationManager notifyMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -260,8 +266,9 @@ public class IMUnreadMsgManager extends IMManager {
 
     /**
      * 备注: 先获取最后一条消息
-     * 1. 清除回话内的未读计数
+     * 1. 清除会话内的未读计数
      * 2. 发送最后一条msgId的已读确认
+     *
      * @param sessionKey
      */
     public void readUnreadSession(String sessionKey) {
@@ -291,7 +298,7 @@ public class IMUnreadMsgManager extends IMManager {
 
     public int getTotalUnreadCount() {
         int count = 0;
-        for (UnreadEntity entity:unreadMsgMap.values()) {
+        for (UnreadEntity entity : unreadMsgMap.values()) {
             if (!entity.isForbidden()) {
                 count = count + entity.getUnReadCount();
             }

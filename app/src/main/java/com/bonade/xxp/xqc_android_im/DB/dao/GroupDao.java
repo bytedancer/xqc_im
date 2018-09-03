@@ -24,7 +24,7 @@ public class GroupDao extends AbstractDao<GroupEntity, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property Cid = new Property(0, Long.class, "cid", true, "CID");
         public final static Property PeerId = new Property(1, int.class, "peerId", false, "PEER_ID");
         public final static Property GroupType = new Property(2, int.class, "groupType", false, "GROUP_TYPE");
         public final static Property MainName = new Property(3, String.class, "mainName", false, "MAIN_NAME");
@@ -51,7 +51,7 @@ public class GroupDao extends AbstractDao<GroupEntity, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"GroupInfo\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
+                "\"CID\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: cid
                 "\"PEER_ID\" INTEGER NOT NULL UNIQUE ," + // 1: peerId
                 "\"GROUP_TYPE\" INTEGER NOT NULL ," + // 2: groupType
                 "\"MAIN_NAME\" TEXT NOT NULL ," + // 3: mainName
@@ -75,9 +75,9 @@ public class GroupDao extends AbstractDao<GroupEntity, Long> {
     protected final void bindValues(DatabaseStatement stmt, GroupEntity entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
+        Long cid = entity.getCid();
+        if (cid != null) {
+            stmt.bindLong(1, cid);
         }
         stmt.bindLong(2, entity.getPeerId());
         stmt.bindLong(3, entity.getGroupType());
@@ -96,9 +96,9 @@ public class GroupDao extends AbstractDao<GroupEntity, Long> {
     protected final void bindValues(SQLiteStatement stmt, GroupEntity entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
+        Long cid = entity.getCid();
+        if (cid != null) {
+            stmt.bindLong(1, cid);
         }
         stmt.bindLong(2, entity.getPeerId());
         stmt.bindLong(3, entity.getGroupType());
@@ -121,7 +121,7 @@ public class GroupDao extends AbstractDao<GroupEntity, Long> {
     @Override
     public GroupEntity readEntity(Cursor cursor, int offset) {
         GroupEntity entity = new GroupEntity( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // cid
             cursor.getInt(offset + 1), // peerId
             cursor.getInt(offset + 2), // groupType
             cursor.getString(offset + 3), // mainName
@@ -139,7 +139,7 @@ public class GroupDao extends AbstractDao<GroupEntity, Long> {
      
     @Override
     public void readEntity(Cursor cursor, GroupEntity entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setCid(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setPeerId(cursor.getInt(offset + 1));
         entity.setGroupType(cursor.getInt(offset + 2));
         entity.setMainName(cursor.getString(offset + 3));
@@ -155,14 +155,14 @@ public class GroupDao extends AbstractDao<GroupEntity, Long> {
     
     @Override
     protected final Long updateKeyAfterInsert(GroupEntity entity, long rowId) {
-        entity.setId(rowId);
+        entity.setCid(rowId);
         return rowId;
     }
     
     @Override
     public Long getKey(GroupEntity entity) {
         if(entity != null) {
-            return entity.getId();
+            return entity.getCid();
         } else {
             return null;
         }
@@ -170,7 +170,7 @@ public class GroupDao extends AbstractDao<GroupEntity, Long> {
 
     @Override
     public boolean hasKey(GroupEntity entity) {
-        return entity.getId() != null;
+        return entity.getCid() != null;
     }
 
     @Override

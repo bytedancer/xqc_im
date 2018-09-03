@@ -12,16 +12,21 @@ import org.greenrobot.greendao.annotation.*;
 /**
  * Entity mapped to table "Session".
  */
+@Entity(nameInDb = "Session")
 public class SessionEntity {
 
+    @Id(autoincrement = true)
     private Long id;
-    /** Not-null value. */
+
+    @NotNull
+    @Unique
     private String sessionKey;
     private int peerId;
     private int peerType;
     private int latestMsgType;
     private int latestMsgId;
-    /** Not-null value. */
+
+    @NotNull
     private String latestMsgData;
     private int talkId;
     private int created;
@@ -30,6 +35,7 @@ public class SessionEntity {
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
 
+    @Generated
     public SessionEntity() {
     }
 
@@ -37,6 +43,7 @@ public class SessionEntity {
         this.id = id;
     }
 
+    @Generated
     public SessionEntity(Long id, String sessionKey, int peerId, int peerType, int latestMsgType, int latestMsgId, String latestMsgData, int talkId, int created, int updated) {
         this.id = id;
         this.sessionKey = sessionKey;
@@ -58,11 +65,14 @@ public class SessionEntity {
         this.id = id;
     }
 
+    @NotNull
     public String getSessionKey() {
         return sessionKey;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
+    /**
+     * Not-null value; ensure this value is available before it is saved to the database.
+     */
     public void setSessionKey(@NotNull String sessionKey) {
         this.sessionKey = sessionKey;
     }
@@ -99,11 +109,14 @@ public class SessionEntity {
         this.latestMsgId = latestMsgId;
     }
 
+    @NotNull
     public String getLatestMsgData() {
         return latestMsgData;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
+    /**
+     * Not-null value; ensure this value is available before it is saved to the database.
+     */
     public void setLatestMsgData(@NotNull String latestMsgData) {
         this.latestMsgData = latestMsgData;
     }
@@ -134,7 +147,7 @@ public class SessionEntity {
 
     // KEEP METHODS - put your custom methods here
     public String buildSessionKey(){
-        if(peerType <=0 || peerId <=0){
+        if (peerType <= 0 || peerId <= 0){
             throw new IllegalArgumentException(
                     "SessionEntity buildSessionKey error,cause by some params <=0");
         }

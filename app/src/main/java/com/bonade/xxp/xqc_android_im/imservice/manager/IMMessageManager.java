@@ -78,17 +78,17 @@ public class IMMessageManager extends IMManager {
      * @param msg
      */
     public void ackReceiveMsg(MessageEntity msg) {
-        logger.d("chat#ackReceiveMsg -> msg:%s", msg);
-        IMBaseDefine.SessionType sessionType = Java2ProtoBuf.getProtoSessionType(msg.getSessionType());
-        IMMessage.IMMsgDataAck imMsgDataAck = IMMessage.IMMsgDataAck.newBuilder()
-                .setMsgId(msg.getMsgId())
-                .setSessionId(msg.getToId())
-                .setUserId(msg.getFromId())
-                .setSessionType(sessionType)
-                .build();
-        int sid = IMBaseDefine.ServiceID.SID_MSG_VALUE;
-        int cid = IMBaseDefine.MessageCmdID.CID_MSG_DATA_ACK_VALUE;
-        imSocketManager.sendRequest(imMsgDataAck, sid, cid);
+//        logger.d("chat#ackReceiveMsg -> msg:%s", msg);
+//        IMBaseDefine.SessionType sessionType = Java2ProtoBuf.getProtoSessionType(msg.getSessionType());
+//        IMMessage.IMMsgDataAck imMsgDataAck = IMMessage.IMMsgDataAck.newBuilder()
+//                .setMsgId(msg.getMsgId())
+//                .setSessionId(msg.getToId())
+//                .setUserId(msg.getFromId())
+//                .setSessionType(sessionType)
+//                .build();
+//        int sid = IMBaseDefine.ServiceID.SID_MSG_VALUE;
+//        int cid = IMBaseDefine.MessageCmdID.CID_MSG_DATA_ACK_VALUE;
+//        imSocketManager.sendRequest(imMsgDataAck, sid, cid);
     }
 
     @Override
@@ -168,60 +168,60 @@ public class IMMessageManager extends IMManager {
         logger.d("chat#sendMessage, msg:%s", msg);
         // 发送情况下 msg_id 都是0
         // 服务端是从1开始计数的
-        if (!SequenceNumberMaker.getInstance().isFailure(msg.getMsgId())) {
-            throw new RuntimeException("#sendMessage# msgId is wrong,cause by 0!");
-        }
-
-        IMBaseDefine.MsgType msgType = Java2ProtoBuf.getProtoMsgType(msg.getMsgType());
-        byte[] sendContent = msg.getSendContent();
-
-        IMMessage.IMMsgData msgData = IMMessage.IMMsgData.newBuilder()
-                .setFromUserId(msg.getFromId())
-                .setToSessionId(msg.getToId())
-                .setMsgId(0)
-                .setCreateTime(msg.getCreated())
-                .setMsgType(msgType)
-                .setMsgData(ByteString.copyFrom(sendContent))  // 这个点要特别注意 todo ByteString.copyFrom
-                .build();
-        int sid = IMBaseDefine.ServiceID.SID_MSG_VALUE;
-        int cid = IMBaseDefine.MessageCmdID.CID_MSG_DATA_VALUE;
-
-        final MessageEntity messageEntity = msg;
-        imSocketManager.sendRequest(msgData, sid, cid, new Packetlistener(getTimeoutTolerance(messageEntity)) {
-            @Override
-            public void onSuccess(Object response) {
-                try {
-                    IMMessage.IMMsgDataAck imMsgDataAck = IMMessage.IMMsgDataAck.parseFrom((CodedInputStream) response);
-                    logger.i("chat#onAckSendedMsg");
-                    if (imMsgDataAck.getMsgId() <= 0) {
-                        throw new RuntimeException("Msg ack error,cause by msgId <=0");
-                    }
-                    messageEntity.setStatus(MessageConstant.MSG_SUCCESS);
-                    messageEntity.setMsgId(imMsgDataAck.getMsgId());
-                    // 主键ID已经存在，直接替换
-                    dbInterface.insertOrUpdateMessage(messageEntity);
-                    // 更新sessionEntity lastMsgId问题
-                    imSessionManager.updateSession(messageEntity);
-                    triggerEvent(new MessageEvent(messageEntity, MessageEvent.Event.ACK_SEND_MESSAGE_OK));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFaild() {
-                messageEntity.setStatus(MessageConstant.MSG_FAILURE);
-                dbInterface.insertOrUpdateMessage(messageEntity);
-                triggerEvent(new MessageEvent(messageEntity, MessageEvent.Event.ACK_SEND_MESSAGE_FAILURE));
-            }
-
-            @Override
-            public void onTimeout() {
-                messageEntity.setStatus(MessageConstant.MSG_FAILURE);
-                dbInterface.insertOrUpdateMessage(messageEntity);
-                triggerEvent(new MessageEvent(messageEntity, MessageEvent.Event.ACK_SEND_MESSAGE_TIME_OUT));
-            }
-        });
+//        if (!SequenceNumberMaker.getInstance().isFailure(msg.getMsgId())) {
+//            throw new RuntimeException("#sendMessage# msgId is wrong,cause by 0!");
+//        }
+//
+//        IMBaseDefine.MsgType msgType = Java2ProtoBuf.getProtoMsgType(msg.getMsgType());
+//        byte[] sendContent = msg.getSendContent();
+//
+//        IMMessage.IMMsgData msgData = IMMessage.IMMsgData.newBuilder()
+//                .setFromUserId(msg.getFromId())
+//                .setToSessionId(msg.getToId())
+//                .setMsgId(0)
+//                .setCreateTime(msg.getCreated())
+//                .setMsgType(msgType)
+//                .setMsgData(ByteString.copyFrom(sendContent))  // 这个点要特别注意 todo ByteString.copyFrom
+//                .build();
+//        int sid = IMBaseDefine.ServiceID.SID_MSG_VALUE;
+//        int cid = IMBaseDefine.MessageCmdID.CID_MSG_DATA_VALUE;
+//
+//        final MessageEntity messageEntity = msg;
+//        imSocketManager.sendRequest(msgData, sid, cid, new Packetlistener(getTimeoutTolerance(messageEntity)) {
+//            @Override
+//            public void onSuccess(Object response) {
+//                try {
+//                    IMMessage.IMMsgDataAck imMsgDataAck = IMMessage.IMMsgDataAck.parseFrom((CodedInputStream) response);
+//                    logger.i("chat#onAckSendedMsg");
+//                    if (imMsgDataAck.getMsgId() <= 0) {
+//                        throw new RuntimeException("Msg ack error,cause by msgId <=0");
+//                    }
+//                    messageEntity.setStatus(MessageConstant.MSG_SUCCESS);
+//                    messageEntity.setMsgId(imMsgDataAck.getMsgId());
+//                    // 主键ID已经存在，直接替换
+//                    dbInterface.insertOrUpdateMessage(messageEntity);
+//                    // 更新sessionEntity lastMsgId问题
+//                    imSessionManager.updateSession(messageEntity);
+//                    triggerEvent(new MessageEvent(messageEntity, MessageEvent.Event.ACK_SEND_MESSAGE_OK));
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onFaild() {
+//                messageEntity.setStatus(MessageConstant.MSG_FAILURE);
+//                dbInterface.insertOrUpdateMessage(messageEntity);
+//                triggerEvent(new MessageEvent(messageEntity, MessageEvent.Event.ACK_SEND_MESSAGE_FAILURE));
+//            }
+//
+//            @Override
+//            public void onTimeout() {
+//                messageEntity.setStatus(MessageConstant.MSG_FAILURE);
+//                dbInterface.insertOrUpdateMessage(messageEntity);
+//                triggerEvent(new MessageEvent(messageEntity, MessageEvent.Event.ACK_SEND_MESSAGE_TIME_OUT));
+//            }
+//        });
     }
 
     /**
@@ -568,17 +568,17 @@ public class IMMessageManager extends IMManager {
     }
 
     private void reqMsgById(int peerId, int sessionType, List<Integer> msgIds) {
-        int userId = IMLoginManager.getInstance().getLoginId();
-        IMBaseDefine.SessionType sType = Java2ProtoBuf.getProtoSessionType(sessionType);
-        IMMessage.IMGetMsgByIdReq imGetMsgByIdReq = IMMessage.IMGetMsgByIdReq.newBuilder()
-                .setSessionId(peerId)
-                .setUserId(userId)
-                .setSessionType(sType)
-                .addAllMsgIdList(msgIds)
-                .build();
-        int sid = IMBaseDefine.ServiceID.SID_MSG_VALUE;
-        int cid = IMBaseDefine.MessageCmdID.CID_MSG_GET_BY_MSG_ID_REQ_VALUE;
-        imSocketManager.sendRequest(imGetMsgByIdReq, sid, cid);
+//        int userId = IMLoginManager.getInstance().getLoginId();
+//        IMBaseDefine.SessionType sType = Java2ProtoBuf.getProtoSessionType(sessionType);
+//        IMMessage.IMGetMsgByIdReq imGetMsgByIdReq = IMMessage.IMGetMsgByIdReq.newBuilder()
+//                .setSessionId(peerId)
+//                .setUserId(userId)
+//                .setSessionType(sType)
+//                .addAllMsgIdList(msgIds)
+//                .build();
+//        int sid = IMBaseDefine.ServiceID.SID_MSG_VALUE;
+//        int cid = IMBaseDefine.MessageCmdID.CID_MSG_GET_BY_MSG_ID_REQ_VALUE;
+//        imSocketManager.sendRequest(imGetMsgByIdReq, sid, cid);
     }
 
     public void onReqMsgById(IMMessage.IMGetMsgByIdRsp rsp) {
@@ -633,19 +633,19 @@ public class IMMessageManager extends IMManager {
      * @param cnt
      */
     public void reqHistoryMsgNet(int peerId, int peerType, int lastMsgId, int cnt) {
-        int loginId = IMLoginManager.getInstance().getLoginId();
-
-        IMMessage.IMGetMsgListReq req = IMMessage.IMGetMsgListReq.newBuilder()
-                .setUserId(loginId)
-                .setSessionType(Java2ProtoBuf.getProtoSessionType(peerType))
-                .setSessionId(peerId)
-                .setMsgIdBegin(lastMsgId)
-                .setMsgCnt(cnt)
-                .build();
-
-        int sid = IMBaseDefine.ServiceID.SID_MSG_VALUE;
-        int cid = IMBaseDefine.MessageCmdID.CID_MSG_LIST_REQUEST_VALUE;
-        imSocketManager.sendRequest(req, sid, cid);
+//        int loginId = IMLoginManager.getInstance().getLoginId();
+//
+//        IMMessage.IMGetMsgListReq req = IMMessage.IMGetMsgListReq.newBuilder()
+//                .setUserId(loginId)
+//                .setSessionType(Java2ProtoBuf.getProtoSessionType(peerType))
+//                .setSessionId(peerId)
+//                .setMsgIdBegin(lastMsgId)
+//                .setMsgCnt(cnt)
+//                .build();
+//
+//        int sid = IMBaseDefine.ServiceID.SID_MSG_VALUE;
+//        int cid = IMBaseDefine.MessageCmdID.CID_MSG_LIST_REQUEST_VALUE;
+//        imSocketManager.sendRequest(req, sid, cid);
     }
 
     /**

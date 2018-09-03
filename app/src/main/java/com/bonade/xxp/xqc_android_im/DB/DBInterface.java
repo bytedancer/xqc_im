@@ -39,7 +39,7 @@ public class DBInterface {
     private Logger logger = Logger.getLogger(DBInterface.class);
     private DaoMaster.DevOpenHelper openHelper;
     private Context context = null;
-    private int loginUserId = 0;
+    private long loginUserId = 0;
 
     private static DBInterface dbInterface = null;
 
@@ -71,7 +71,7 @@ public class DBInterface {
         }
     }
 
-    public void initDbHelp(Context context, int loginId) {
+    public void initDbHelp(Context context, long loginId) {
         if (context == null || loginId <= 0) {
             throw new RuntimeException("#DBInterface# init DB exception!");
         }
@@ -167,7 +167,7 @@ public class DBInterface {
         return entity;
     }
 
-    public UserEntity getByLoginId(int loginId) {
+    public UserEntity getByLoginId(long loginId) {
         UserDao dao = openReadableDb().getUserDao();
         UserEntity entity = dao.queryBuilder().where(UserDao.Properties.PeerId.eq(loginId)).unique();
         return entity;

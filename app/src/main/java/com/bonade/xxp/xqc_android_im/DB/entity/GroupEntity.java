@@ -24,11 +24,10 @@ import java.util.TreeSet;
 public class GroupEntity extends PeerEntity {
 
     private int groupType;
+
     private int creatorId;
     private int userCount;
-    /**
-     * Not-null value.
-     */
+
     private String userIds;
     private int version;
     private int status;
@@ -41,12 +40,12 @@ public class GroupEntity extends PeerEntity {
     public GroupEntity() {
     }
 
-    public GroupEntity(Long id) {
-        this.id = id;
+    public GroupEntity(Long cid) {
+        this.cid = cid;
     }
 
-    public GroupEntity(Long id, int peerId, int groupType, String mainName, String avatar, int creatorId, int userCount, String userIds, int version, int status, int created, int updated) {
-        this.id = id;
+    public GroupEntity(Long cid, int peerId, int groupType, String mainName, String avatar, int creatorId, int userCount, String userIds, int version, int status, int created, int updated) {
+        this.cid = cid;
         this.peerId = peerId;
         this.groupType = groupType;
         this.mainName = mainName;
@@ -60,21 +59,6 @@ public class GroupEntity extends PeerEntity {
         this.updated = updated;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public int getPeerId() {
-        return peerId;
-    }
-
-    public void setPeerId(int peerId) {
-        this.peerId = peerId;
-    }
 
     public int getGroupType() {
         return groupType;
@@ -82,28 +66,6 @@ public class GroupEntity extends PeerEntity {
 
     public void setGroupType(int groupType) {
         this.groupType = groupType;
-    }
-
-    public String getMainName() {
-        return mainName;
-    }
-
-    /**
-     * Not-null value; ensure this value is available before it is saved to the database.
-     */
-    public void setMainName(@NotNull String mainName) {
-        this.mainName = mainName;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    /**
-     * Not-null value; ensure this value is available before it is saved to the database.
-     */
-    public void setAvatar(@NotNull String avatar) {
-        this.avatar = avatar;
     }
 
     public int getCreatorId() {
@@ -122,13 +84,12 @@ public class GroupEntity extends PeerEntity {
         this.userCount = userCount;
     }
 
+    @NotNull
     public String getUserIds() {
         return userIds;
     }
 
-    /**
-     * Not-null value; ensure this value is available before it is saved to the database.
-     */
+    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setUserIds(@NotNull String userIds) {
         this.userIds = userIds;
     }
@@ -147,22 +108,6 @@ public class GroupEntity extends PeerEntity {
 
     public void setStatus(int status) {
         this.status = status;
-    }
-
-    public int getCreated() {
-        return created;
-    }
-
-    public void setCreated(int created) {
-        this.created = created;
-    }
-
-    public int getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(int updated) {
-        this.updated = updated;
     }
 
     // KEEP METHODS - put your custom methods here

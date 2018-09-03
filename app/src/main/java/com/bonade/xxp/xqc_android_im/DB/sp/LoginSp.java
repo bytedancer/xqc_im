@@ -31,10 +31,8 @@ public class LoginSp {
                 (fileName, context.MODE_PRIVATE);
     }
 
-    public void setLoginInfo(String userName, String pwd, int loginId){
+    public void setLoginInfo(int loginId){
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(KEY_LOGIN_NAME, userName);
-        editor.putString(KEY_PWD, pwd);
         editor.putInt(KEY_LOGIN_ID, loginId);
         editor.commit();
     }
@@ -57,7 +55,7 @@ public class LoginSp {
     public class SpLoginIdentity {
 //        private String loginName;
 //        private String pwd;
-        private int loginId;
+        private long loginId;
 
 //        public SpLoginIdentity(String loginName, String pwd, int loginId){
 //            this.loginName = loginName;
@@ -65,11 +63,11 @@ public class LoginSp {
 //            this.loginId = loginId;
 //        }
 
-        public SpLoginIdentity(int loginId){
+        public SpLoginIdentity(long loginId){
             this.loginId = loginId;
         }
 
-        public int getLoginId() {
+        public long getLoginId() {
             return loginId;
         }
 

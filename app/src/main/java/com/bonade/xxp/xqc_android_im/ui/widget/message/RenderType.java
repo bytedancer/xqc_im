@@ -1,0 +1,16 @@
+package com.bonade.xxp.xqc_android_im.ui.widget.message;
+
+public enum RenderType {
+
+    MESSAGE_TYPE_INVALID,
+
+    MESSAGE_TYPE_MINE_TEXT,
+    MESSAGE_TYPE_MINE_IMAGE,
+    MESSAGE_TYPE_MINE_AUDIO,
+
+    MESSAGE_TYPE_OTHER_TEXT,
+    MESSAGE_TYPE_OTHER_IMAGE,
+    MESSAGE_TYPE_OTHER_AUDIO,
+
+    MESSAGE_TYPE_TIME_TITLE
+}

@@ -20,7 +20,7 @@ import com.bonade.xxp.xqc_android_im.R;
 
 public class BottomBarTab extends FrameLayout {
 
-    private ImageView mIcon;
+    private RedImageView mIcon;
     private TextView mTvTitle;
     private Context mContext;
     private int mTabPosition = -1;
@@ -55,7 +55,7 @@ public class BottomBarTab extends FrameLayout {
         paramsContainer.gravity = Gravity.CENTER;
         lLContainer.setLayoutParams(paramsContainer);
 
-        mIcon = new ImageView(context);
+        mIcon = new RedImageView(context);
         int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 27, getResources().getDisplayMetrics());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(size, size);
         mIcon.setImageResource(icon);
@@ -96,6 +96,10 @@ public class BottomBarTab extends FrameLayout {
 //        }
 //        mQBadgeView.setBadgeText(text);
 //    }
+
+    public void setRedPointCount(int count) {
+        mIcon.setText(String.valueOf(count));
+    }
 
     @Override
     public void setSelected(boolean selected) {

@@ -1,30 +1,34 @@
 package com.bonade.xxp.xqc_android_im.DB.entity;
 
 import com.bonade.xxp.xqc_android_im.protobuf.helper.EntityChangeEngine;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * 聊天对象抽象类  may be user/group
  */
 public abstract class PeerEntity {
 
-    protected Long id;
+    protected Long cid;
+    @SerializedName(value = "id", alternate = {"groupId"})
     protected int peerId;
     /** Not-null value.
      * userEntity --> nickName
      * groupEntity --> groupName
      * */
+    @SerializedName(value = "userName", alternate = {"groupName"})
     protected String mainName;
     /** Not-null value.*/
+    @SerializedName(value = "userLogo", alternate = {"groupLogo"})
     protected String avatar;
     protected int created;
     protected int updated;
 
-    public Long getId() {
-        return id;
+    public Long getCid() {
+        return cid;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCid(Long cid) {
+        this.cid = cid;
     }
 
     public int getPeerId() {

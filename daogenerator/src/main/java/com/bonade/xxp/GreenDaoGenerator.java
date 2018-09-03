@@ -7,6 +7,9 @@ import org.greenrobot.greendao.generator.Index;
 import org.greenrobot.greendao.generator.Property;
 import org.greenrobot.greendao.generator.Schema;
 
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+
 /**
  * 其中UserEntity、 GroupEntity 继承PeerEntity
  * 由于UserEntity、 GroupEntity是自动生成，PeerEntity会有重复字段，所以每次生成之后要处理下成员变量。
@@ -55,7 +58,7 @@ public class GreenDaoGenerator {
         userInfo.setClassNameDao("UserDao");
         userInfo.setJavaPackage(entityPath);
 
-        userInfo.addIdProperty().autoincrement();
+        userInfo.addLongProperty("cid").primaryKey().autoincrement();
         userInfo.addIntProperty("peerId").unique().notNull().index();
         userInfo.addIntProperty("gender");
         userInfo.addStringProperty("mainName").notNull();
@@ -83,7 +86,7 @@ public class GreenDaoGenerator {
         groupInfo.setClassNameDao("GroupDao");
         groupInfo.setJavaPackage(entityPath);
 
-        groupInfo.addIdProperty().autoincrement();
+        groupInfo.addLongProperty("cid").primaryKey().autoincrement();
         groupInfo.addIntProperty("peerId").unique().notNull();
         groupInfo.addIntProperty("groupType").notNull();
         groupInfo.addStringProperty("mainName").notNull();

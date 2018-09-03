@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.PowerManager;
 
+import com.bonade.xxp.xqc_android_im.config.SysConstant;
 import com.bonade.xxp.xqc_android_im.imservice.callback.Packetlistener;
 import com.bonade.xxp.xqc_android_im.protobuf.IMBaseDefine;
 import com.bonade.xxp.xqc_android_im.protobuf.IMOther;
@@ -30,7 +31,8 @@ public class IMHeartBeatManager extends IMManager {
     }
     private IMHeartBeatManager(){}
 
-    private final int HEARTBEAT_INTERVAL = 4 * 60 * 1000;
+//    private final int HEARTBEAT_INTERVAL = 4 * 60 * 1000;
+    private final int HEARTBEAT_INTERVAL = 4 * 1000;
     private final String ACTION_SENDING_HEARTBEAT = "com.bonade.xxp.xqc_android_im.imservice.manager.imheartbeatmanager";
     private PendingIntent pendingIntent;
 
@@ -115,11 +117,16 @@ public class IMHeartBeatManager extends IMManager {
             wakeLock.acquire();
             try {
                 final long timeOut = 5 * 1000;
+                String userId = String.valueOf(IMLoginManager.getInstance().getLoginId());
                 IMOther.IMHeartBeat imHeartBeat = IMOther.IMHeartBeat.newBuilder()
+                        .setUserId(userId)
+                        .setTimestamp(System.currentTimeMillis())
                         .build();
+
+                short flag = SysConstant.PROTOCOL_FLAG_HEARTBEAT;
                 int sid = IMBaseDefine.ServiceID.SID_OTHER_VALUE;
                 int cid = IMBaseDefine.OtherCmdID.CID_OTHER_HEARTBEAT_VALUE;
-                IMSocketManager.getInstance().sendRequest(imHeartBeat, sid, cid, new Packetlistener(timeOut) {
+                IMSocketManager.getInstance().sendRequest(imHeartBeat, flag, sid, cid, new Packetlistener(timeOut) {
                     @Override
                     public void onSuccess(Object response) {
                         logger.d("heartbeat#心跳成功，链接保活");

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.bonade.xxp.xqc_android_im.ui.widget.message.TextRenderView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:paddingBottom="20dp"
+    android:paddingLeft="10dp" >
+
+    <ImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/im_default_user_avatar" />
+
+    <LinearLayout
+        android:id="@+id/content_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/iv_avatar"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="60dp"
+        android:layout_toRightOf="@id/iv_avatar"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="5dp"
+            android:text="小明"
+            android:textSize="11sp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_toRightOf="@id/iv_avatar"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/tv_message_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/im_other_item_bg_normal"
+                android:gravity="left"
+                android:paddingBottom="8dp"
+                android:paddingLeft="18dp"
+                android:paddingTop="8dp"
+                android:paddingRight="6dp"
+                android:text="1111111111111"
+                android:textColor="@android:color/black"
+                android:textSize="17sp"
+                android:textColorLink="@android:color/black" />
+
+            <ImageView
+                android:id="@+id/iv_message_state_failed"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center_vertical"
+                android:adjustViewBounds="true"
+                android:src="@mipmap/im_msg_tip"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/pb_loading"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+</com.bonade.xxp.xqc_android_im.ui.widget.message.TextRenderView>
