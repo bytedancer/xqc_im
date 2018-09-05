@@ -23,9 +23,9 @@ public interface UserApi {
      */
     @Headers("channel:MOBILE")
     @FormUrlEncoded
-    @POST("https://beta.bndxinqc.com/api/ystem/serviceuser/basic/app/v3/nolog/loginByPassword")
+    @POST("http://192.168.0.251/api/system/serviceuser/basic/app/v3/nolog/loginByPassword")
     Observable<DataBindUserToken> login(@Field("username") String username,
-                                        @Field("password")String password);
+                                        @Field("password") String password);
 
     /**
      * 获取用户信息
@@ -34,7 +34,7 @@ public interface UserApi {
      * @return
      */
     @FormUrlEncoded
-    @POST("https://beta.bndxinqc.com/api/system/serviceuser/search/app/v2/query/getUserInfoForAppLogin")
+    @POST("http://192.168.0.251/api/system/serviceuser/search/app/v2/query/getUserInfoForAppLogin")
     Observable<DataUserInfo> getUserInfoForAppLogin(@Header("access_token") String accessToken,
                                                     @Field("loginInit") String loginInit);
 
@@ -48,7 +48,7 @@ public interface UserApi {
      */
     @FormUrlEncoded
     @POST("/im/imUserInfo/getUserInfo")
-    Observable<BaseResponse<UserEntity>> getUserInfo(@Field("userId")String userId, @Field("targetId")String targetId);
+    Observable<BaseResponse<UserEntity>> getUserInfo(@Field("userId")int userId, @Field("targetId")int targetId);
 
 
 }

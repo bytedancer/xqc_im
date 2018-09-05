@@ -8,14 +8,14 @@ import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
-import com.bonade.xxp.xqc_android_im.DB.entity.DepartmentEntity;
 import com.bonade.xxp.xqc_android_im.DB.entity.UserEntity;
+import com.bonade.xxp.xqc_android_im.DB.entity.DepartmentEntity;
 import com.bonade.xxp.xqc_android_im.DB.entity.GroupEntity;
 import com.bonade.xxp.xqc_android_im.DB.entity.MessageEntity;
 import com.bonade.xxp.xqc_android_im.DB.entity.SessionEntity;
 
-import com.bonade.xxp.xqc_android_im.DB.dao.DepartmentDao;
 import com.bonade.xxp.xqc_android_im.DB.dao.UserDao;
+import com.bonade.xxp.xqc_android_im.DB.dao.DepartmentDao;
 import com.bonade.xxp.xqc_android_im.DB.dao.GroupDao;
 import com.bonade.xxp.xqc_android_im.DB.dao.MessageDao;
 import com.bonade.xxp.xqc_android_im.DB.dao.SessionDao;
@@ -29,14 +29,14 @@ import com.bonade.xxp.xqc_android_im.DB.dao.SessionDao;
  */
 public class DaoSession extends AbstractDaoSession {
 
-    private final DaoConfig departmentDaoConfig;
     private final DaoConfig userDaoConfig;
+    private final DaoConfig departmentDaoConfig;
     private final DaoConfig groupDaoConfig;
     private final DaoConfig messageDaoConfig;
     private final DaoConfig sessionDaoConfig;
 
-    private final DepartmentDao departmentDao;
     private final UserDao userDao;
+    private final DepartmentDao departmentDao;
     private final GroupDao groupDao;
     private final MessageDao messageDao;
     private final SessionDao sessionDao;
@@ -45,11 +45,11 @@ public class DaoSession extends AbstractDaoSession {
             daoConfigMap) {
         super(db);
 
-        departmentDaoConfig = daoConfigMap.get(DepartmentDao.class).clone();
-        departmentDaoConfig.initIdentityScope(type);
-
         userDaoConfig = daoConfigMap.get(UserDao.class).clone();
         userDaoConfig.initIdentityScope(type);
+
+        departmentDaoConfig = daoConfigMap.get(DepartmentDao.class).clone();
+        departmentDaoConfig.initIdentityScope(type);
 
         groupDaoConfig = daoConfigMap.get(GroupDao.class).clone();
         groupDaoConfig.initIdentityScope(type);
@@ -60,33 +60,33 @@ public class DaoSession extends AbstractDaoSession {
         sessionDaoConfig = daoConfigMap.get(SessionDao.class).clone();
         sessionDaoConfig.initIdentityScope(type);
 
-        departmentDao = new DepartmentDao(departmentDaoConfig, this);
         userDao = new UserDao(userDaoConfig, this);
+        departmentDao = new DepartmentDao(departmentDaoConfig, this);
         groupDao = new GroupDao(groupDaoConfig, this);
         messageDao = new MessageDao(messageDaoConfig, this);
         sessionDao = new SessionDao(sessionDaoConfig, this);
 
-        registerDao(DepartmentEntity.class, departmentDao);
         registerDao(UserEntity.class, userDao);
+        registerDao(DepartmentEntity.class, departmentDao);
         registerDao(GroupEntity.class, groupDao);
         registerDao(MessageEntity.class, messageDao);
         registerDao(SessionEntity.class, sessionDao);
     }
     
     public void clear() {
-        departmentDaoConfig.clearIdentityScope();
         userDaoConfig.clearIdentityScope();
+        departmentDaoConfig.clearIdentityScope();
         groupDaoConfig.clearIdentityScope();
         messageDaoConfig.clearIdentityScope();
         sessionDaoConfig.clearIdentityScope();
     }
 
-    public DepartmentDao getDepartmentDao() {
-        return departmentDao;
-    }
-
     public UserDao getUserDao() {
         return userDao;
+    }
+
+    public DepartmentDao getDepartmentDao() {
+        return departmentDao;
     }
 
     public GroupDao getGroupDao() {

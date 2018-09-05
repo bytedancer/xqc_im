@@ -24,8 +24,8 @@ public class GreenDaoGenerator {
         Schema schema = new Schema(dbVersion, "com.bonade.xxp.xqc_android_im.DB.dao");
 
         schema.enableKeepSectionsByDefault();
-        addDepartment(schema);
         addUserInfo(schema);
+        addDepartment(schema);
         addGroupInfo(schema);
         addMessage(schema);
         addSessionInfo(schema);
@@ -60,19 +60,17 @@ public class GreenDaoGenerator {
 
         userInfo.addLongProperty("cid").primaryKey().autoincrement();
         userInfo.addIntProperty("peerId").unique().notNull().index();
-        userInfo.addIntProperty("gender");
-        userInfo.addStringProperty("mainName").notNull();
-        // 这个可以自动生成pinyin
-        userInfo.addStringProperty("pinyinName").notNull();
-        userInfo.addStringProperty("realName").notNull();
-        userInfo.addStringProperty("avatar").notNull();
-        userInfo.addStringProperty("phone").notNull();
-        userInfo.addStringProperty("email").notNull();
-        userInfo.addIntProperty("departmentId");
-        userInfo.addIntProperty("status");
+        userInfo.addStringProperty("mainName");
+        userInfo.addStringProperty("avatar");
+
+        userInfo.addIntProperty("companyId");
+        userInfo.addStringProperty("companyName");
+        userInfo.addStringProperty("jobName");
+        userInfo.addStringProperty("deptName");
+        userInfo.addStringProperty("mobile");
         userInfo.addIntProperty("isFriend");
-        userInfo.addStringProperty("area");
-        userInfo.addStringProperty("momentcover");
+        userInfo.addStringProperty("email");
+        userInfo.addStringProperty("userName");
 
         userInfo.addIntProperty("created");
         userInfo.addIntProperty("updated");

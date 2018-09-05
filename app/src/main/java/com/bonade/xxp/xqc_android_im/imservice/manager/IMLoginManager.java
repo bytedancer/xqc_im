@@ -6,16 +6,24 @@ import com.bonade.xxp.xqc_android_im.DB.DBInterface;
 import com.bonade.xxp.xqc_android_im.DB.entity.UserEntity;
 import com.bonade.xxp.xqc_android_im.DB.sp.LoginSp;
 import com.bonade.xxp.xqc_android_im.config.SysConstant;
+import com.bonade.xxp.xqc_android_im.http.ApiFactory;
+import com.bonade.xxp.xqc_android_im.http.base.BaseResponse;
 import com.bonade.xxp.xqc_android_im.imservice.callback.Packetlistener;
 import com.bonade.xxp.xqc_android_im.imservice.event.LoginEvent;
+import com.bonade.xxp.xqc_android_im.model.DataUserInfo;
 import com.bonade.xxp.xqc_android_im.protobuf.IMBaseDefine;
 import com.bonade.xxp.xqc_android_im.protobuf.IMLogin;
 import com.bonade.xxp.xqc_android_im.util.Logger;
+import com.bonade.xxp.xqc_android_im.util.ViewUtil;
 import com.google.protobuf.CodedInputStream;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
+
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * 很多情况下都是一种权衡
@@ -222,7 +230,31 @@ public class IMLoginManager extends IMManager {
         switch (result) {
             case 1:
                 loginId = Integer.parseInt(loginRes.getUserId());
-                onLoginOk();
+                ApiFactory.getUserApi().getUserInfo(loginId, loginId)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<BaseResponse<UserEntity>>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                triggerEvent(LoginEvent.LOGIN_AUTH_FAILED);
+                            }
+
+                            @Override
+                            public void onNext(BaseResponse<UserEntity> baseResponse) {
+                                if (baseResponse == null || baseResponse.getData() == null) {
+                                    triggerEvent(LoginEvent.LOGIN_AUTH_FAILED);
+                                    return;
+                                }
+                                loginInfo = baseResponse.getData();
+                                onLoginOk();
+                            }
+                        });
+
                 break;
             case 0:
                 logger.e("login#login msg server failed, result:%s"+ result);

@@ -62,22 +62,22 @@ public class ProtoBuf2JavaBean {
 
     public static UserEntity getUserEntity(IMBaseDefine.UserInfo userInfo){
         UserEntity userEntity = new UserEntity();
-        int timeNow = (int) (System.currentTimeMillis()/1000);
-
-        userEntity.setStatus(userInfo.getStatus());
-        userEntity.setAvatar(userInfo.getAvatarUrl());
-        userEntity.setCreated(timeNow);
-        userEntity.setDepartmentId(userInfo.getDepartmentId());
-        userEntity.setEmail(userInfo.getEmail());
-        userEntity.setGender(userInfo.getUserGender());
-        userEntity.setMainName(userInfo.getUserNickName());
-        userEntity.setPhone(userInfo.getUserTel());
-        userEntity.setPinyinName(userInfo.getUserDomain());
-        userEntity.setRealName(userInfo.getUserRealName());
-        userEntity.setUpdated(timeNow);
-        userEntity.setPeerId(userInfo.getUserId());
-
-        PinYin.getPinYin(userEntity.getMainName(), userEntity.getPinyinElement());
+//        int timeNow = (int) (System.currentTimeMillis()/1000);
+//
+//        userEntity.setStatus(userInfo.getStatus());
+//        userEntity.setAvatar(userInfo.getAvatarUrl());
+//        userEntity.setCreated(timeNow);
+//        userEntity.setDepartmentId(userInfo.getDepartmentId());
+//        userEntity.setEmail(userInfo.getEmail());
+//        userEntity.setGender(userInfo.getUserGender());
+//        userEntity.setMainName(userInfo.getUserNickName());
+//        userEntity.setPhone(userInfo.getUserTel());
+//        userEntity.setPinyinName(userInfo.getUserDomain());
+//        userEntity.setRealName(userInfo.getUserRealName());
+//        userEntity.setUpdated(timeNow);
+//        userEntity.setPeerId(userInfo.getUserId());
+//
+//        PinYin.getPinYin(userEntity.getMainName(), userEntity.getPinyinElement());
         return userEntity;
     }
 

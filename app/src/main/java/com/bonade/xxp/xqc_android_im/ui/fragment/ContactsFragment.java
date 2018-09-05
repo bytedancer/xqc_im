@@ -13,7 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bonade.xxp.xqc_android_im.DB.entity.UserEntity;
 import com.bonade.xxp.xqc_android_im.R;
+import com.bonade.xxp.xqc_android_im.imservice.manager.IMLoginManager;
 import com.bonade.xxp.xqc_android_im.model.Person;
 import com.bonade.xxp.xqc_android_im.ui.activity.FriendInfoActivity;
 import com.bonade.xxp.xqc_android_im.ui.base.BaseFragment;
@@ -36,7 +38,7 @@ import java.util.regex.Pattern;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ContactsFragment extends BaseFragment implements SideIndexBar.OnIndexTouchedChangedListener {
+public class ContactsFragment extends BaseFragment {
 
     public static void launch(Activity from) {
         FragmentContainerActivity.launch(from, ContactsFragment.class, null);
@@ -44,12 +46,6 @@ public class ContactsFragment extends BaseFragment implements SideIndexBar.OnInd
 
     @BindView(R.id.rv_contacts)
     RecyclerView mRecyclerView;
-
-    @BindView(R.id.tv_overlay)
-    TextView mOverlayView;
-
-    @BindView(R.id.side_index_bar)
-    SideIndexBar mSideIndexBar;
 
     private ContactsAdapter mAdapter;
 
@@ -71,45 +67,41 @@ public class ContactsFragment extends BaseFragment implements SideIndexBar.OnInd
     }
 
     private void setupRecyclerView() {
-        List<Person> people = Person.getAllPersons();
-        people.add(0, new Person("我的", "我的"));
-        people.add(1, new Person("新的好友", "新的好友"));
-        people.add(2, new Person("群聊", "群聊"));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.addItemDecoration(new SectionItemDecoration(getActivity(), people, 3), 0);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(_mActivity), 1);
-        mAdapter = new ContactsAdapter(R.layout.item_contacts, people);
-        mAdapter.setLayoutManager(linearLayoutManager);
+        mAdapter = new ContactsAdapter(R.layout.item_contacts, new ArrayList<>());
         mRecyclerView.setAdapter(mAdapter);
-
-        mSideIndexBar.setOverlayTextView(mOverlayView)
-                .setOnIndexChangedListener(this);
     }
 
-    @Override
-    public void onIndexChanged(String index, int position) {
-        //滚动RecyclerView到索引位置
-        mAdapter.scrollToSection(index);
+    private void loadData() {
+
     }
 
-    public class ContactsAdapter extends BaseQuickAdapter<Person, BaseViewHolder> {
+    public class ContactsAdapter extends BaseQuickAdapter<Object, BaseViewHolder> {
 
-        private LinearLayoutManager mLayoutManager;
-
-        public ContactsAdapter(int layoutResId, @Nullable List<Person> data) {
+        public ContactsAdapter(int layoutResId, @Nullable List<Object> data) {
             super(layoutResId, data);
+
             ContactsAdapter.this.setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                    if (position == 0) {
-                        QRCodeFragment.launchForUser(_mActivity, new Person("李平", "liping"));
-                    } else if (position == 1) {
-                        NewFriendFragment.launch(_mActivity);
-                    } else if (position == 2) {
-                        GroupChatFragment.launch(_mActivity);
-                    } else {
+                    Object object = adapter.getItem(position);
+                    if (object instanceof CommContact) {
+                        CommContact commContact = (CommContact) object;
+                        int action = commContact.getAction();
+                        switch (action) {
+                            case CommContact.ACTION_NEW_FRIEND:
+                                break;
+                            case CommContact.ACTION_GROUP_CHAT:
+                                break;
+                            case CommContact.ACTION_XQC_FRIEND:
+                                break;
+                            default:
+                                break;
+                        }
+                    } else if (object instanceof UserEntity){
+                        UserEntity userEntity = (UserEntity) object;
                         FriendInfoActivity.launch(_mActivity);
                     }
                 }
@@ -117,30 +109,59 @@ public class ContactsFragment extends BaseFragment implements SideIndexBar.OnInd
         }
 
         @Override
-        protected void convert(BaseViewHolder helper, Person item) {
-            helper.setText(R.id.tv_name, item.getName());
+        protected void convert(BaseViewHolder helper, Object item) {
+//            helper.setText(R.id.tv_name, item.getName());
+        }
+    }
+
+    private class CommContact {
+
+        public static final int ACTION_NONE           = 0;
+        public static final int ACTION_NEW_FRIEND     = 1;
+        public static final int ACTION_GROUP_CHAT = 2;
+        public static final int ACTION_XQC_FRIEND = 3;
+
+        private int drawableRes;
+        private String name;
+        private int action;
+
+        public CommContact(int drawableRes, String name, int action) {
+            this.drawableRes = drawableRes;
+            this.name = name;
+            this.action = action;
         }
 
-        public void setLayoutManager(LinearLayoutManager manager){
-            this.mLayoutManager = manager;
+        public List<CommContact> getCommContacts() {
+            List<CommContact> commContacts = new ArrayList<>();
+            commContacts.add(new CommContact(R.mipmap.im_default_user_avatar, "新的好友", ACTION_NEW_FRIEND));
+            commContacts.add(new CommContact(R.mipmap.im_default_user_avatar, "群聊", ACTION_GROUP_CHAT));
+            commContacts.add(new CommContact(R.mipmap.im_default_user_avatar, "新的好友", ACTION_XQC_FRIEND));
+            commContacts.add(new CommContact(R.mipmap.im_default_user_avatar, "薪起程好友", ACTION_NONE));
+            return commContacts;
         }
 
-        /**
-         * 滚动RecyclerView到索引位置
-         * @param index
-         */
-        public void scrollToSection(String index){
-            if (mData == null || mData.isEmpty()) return;
-            if (TextUtils.isEmpty(index)) return;
-            int size = mData.size();
-            for (int i = 0; i < size; i++) {
-                if (TextUtils.equals(index.substring(0, 1), mData.get(i).getSection().substring(0, 1))){
-                    if (mLayoutManager != null){
-                        mLayoutManager.scrollToPositionWithOffset(i, 0);
-                        return;
-                    }
-                }
-            }
+        public int getDrawableRes() {
+            return drawableRes;
+        }
+
+        public void setDrawableRes(int drawableRes) {
+            this.drawableRes = drawableRes;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getAction() {
+            return action;
+        }
+
+        public void setAction(int action) {
+            this.action = action;
         }
     }
 }

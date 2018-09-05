@@ -70,9 +70,7 @@ public class SessionEntity {
         return sessionKey;
     }
 
-    /**
-     * Not-null value; ensure this value is available before it is saved to the database.
-     */
+    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setSessionKey(@NotNull String sessionKey) {
         this.sessionKey = sessionKey;
     }
@@ -114,9 +112,7 @@ public class SessionEntity {
         return latestMsgData;
     }
 
-    /**
-     * Not-null value; ensure this value is available before it is saved to the database.
-     */
+    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setLatestMsgData(@NotNull String latestMsgData) {
         this.latestMsgData = latestMsgData;
     }

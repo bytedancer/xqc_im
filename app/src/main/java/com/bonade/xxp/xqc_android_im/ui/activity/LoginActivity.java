@@ -110,8 +110,8 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void setupViews(Bundle savedInstanceState) {
-        mUsernameView.setText("13685536183");
-        mPwdView.setText("lp855783");
+        mUsernameView.setText("13776625960");
+        mPwdView.setText("111111");
         SystemConfigSp.getInstance().init(getApplicationContext());
         // 检查SP中是否有入口地址
         if (TextUtils.isEmpty(SystemConfigSp.getInstance().getStrConfig(SystemConfigSp.SysCfgDimension.LOGINSERVER))) {
@@ -194,7 +194,10 @@ public class LoginActivity extends BaseActivity {
 
                         @Override
                         public void onNext(DataBindUserToken dataBindUserToken) {
-                            String accessToken = dataBindUserToken.getData().getAccess_token();
+                            String accessToken = "";
+                            if (dataBindUserToken != null && dataBindUserToken.getData() != null && !TextUtils.isEmpty(dataBindUserToken.getData().getAccess_token())) {
+                                accessToken = dataBindUserToken.getData().getAccess_token();
+                            }
                             App.getContext().setAccount(username);
                             ApiFactory.getUserApi().getUserInfoForAppLogin(accessToken, "false")
                                     .subscribeOn(Schedulers.io())

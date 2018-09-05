@@ -21,22 +21,23 @@ import java.util.TreeSet;
 /**
  * Entity mapped to table "GroupInfo".
  */
+
 public class GroupEntity extends PeerEntity {
 
     private int groupType;
-
     private int creatorId;
     private int userCount;
-
     private String userIds;
     private int version;
     private int status;
+
 
     // KEEP FIELDS - put your custom fields here
     private PinYin.PinYinElement pinyinElement = new PinYin.PinYinElement();
     private SearchElement searchElement = new SearchElement();
     // KEEP FIELDS END
 
+    @Generated
     public GroupEntity() {
     }
 
@@ -44,6 +45,7 @@ public class GroupEntity extends PeerEntity {
         this.cid = cid;
     }
 
+    @Generated
     public GroupEntity(Long cid, int peerId, int groupType, String mainName, String avatar, int creatorId, int userCount, String userIds, int version, int status, int created, int updated) {
         this.cid = cid;
         this.peerId = peerId;
@@ -59,6 +61,21 @@ public class GroupEntity extends PeerEntity {
         this.updated = updated;
     }
 
+    public Long getCid() {
+        return cid;
+    }
+
+    public void setCid(Long cid) {
+        this.cid = cid;
+    }
+
+    public int getPeerId() {
+        return peerId;
+    }
+
+    public void setPeerId(int peerId) {
+        this.peerId = peerId;
+    }
 
     public int getGroupType() {
         return groupType;
@@ -66,6 +83,26 @@ public class GroupEntity extends PeerEntity {
 
     public void setGroupType(int groupType) {
         this.groupType = groupType;
+    }
+
+    @NotNull
+    public String getMainName() {
+        return mainName;
+    }
+
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setMainName(@NotNull String mainName) {
+        this.mainName = mainName;
+    }
+
+    @NotNull
+    public String getAvatar() {
+        return avatar;
+    }
+
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setAvatar(@NotNull String avatar) {
+        this.avatar = avatar;
     }
 
     public int getCreatorId() {
@@ -108,6 +145,22 @@ public class GroupEntity extends PeerEntity {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public int getCreated() {
+        return created;
+    }
+
+    public void setCreated(int created) {
+        this.created = created;
+    }
+
+    public int getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(int updated) {
+        this.updated = updated;
     }
 
     // KEEP METHODS - put your custom methods here

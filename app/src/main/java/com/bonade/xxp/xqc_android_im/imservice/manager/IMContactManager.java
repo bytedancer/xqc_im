@@ -284,39 +284,39 @@ public class IMContactManager extends IMManager {
     public List<UserEntity> getDepartmentTabSortedList() {
         // todo eric efficiency
         List<UserEntity> contactList = new ArrayList<>(userMap.values());
-        Collections.sort(contactList, new Comparator<UserEntity>() {
-            @Override
-            public int compare(UserEntity entity1, UserEntity entity2) {
-                DepartmentEntity dept1 = departmentMap.get(entity1.getDepartmentId());
-                DepartmentEntity dept2 = departmentMap.get(entity2.getDepartmentId());
-
-                if (entity1.getDepartmentId() == entity2.getDepartmentId()) {
-                    // start compare
-                    if (entity2.getPinyinElement().pinyin.startsWith("#")) {
-                        return -1;
-                    } else if (entity1.getPinyinElement().pinyin.startsWith("#")) {
-                        // todo eric guess: latter is > 0
-                        return 1;
-                    } else {
-                        if(entity1.getPinyinElement().pinyin == null) {
-                            PinYin.getPinYin(entity1.getMainName(), entity1.getPinyinElement());
-                        }
-                        if(entity2.getPinyinElement().pinyin == null) {
-                            PinYin.getPinYin(entity2.getMainName(),entity2.getPinyinElement());
-                        }
-                        return entity1.getPinyinElement().pinyin.compareToIgnoreCase(entity2.getPinyinElement().pinyin);
-                    }
-                    // end compare
-                } else {
-                    if(dept1 != null && dept2 != null && dept1.getDepartName() != null && dept2.getDepartName() != null) {
-                        return dept1.getDepartName().compareToIgnoreCase(dept2.getDepartName());
-                    }
-                    else
-                        return 1;
-
-                }
-            }
-        });
+//        Collections.sort(contactList, new Comparator<UserEntity>() {
+//            @Override
+//            public int compare(UserEntity entity1, UserEntity entity2) {
+//                DepartmentEntity dept1 = departmentMap.get(entity1.getDepartmentId());
+//                DepartmentEntity dept2 = departmentMap.get(entity2.getDepartmentId());
+//
+//                if (entity1.getDepartmentId() == entity2.getDepartmentId()) {
+//                    // start compare
+//                    if (entity2.getPinyinElement().pinyin.startsWith("#")) {
+//                        return -1;
+//                    } else if (entity1.getPinyinElement().pinyin.startsWith("#")) {
+//                        // todo eric guess: latter is > 0
+//                        return 1;
+//                    } else {
+//                        if(entity1.getPinyinElement().pinyin == null) {
+//                            PinYin.getPinYin(entity1.getMainName(), entity1.getPinyinElement());
+//                        }
+//                        if(entity2.getPinyinElement().pinyin == null) {
+//                            PinYin.getPinYin(entity2.getMainName(),entity2.getPinyinElement());
+//                        }
+//                        return entity1.getPinyinElement().pinyin.compareToIgnoreCase(entity2.getPinyinElement().pinyin);
+//                    }
+//                    // end compare
+//                } else {
+//                    if(dept1 != null && dept2 != null && dept1.getDepartName() != null && dept2.getDepartName() != null) {
+//                        return dept1.getDepartName().compareToIgnoreCase(dept2.getDepartName());
+//                    }
+//                    else
+//                        return 1;
+//
+//                }
+//            }
+//        });
         return contactList;
     }
 

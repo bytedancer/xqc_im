@@ -161,11 +161,11 @@ public class DBInterface {
         return result;
     }
 
-    public UserEntity getByUserName(String uName) {
-        UserDao dao = openReadableDb().getUserDao();
-        UserEntity entity = dao.queryBuilder().where(UserDao.Properties.PinyinName.eq(uName)).unique();
-        return entity;
-    }
+//    public UserEntity getByUserName(String uName) {
+//        UserDao dao = openReadableDb().getUserDao();
+//        UserEntity entity = dao.queryBuilder().where(UserDao.Properties.PinyinName.eq(uName)).unique();
+//        return entity;
+//    }
 
     public UserEntity getByLoginId(long loginId) {
         UserDao dao = openReadableDb().getUserDao();

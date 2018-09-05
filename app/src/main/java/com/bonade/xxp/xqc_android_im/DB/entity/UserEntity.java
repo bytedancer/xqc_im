@@ -19,34 +19,23 @@ import org.greenrobot.greendao.annotation.NotNull;
 /**
  * Entity mapped to table "UserInfo".
  */
+
 public class UserEntity extends PeerEntity {
 
-    private Integer gender;
-
-    private String pinyinName;
-
-    @SerializedName("userName")
-    private String realName;
-
-    @SerializedName("mobile")
-    private String phone;
-
+    private int companyId;
+    private String companyName;
+    private String jobName;
+    private String deptName;
+    private String mobile;
+    private int isFriend;
     private String email;
-
-    private Integer departmentId;
-
-    private Integer status;
-
-    private Integer isFriend;
-
-    private String area;
-
-    private String momentcover;
+    private String userName;
 
     // KEEP FIELDS - put your custom fields here
     private PinYin.PinYinElement pinyinElement = new PinYin.PinYinElement();
     private SearchElement searchElement = new SearchElement();
     // KEEP FIELDS END
+
 
     public UserEntity() {
     }
@@ -55,88 +44,97 @@ public class UserEntity extends PeerEntity {
         this.cid = cid;
     }
 
-    public UserEntity(Long cid, int peerId, Integer gender, String mainName, String pinyinName, String realName, String avatar, String phone, String email, Integer departmentId, Integer status, Integer isFriend, String area, String momentcover, Integer created, Integer updated) {
+    public UserEntity(Long cid, int peerId, String mainName, String avatar, Integer companyId, String companyName, String jobName, String deptName, String mobile, Integer isFriend, String email, String userName, Integer created, Integer updated) {
         this.cid = cid;
         this.peerId = peerId;
-        this.gender = gender;
         this.mainName = mainName;
-        this.pinyinName = pinyinName;
-        this.realName = realName;
         this.avatar = avatar;
-        this.phone = phone;
-        this.email = email;
-        this.departmentId = departmentId;
-        this.status = status;
+        this.companyId = companyId;
+        this.companyName = companyName;
+        this.jobName = jobName;
+        this.deptName = deptName;
+        this.mobile = mobile;
         this.isFriend = isFriend;
-        this.area = area;
-        this.momentcover = momentcover;
+        this.email = email;
+        this.userName = userName;
         this.created = created;
         this.updated = updated;
     }
 
-
-    public Integer getGender() {
-        return gender;
+    public Long getCid() {
+        return cid;
     }
 
-    public void setGender(Integer gender) {
-        this.gender = gender;
+    public void setCid(Long cid) {
+        this.cid = cid;
     }
 
-    @NotNull
-    public String getPinyinName() {
-        return pinyinName;
+    public int getPeerId() {
+        return peerId;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setPinyinName(@NotNull String pinyinName) {
-        this.pinyinName = pinyinName;
+    public void setPeerId(int peerId) {
+        this.peerId = peerId;
     }
 
-    @NotNull
-    public String getRealName() {
-        return realName;
+    public String getMainName() {
+        if (!TextUtils.isEmpty(mainName))
+            return mainName;
+        if (!TextUtils.isEmpty(userName))
+            return userName;
+        return "";
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setRealName(@NotNull String realName) {
-        this.realName = realName;
+    public void setMainName(String mainName) {
+        this.mainName = mainName;
     }
 
-    @NotNull
-    public String getPhone() {
-        return phone;
+    public String getAvatar() {
+        return avatar;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setPhone(@NotNull String phone) {
-        this.phone = phone;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
-    @NotNull
-    public String getEmail() {
-        return email;
+    public Integer getCompanyId() {
+        return companyId;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setEmail(@NotNull String email) {
-        this.email = email;
+    public void setCompanyId(Integer companyId) {
+        this.companyId = companyId;
     }
 
-    public Integer getDepartmentId() {
-        return departmentId;
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public void setDepartmentId(Integer departmentId) {
-        this.departmentId = departmentId;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
-    public Integer getStatus() {
-        return status;
+    public String getJobName() {
+        return jobName;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setJobName(String jobName) {
+        this.jobName = jobName;
+    }
+
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
     public Integer getIsFriend() {
@@ -147,63 +145,39 @@ public class UserEntity extends PeerEntity {
         this.isFriend = isFriend;
     }
 
-    public String getArea() {
-        return area;
+    public String getEmail() {
+        return email;
     }
 
-    public void setArea(String area) {
-        this.area = area;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getMomentcover() {
-        return momentcover;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setMomentcover(String momentcover) {
-        this.momentcover = momentcover;
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public int getCreated() {
+        return created;
+    }
+
+    public void setCreated(Integer created) {
+        this.created = created;
+    }
+
+    public int getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Integer updated) {
+        this.updated = updated;
     }
 
     // KEEP METHODS - put your custom methods here
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof UserEntity)) return false;
-
-        UserEntity entity = (UserEntity) o;
-
-        if (departmentId != entity.departmentId) return false;
-        if (gender != entity.gender) return false;
-        if (peerId != entity.peerId) return false;
-        if (status != entity.status) return false;
-        if (avatar != null ? !avatar.equals(entity.avatar) : entity.avatar != null) return false;
-        if (email != null ? !email.equals(entity.email) : entity.email != null) return false;
-        if (mainName != null ? !mainName.equals(entity.mainName) : entity.mainName != null)
-            return false;
-        if (phone != null ? !phone.equals(entity.phone) : entity.phone != null) return false;
-        if (pinyinName != null ? !pinyinName.equals(entity.pinyinName) : entity.pinyinName != null)
-            return false;
-        if (realName != null ? !realName.equals(entity.realName) : entity.realName != null)
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = peerId;
-        result = 31 * result + gender;
-        result = 31 * result + (mainName != null ? mainName.hashCode() : 0);
-        result = 31 * result + (pinyinName != null ? pinyinName.hashCode() : 0);
-        result = 31 * result + (realName != null ? realName.hashCode() : 0);
-        result = 31 * result + (avatar != null ? avatar.hashCode() : 0);
-        result = 31 * result + (phone != null ? phone.hashCode() : 0);
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + departmentId;
-        result = 31 * result + status;
-        return result;
-    }
-
     public PinYin.PinYinElement getPinyinElement() {
         return pinyinElement;
     }
@@ -213,17 +187,11 @@ public class UserEntity extends PeerEntity {
         return searchElement;
     }
 
-    public String getSectionName() {
-        if (TextUtils.isEmpty(pinyinElement.pinyin)) {
-            return "";
-        }
-        return pinyinElement.pinyin.substring(0, 1);
-    }
-
     @Override
     public int getType() {
         return DBConstant.SESSION_TYPE_SINGLE;
     }
+
     // KEEP METHODS END
 
 }
