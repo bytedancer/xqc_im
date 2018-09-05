@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_root"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ebebeb">
+
+    <include layout="@layout/comm_toolbar_title_center"/>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
 
-        <com.scwang.smartrefresh.layout.SmartRefreshLayout
-            android:id="@+id/xrefreshview"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/transparent">
@@ -24,7 +27,7 @@
                 android:paddingBottom="1dp"
                 android:clipToPadding="false"
                 android:background="@color/white" />
-        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+        </android.support.v4.widget.SwipeRefreshLayout>
 
         <TextView
             android:id="@+id/tv_new_msg_tip"

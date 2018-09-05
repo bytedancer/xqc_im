@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import com.bonade.xxp.xqc_android_im.config.DBConstant;
 import com.bonade.xxp.xqc_android_im.imservice.entity.SearchElement;
 import com.bonade.xxp.xqc_android_im.util.pinyin.PinYin;
+import com.google.gson.annotations.SerializedName;
 
 import org.greenrobot.greendao.annotation.NotNull;
 // KEEP INCLUDES END
@@ -24,8 +25,10 @@ public class UserEntity extends PeerEntity {
 
     private String pinyinName;
 
+    @SerializedName("userName")
     private String realName;
 
+    @SerializedName("mobile")
     private String phone;
 
     private String email;

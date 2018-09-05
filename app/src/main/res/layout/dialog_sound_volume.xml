@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@mipmap/im_sound_volume_default_bg"
+    android:id="@+id/ll_sound_volume"
+    android:gravity="center|right"
+    android:padding="20dp" >
+
+    <ImageView
+        android:id="@+id/iv_sound_volume"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="-6dp"
+        android:layout_marginRight="30dp"
+        android:src="@mipmap/im_sound_volume_01" />
+
+</LinearLayout>

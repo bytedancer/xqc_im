@@ -20,6 +20,7 @@ import com.bonade.xxp.xqc_android_im.imservice.entity.UnreadEntity;
 import com.bonade.xxp.xqc_android_im.imservice.event.GroupEvent;
 
 import com.bonade.xxp.xqc_android_im.imservice.event.UnreadEvent;
+import com.bonade.xxp.xqc_android_im.ui.activity.ChatActivity;
 import com.bonade.xxp.xqc_android_im.util.IMUIHelper;
 import com.bonade.xxp.xqc_android_im.util.Logger;
 import com.bumptech.glide.Glide;
@@ -178,9 +179,9 @@ public class IMNotificationManager extends IMManager {
 
         final String ticker = String.format("[%d%s]%s: %s", totalUnread, unit, title, content);
         final int notificationId = getSessionNotificationId(unreadEntity.getSessionKey());
-//        final Intent intent = new Intent(context, MessageActivity.class);
-//        intent.putExtra(IntentConstant.KEY_SESSION_KEY, unreadEntity.getSessionKey());
-        final Intent intent = null;
+        ChatActivity.launch(context, unreadEntity.getSessionKey());
+        final Intent intent = new Intent(context, ChatActivity.class);
+        intent.putExtra(ChatActivity.SESSION_KEY, unreadEntity.getSessionKey());
 
         logger.d("notification#notification avatarUrl:%s", avatarUrl);
         final String finalTitle = title;

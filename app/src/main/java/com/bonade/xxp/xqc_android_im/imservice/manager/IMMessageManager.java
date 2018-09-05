@@ -11,6 +11,7 @@ import com.bonade.xxp.xqc_android_im.config.DBConstant;
 import com.bonade.xxp.xqc_android_im.config.MessageConstant;
 import com.bonade.xxp.xqc_android_im.config.SysConstant;
 import com.bonade.xxp.xqc_android_im.imservice.callback.Packetlistener;
+import com.bonade.xxp.xqc_android_im.imservice.entity.AudioMessage;
 import com.bonade.xxp.xqc_android_im.imservice.entity.ImageMessage;
 import com.bonade.xxp.xqc_android_im.imservice.entity.TextMessage;
 import com.bonade.xxp.xqc_android_im.imservice.event.MessageEvent;
@@ -273,13 +274,13 @@ public class IMMessageManager extends IMManager {
         sendMessage(textMessage);
     }
 
-//    public void sendVoice(AudioMessage audioMessage) {
+    public void sendVoice(AudioMessage audioMessage) {
 //        logger.i("chat#audio#sendVoice");
 //        audioMessage.setStatus(MessageConstant.MSG_SENDING);
 //        long pkId =  DBInterface.instance().insertOrUpdateMessage(audioMessage);
 //        sessionManager.updateSession(audioMessage);
 //        sendMessage(audioMessage);
-//    }
+    }
 
     public void sendSingleImage(ImageMessage msg) {
         logger.d("ImMessageManager#sendImage ");

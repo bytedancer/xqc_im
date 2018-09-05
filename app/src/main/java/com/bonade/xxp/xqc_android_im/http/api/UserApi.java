@@ -1,5 +1,7 @@
 package com.bonade.xxp.xqc_android_im.http.api;
 
+import com.bonade.xxp.xqc_android_im.DB.entity.UserEntity;
+import com.bonade.xxp.xqc_android_im.http.base.BaseResponse;
 import com.bonade.xxp.xqc_android_im.model.DataBindUserToken;
 import com.bonade.xxp.xqc_android_im.model.DataUserInfo;
 
@@ -21,7 +23,7 @@ public interface UserApi {
      */
     @Headers("channel:MOBILE")
     @FormUrlEncoded
-    @POST("system/serviceuser/basic/app/v3/nolog/loginByPassword")
+    @POST("https://beta.bndxinqc.com/api/ystem/serviceuser/basic/app/v3/nolog/loginByPassword")
     Observable<DataBindUserToken> login(@Field("username") String username,
                                         @Field("password")String password);
 
@@ -32,7 +34,7 @@ public interface UserApi {
      * @return
      */
     @FormUrlEncoded
-    @POST("system/serviceuser/search/app/v2/query/getUserInfoForAppLogin")
+    @POST("https://beta.bndxinqc.com/api/system/serviceuser/search/app/v2/query/getUserInfoForAppLogin")
     Observable<DataUserInfo> getUserInfoForAppLogin(@Header("access_token") String accessToken,
                                                     @Field("loginInit") String loginInit);
 
@@ -46,7 +48,7 @@ public interface UserApi {
      */
     @FormUrlEncoded
     @POST("/im/imUserInfo/getUserInfo")
-    Observable<String> getUserInfo(String targetId, String userId);
+    Observable<BaseResponse<UserEntity>> getUserInfo(@Field("userId")String userId, @Field("targetId")String targetId);
 
 
 }

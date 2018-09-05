@@ -27,7 +27,8 @@ public class RetrofitManager {
     private static Retrofit retrofit;
     private static Gson mGson;
     private static String cookie = "";
-    private static final String BASE_URL = "https://beta.bndxinqc.com/api/";
+    // 茆家龙
+    private static final String BASE_URL = "http://192.168.12.157:8130";
     private JSONArray mRequestRoute;
 
     private RetrofitManager() {

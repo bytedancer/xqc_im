@@ -213,7 +213,8 @@ public class LoginActivity extends BaseActivity {
 
                                         @Override
                                         public void onNext(DataUserInfo dataUserInfo) {
-                                            imService.getLoginManager().login((int)dataUserInfo.getData().getUserInfo().getId());
+                                            int loginId = (int)dataUserInfo.getData().getUserInfo().getId();
+                                            imService.getLoginManager().login(loginId);
                                         }
                                     });
                         }

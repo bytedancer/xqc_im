@@ -15,7 +15,7 @@ public abstract class PeerEntity {
      * userEntity --> nickName
      * groupEntity --> groupName
      * */
-    @SerializedName(value = "userName", alternate = {"groupName"})
+    @SerializedName(value = "nickName", alternate = {"groupName"})
     protected String mainName;
     /** Not-null value.*/
     @SerializedName(value = "userLogo", alternate = {"groupLogo"})

@@ -36,8 +36,6 @@ public class IMLoginManager extends IMManager {
     IMSocketManager imSocketManager = IMSocketManager.getInstance();
 
     // 登录参数，以便重试
-    private String loginUserName;
-    private String loginPwd;
     private int loginId;
     private UserEntity loginInfo;
 
@@ -66,8 +64,6 @@ public class IMLoginManager extends IMManager {
 
     @Override
     public void reset() {
-        loginUserName = null;
-        loginPwd = null;
         loginId = -1;
         loginInfo = null;
         identityChanged = false;
@@ -134,8 +130,6 @@ public class IMLoginManager extends IMManager {
             triggerEvent(LoginEvent.LOGIN_AUTH_FAILED);
             return;
         }
-//        loginUserName = identity.getLoginName();
-//        loginPwd = identity.getPwd();
         identityChanged = false;
 
         long loginId = identity.getLoginId();
@@ -161,20 +155,13 @@ public class IMLoginManager extends IMManager {
         logger.i("login#login -> userId:%s", userId);
 
         LoginSp.SpLoginIdentity identity = LoginSp.getInstance().getLoginIdentity();
-//        if(identity !=null && !TextUtils.isEmpty(identity.getPwd())) {
-//            if (identity.getPwd().equals(password) && identity.getLoginName().equals(userName)) {
-//                login(identity);
-//                return;
-//            }
-//        }
         if (identity != null) {
             login(identity);
         }
 
-//        loginUserName = userName;
-//        loginPwd = password;
         loginId = userId;
         identityChanged = true;
+
         imSocketManager.reqMsgServerAddrs();
     }
 
@@ -275,6 +262,14 @@ public class IMLoginManager extends IMManager {
         logger.d("login#setLoginId -> loginId:%d", loginId);
         this.loginId = loginId;
 
+    }
+
+    public UserEntity getLoginInfo() {
+        return loginInfo;
+    }
+
+    public void setLoginInfo(UserEntity loginInfo) {
+        this.loginInfo = loginInfo;
     }
 
     public boolean isKickout() {

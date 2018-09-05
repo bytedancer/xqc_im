@@ -166,7 +166,7 @@ public class CommonUtil {
         final File folder = new File(Environment.getExternalStorageDirectory()
                 .getAbsolutePath()
                 + File.separator
-                + "MGJ-IM"
+                + "XQC-IM"
                 + File.separator
                 + "images");
         if (!folder.exists()) {
@@ -180,7 +180,7 @@ public class CommonUtil {
         final File folder = new File(Environment.getExternalStorageDirectory()
                 .getAbsolutePath()
                 + File.separator
-                + "MGJ-IM"
+                + "XQC-IM"
                 + File.separator
                 + "images");
         if (!folder.exists()) {
@@ -344,12 +344,12 @@ public class CommonUtil {
                 : "audio";
         if (CommonUtil.checkSDCard()) {
             path = Environment.getExternalStorageDirectory().toString()
-                    + File.separator + "MGJ-IM" + File.separator + floder
+                    + File.separator + "XQC-IM" + File.separator + floder
                     + File.separator;
 
         } else {
             path = Environment.getDataDirectory().toString() + File.separator
-                    + "MGJ-IM" + File.separator + floder + File.separator;
+                    + "XQC-IM" + File.separator + floder + File.separator;
         }
         return path;
     }
