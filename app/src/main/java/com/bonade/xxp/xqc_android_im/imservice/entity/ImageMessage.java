@@ -6,7 +6,6 @@ import com.bonade.xxp.xqc_android_im.DB.entity.UserEntity;
 import com.bonade.xxp.xqc_android_im.config.DBConstant;
 import com.bonade.xxp.xqc_android_im.config.MessageConstant;
 import com.bonade.xxp.xqc_android_im.imservice.support.SequenceNumberMaker;
-import com.bonade.xxp.xqc_android_im.ui.adapter.album.ImageItem;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -169,38 +168,38 @@ public class ImageMessage extends MessageEntity implements Serializable {
      * 消息页面，发送图片消息
      * @return
      */
-    public static ImageMessage buildForSend(ImageItem item, UserEntity fromUser, PeerEntity peerEntity) {
-        ImageMessage msg = new ImageMessage();
-        if (new File(item.getImagePath()).exists()) {
-            msg.setPath(item.getImagePath());
-        } else {
-            if (new File(item.getThumbnailPath()).exists()) {
-                msg.setPath(item.getThumbnailPath());
-            } else {
-                // 找不到图片路径时使用加载失败的图片展示
-                msg.setPath(null);
-            }
-        }
-
-        // 将图片发送至服务器
-        int nowTime = (int) (System.currentTimeMillis() / 1000);
-
-        msg.setFromId(fromUser.getPeerId());
-        msg.setToId(peerEntity.getPeerId());
-        msg.setCreated(nowTime);
-        msg.setUpdated(nowTime);
-        msg.setDisplayType(DBConstant.SHOW_IMAGE_TYPE);
-        // content 自动生成的
-        int peerType = peerEntity.getType();
-        int msgType = peerType == DBConstant.SESSION_TYPE_GROUP ? DBConstant.MSG_TYPE_GROUP_TEXT :
-                DBConstant.MSG_TYPE_SINGLE_TEXT;
-        msg.setMsgType(msgType);
-
-        msg.setStatus(MessageConstant.MSG_SENDING);
-        msg.setLoadStatus(MessageConstant.IMAGE_UNLOAD);
-        msg.buildSessionKey(true);
-        return msg;
-    }
+//    public static ImageMessage buildForSend(ImageItem item, UserEntity fromUser, PeerEntity peerEntity) {
+//        ImageMessage msg = new ImageMessage();
+//        if (new File(item.getImagePath()).exists()) {
+//            msg.setPath(item.getImagePath());
+//        } else {
+//            if (new File(item.getThumbnailPath()).exists()) {
+//                msg.setPath(item.getThumbnailPath());
+//            } else {
+//                // 找不到图片路径时使用加载失败的图片展示
+//                msg.setPath(null);
+//            }
+//        }
+//
+//        // 将图片发送至服务器
+//        int nowTime = (int) (System.currentTimeMillis() / 1000);
+//
+//        msg.setFromId(fromUser.getPeerId());
+//        msg.setToId(peerEntity.getPeerId());
+//        msg.setCreated(nowTime);
+//        msg.setUpdated(nowTime);
+//        msg.setDisplayType(DBConstant.SHOW_IMAGE_TYPE);
+//        // content 自动生成的
+//        int peerType = peerEntity.getType();
+//        int msgType = peerType == DBConstant.SESSION_TYPE_GROUP ? DBConstant.MSG_TYPE_GROUP_TEXT :
+//                DBConstant.MSG_TYPE_SINGLE_TEXT;
+//        msg.setMsgType(msgType);
+//
+//        msg.setStatus(MessageConstant.MSG_SENDING);
+//        msg.setLoadStatus(MessageConstant.IMAGE_UNLOAD);
+//        msg.buildSessionKey(true);
+//        return msg;
+//    }
 
     public static ImageMessage buildForSend(String takePhotoSavePath,UserEntity fromUser,PeerEntity peerEntity){
         ImageMessage imageMessage = new ImageMessage();

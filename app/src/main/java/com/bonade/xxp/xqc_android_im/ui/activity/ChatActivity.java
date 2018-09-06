@@ -105,9 +105,7 @@ import butterknife.OnTouch;
 public class ChatActivity extends BaseActivity {
 
     public static void launch(Context from, String sessionKey) {
-        Intent intent = new Intent(from, ChatActivity.class);
-        intent.putExtra(SESSION_KEY, sessionKey);
-        from.startActivity(intent);
+        from.startActivity(new Intent(from, ChatActivity.class).putExtra(SESSION_KEY, sessionKey));
     }
 
     private Logger logger = Logger.getLogger(ChatActivity.class);
@@ -117,6 +115,9 @@ public class ChatActivity extends BaseActivity {
 
     @BindView(R.id.ll_root)
     LinearLayout mRootView;
+
+    @BindView(R.id.toolbar)
+    android.support.v7.widget.Toolbar mToolbar;
 
     @BindView(R.id.refresh)
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -841,6 +842,7 @@ public class ChatActivity extends BaseActivity {
      * 2. 如果是群组，检测自己是不是还在群中
      */
     private void setTitleByUser() {
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle(mPeerEntity.getMainName());
         int peerType = mPeerEntity.getType();
         switch (peerType) {

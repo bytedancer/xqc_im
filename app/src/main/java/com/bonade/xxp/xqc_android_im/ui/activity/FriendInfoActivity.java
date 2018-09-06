@@ -1,24 +1,68 @@
 package com.bonade.xxp.xqc_android_im.ui.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bonade.xxp.xqc_android_im.DB.entity.UserEntity;
 import com.bonade.xxp.xqc_android_im.R;
+import com.bonade.xxp.xqc_android_im.http.ApiFactory;
+import com.bonade.xxp.xqc_android_im.http.base.BaseResponse;
+import com.bonade.xxp.xqc_android_im.imservice.manager.IMLoginManager;
 import com.bonade.xxp.xqc_android_im.model.Person;
 import com.bonade.xxp.xqc_android_im.ui.base.BaseActivity;
 import com.bonade.xxp.xqc_android_im.ui.fragment.FriendInfoSettingFragment;
 import com.bonade.xxp.xqc_android_im.ui.fragment.QRCodeFragment;
 import com.bonade.xxp.xqc_android_im.util.ViewUtil;
+import com.bumptech.glide.Glide;
 
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class FriendInfoActivity extends BaseActivity {
 
-    public static void launch(Activity from) {
-        from.startActivity(new Intent(from, FriendInfoActivity.class));
+    public static void launch(Context from, int contactId) {
+        Intent intent = new Intent(from, FriendInfoActivity.class);
+        intent.putExtra(KEY_CONTACT_ID, contactId);
+        from.startActivity(intent);
     }
+
+    private static final String KEY_CONTACT_ID = "KEY_CONTACT_ID";
+
+    @BindView(R.id.iv_avatar)
+    ImageView mAvatarView;
+
+    @BindView(R.id.tv_name)
+    TextView mNameView;
+
+    @BindView(R.id.tv_company)
+    TextView mCompanyView;
+
+    @BindView(R.id.tv_department)
+    TextView mDepartmentView;
+
+    @BindView(R.id.tv_phone)
+    TextView mPhoneView;
+
+    @BindView(R.id.tv_email)
+    TextView mEmailView;
+
+    @BindView(R.id.fl_add_friend)
+    FrameLayout mAddFriendView;
 
     @OnClick(R.id.iv_back)
     void backClick() {
@@ -37,11 +81,17 @@ public class FriendInfoActivity extends BaseActivity {
 
     @OnClick(R.id.fl_call)
     void callClick() {
-        callPhone("13685536183");
+        String mobile = mUserEntity.getMobile();
+        if (TextUtils.isEmpty(mUserEntity.getMobile())) {
+            ViewUtil.showMessage("手机号码为空");
+            return;
+        }
+        callPhone(mobile);
     }
 
     @OnClick(R.id.fl_send_msg)
     void sendMsgClick() {
+        ChatActivity.launch(this, mUserEntity.getSessionKey());
         ViewUtil.showMessage("发消息");
     }
 
@@ -50,6 +100,9 @@ public class FriendInfoActivity extends BaseActivity {
         ViewUtil.showMessage("加好友");
     }
 
+    private int mContactId;
+    private UserEntity mUserEntity;
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_friend_info;
@@ -57,7 +110,59 @@ public class FriendInfoActivity extends BaseActivity {
 
     @Override
     protected void setupViews(Bundle savedInstanceState) {
+        mContactId = getIntent().getIntExtra(KEY_CONTACT_ID, 0);
+        loadData();
+    }
 
+    private void loadData() {
+        int loginId = IMLoginManager.getInstance().getLoginId();
+        ApiFactory.getUserApi().getUserInfo(loginId, mContactId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<BaseResponse<UserEntity>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ViewUtil.showMessage(e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(BaseResponse<UserEntity> response) {
+                        if (response == null || response.getData() == null) {
+                            return;
+                        }
+
+                        onRepUserInfo(response.getData());
+                    }
+                });
+    }
+
+    private void onRepUserInfo(UserEntity userEntity) {
+        mUserEntity = userEntity;
+        Glide.with(this)
+                .load(userEntity.getAvatar())
+                .error(R.mipmap.im_default_user_avatar)
+                .placeholder(R.mipmap.im_default_user_avatar)
+                .bitmapTransform(new CropCircleTransformation(Glide.get(this).getBitmapPool()))
+                .crossFade()
+                .into(mAvatarView);
+
+        if (TextUtils.isEmpty(userEntity.getMainName()))
+            mNameView.setText(userEntity.getMainName());
+        if (!TextUtils.isEmpty(userEntity.getCompanyName()))
+            mCompanyView.setText(userEntity.getCompanyName());
+        if (!TextUtils.isEmpty(userEntity.getDeptName()))
+            mDepartmentView.setText(userEntity.getDeptName());
+        if (!TextUtils.isEmpty(userEntity.getMobile()))
+            mPhoneView.setText(userEntity.getMobile());
+        if (!TextUtils.isEmpty(userEntity.getEmail()))
+            mEmailView.setText(userEntity.getEmail());
+
+        mAddFriendView.setVisibility(userEntity.isFriend() ? View.GONE : View.VISIBLE);
     }
 
     /**

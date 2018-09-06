@@ -73,7 +73,7 @@ public abstract class PeerEntity {
 
     // peer就能生成sessionKey
     public String getSessionKey(){
-        return EntityChangeEngine.getSessionKey(peerId,getType());
+        return EntityChangeEngine.getSessionKey(peerId, getType());
     }
 
     public abstract int getType();

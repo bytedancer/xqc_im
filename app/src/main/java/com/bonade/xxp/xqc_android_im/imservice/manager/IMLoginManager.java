@@ -140,10 +140,10 @@ public class IMLoginManager extends IMManager {
         }
         identityChanged = false;
 
-        long loginId = identity.getLoginId();
+        long mLoginId = identity.getLoginId();
         // 初始化数据库
-        DBInterface.getInstance().initDbHelp(context, loginId);
-        UserEntity loginEntity = DBInterface.getInstance().getByLoginId(loginId);
+        DBInterface.getInstance().initDbHelp(context, mLoginId);
+        UserEntity loginEntity = DBInterface.getInstance().getByLoginId(mLoginId);
         do {
             if (loginEntity == null) {
                 break;
@@ -254,7 +254,6 @@ public class IMLoginManager extends IMManager {
                                 onLoginOk();
                             }
                         });
-
                 break;
             case 0:
                 logger.e("login#login msg server failed, result:%s"+ result);

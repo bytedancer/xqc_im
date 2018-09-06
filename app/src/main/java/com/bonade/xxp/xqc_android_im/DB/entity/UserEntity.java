@@ -177,6 +177,10 @@ public class UserEntity extends PeerEntity {
         this.updated = updated;
     }
 
+    public boolean isFriend() {
+        return isFriend == 1;
+    }
+
     // KEEP METHODS - put your custom methods here
     public PinYin.PinYinElement getPinyinElement() {
         return pinyinElement;

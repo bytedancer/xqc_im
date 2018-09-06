@@ -169,12 +169,12 @@ public class IMMessageManager extends IMManager {
         logger.d("chat#sendMessage, msg:%s", msg);
         // 发送情况下 msg_id 都是0
         // 服务端是从1开始计数的
-//        if (!SequenceNumberMaker.getInstance().isFailure(msg.getMsgId())) {
-//            throw new RuntimeException("#sendMessage# msgId is wrong,cause by 0!");
-//        }
-//
-//        IMBaseDefine.MsgType msgType = Java2ProtoBuf.getProtoMsgType(msg.getMsgType());
-//        byte[] sendContent = msg.getSendContent();
+        if (!SequenceNumberMaker.getInstance().isFailure(msg.getMsgId())) {
+            throw new RuntimeException("#sendMessage# msgId is wrong,cause by 0!");
+        }
+
+        IMBaseDefine.MsgType msgType = Java2ProtoBuf.getProtoMsgType(msg.getMsgType());
+        byte[] sendContent = msg.getSendContent();
 //
 //        IMMessage.IMMsgData msgData = IMMessage.IMMsgData.newBuilder()
 //                .setFromUserId(msg.getFromId())

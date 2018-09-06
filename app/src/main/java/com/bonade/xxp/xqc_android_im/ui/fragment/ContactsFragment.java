@@ -96,7 +96,7 @@ public class ContactsFragment extends BaseFragment {
     private void loadData() {
         int userId = IMLoginManager.getInstance().getLoginId();
         int companyId = IMLoginManager.getInstance().getLoginInfo().getCompanyId();
-        ApiFactory.getContactApi().getListEmployee(userId, companyId, 20, 1)
+        ApiFactory.getContactApi().getListEmployee(userId, companyId, 1, 20)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<BaseResponse<GetListEmployeeResp>>() {
@@ -149,7 +149,7 @@ public class ContactsFragment extends BaseFragment {
                         }
                     } else if (object instanceof UserEntity){
                         UserEntity userEntity = (UserEntity) object;
-                        FriendInfoActivity.launch(_mActivity);
+                        FriendInfoActivity.launch(_mActivity, userEntity.getPeerId());
                     }
                 }
             });
@@ -183,8 +183,8 @@ public class ContactsFragment extends BaseFragment {
 
         public static final int ACTION_NONE           = 0;
         public static final int ACTION_NEW_FRIEND     = 1;
-        public static final int ACTION_GROUP_CHAT = 2;
-        public static final int ACTION_XQC_FRIEND = 3;
+        public static final int ACTION_GROUP_CHAT     = 2;
+        public static final int ACTION_XQC_FRIEND     = 3;
 
         private int drawableRes;
         private String name;

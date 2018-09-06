@@ -3,6 +3,10 @@ package com.bonade.xxp.xqc_android_im.imservice.manager;
 import com.bonade.xxp.xqc_android_im.DB.DBInterface;
 import com.bonade.xxp.xqc_android_im.DB.entity.DepartmentEntity;
 import com.bonade.xxp.xqc_android_im.DB.entity.UserEntity;
+import com.bonade.xxp.xqc_android_im.http.ApiFactory;
+import com.bonade.xxp.xqc_android_im.http.base.BaseResponse;
+import com.bonade.xxp.xqc_android_im.http.response.GetListEmployeeResp;
+import com.bonade.xxp.xqc_android_im.imservice.event.LoginEvent;
 import com.bonade.xxp.xqc_android_im.imservice.event.UserInfoEvent;
 import com.bonade.xxp.xqc_android_im.protobuf.IMBaseDefine;
 import com.bonade.xxp.xqc_android_im.protobuf.IMBuddy;
@@ -18,6 +22,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
+
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * 负责用户信息的请求
@@ -122,14 +131,85 @@ public class IMContactManager extends IMManager {
 
     private void reqGetAllUsers(int lastUpdateTime) {
         logger.i("contact#reqGetAllUsers");
-        int userId = IMLoginManager.getInstance().getLoginId();
+        UserEntity userEntity = IMLoginManager.getInstance().getLoginInfo();
+        final int userId = userEntity.getPeerId();
+        int companyId = userEntity.getCompanyId();
+        final List<UserEntity> myFriends = new ArrayList<>();
+        ApiFactory.getContactApi().getListEmployee(userId, companyId, 1, Integer.MAX_VALUE)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<BaseResponse<GetListEmployeeResp>>() {
+                    @Override
+                    public void onCompleted() {
 
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        logger.e(e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(BaseResponse<GetListEmployeeResp> response) {
+                        if (response != null
+                                && response.getData() != null
+                                && response.getData().getRecords() != null
+                                && !response.getData().getRecords().isEmpty()) {
+                            myFriends.addAll(response.getData().getRecords());
+                        }
+                        ApiFactory.getContactApi().getListFriend(userId)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Observer<BaseResponse<List<UserEntity>>>() {
+                                    @Override
+                                    public void onCompleted() {
+
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        logger.e(e.getMessage());
+                                    }
+
+                                    @Override
+                                    public void onNext(BaseResponse<List<UserEntity>> response) {
+                                        if (response != null
+                                                && response.getData() != null
+                                                && !response.getData().isEmpty()) {
+                                            myFriends.addAll(response.getData());
+                                        }
+
+                                        if (!myFriends.isEmpty()) {
+                                            onRepAllUsers(myFriends);
+                                        }
+                                    }
+                                });
+                    }
+                });
 //        IMBuddy.IMAllUserReq imAllUserReq  = IMBuddy.IMAllUserReq.newBuilder()
 //                .setUserId(userId)
 //                .setLatestUpdateTime(lastUpdateTime).build();
 //        int sid = IMBaseDefine.ServiceID.SID_BUDDY_LIST_VALUE;
 //        int cid = IMBaseDefine.BuddyListCmdID.CID_BUDDY_LIST_ALL_USER_REQUEST_VALUE;
 //        imSocketManager.sendRequest(imAllUserReq, sid, cid);
+    }
+
+    public void onRepAllUsers(List<UserEntity> userEntities) {
+        logger.i("contact#onRepAllUsers");
+        logger.i("contact#user cnt:%d", userEntities.size());
+        if (userEntities.size() <= 0) {
+            return;
+        }
+
+        ArrayList<UserEntity> needDB = new ArrayList<>();
+        for (UserEntity userEntity : userEntities) {
+            userMap.put(userEntity.getPeerId(), userEntity);
+            needDB.add(userEntity);
+        }
+
+        dbInterface.batchInsertOrUpdateUser(needDB);
+        List<UserEntity> list = dbInterface.loadAllUsers();
+        triggerEvent(UserInfoEvent.USER_INFO_UPDATE);
     }
 
     /**
