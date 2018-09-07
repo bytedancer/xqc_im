@@ -90,6 +90,9 @@ public class NewFriendFragment extends BaseFragment {
 
                     @Override
                     public void onNext(BaseResponse<List<DataFriendsRequest>> listBaseResponse) {
+                        if (listBaseResponse == null || listBaseResponse.getData() == null) {
+                            return;
+                        }
                         List<DataFriendsRequest> newData = new ArrayList<>();
                         for (DataFriendsRequest item : listBaseResponse.getData()) {
                             if (item.getRequestStatus() == 0) {
