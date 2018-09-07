@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bonade.xxp.xqc_android_im.DB.entity.UserEntity;
@@ -52,14 +53,23 @@ public class FriendInfoActivity extends BaseActivity {
     @BindView(R.id.tv_company)
     TextView mCompanyView;
 
+    @BindView(R.id.tv_company_des)
+    TextView mCompanyDesView;
+
     @BindView(R.id.tv_department)
     TextView mDepartmentView;
+
+    @BindView(R.id.tv_job)
+    TextView mJobView;
 
     @BindView(R.id.tv_phone)
     TextView mPhoneView;
 
     @BindView(R.id.tv_email)
     TextView mEmailView;
+
+    @BindView(R.id.ll_remark)
+    LinearLayout mRemarkView;
 
     @BindView(R.id.fl_add_friend)
     FrameLayout mAddFriendView;
@@ -92,12 +102,39 @@ public class FriendInfoActivity extends BaseActivity {
     @OnClick(R.id.fl_send_msg)
     void sendMsgClick() {
         ChatActivity.launch(this, mUserEntity.getSessionKey());
-        ViewUtil.showMessage("发消息");
+    }
+
+    @OnClick(R.id.ll_remark)
+    void remarkFriends() {
+        ViewUtil.showMessage("添加备注");
     }
 
     @OnClick(R.id.fl_add_friend)
     void addFriendClick() {
-        ViewUtil.showMessage("加好友");
+        int userId = IMLoginManager.getInstance().getLoginId();
+        ApiFactory.getContactApi().addFriends(userId, mUserEntity.getPeerId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<BaseResponse<String>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ViewUtil.showMessage(e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(BaseResponse<String> stringBaseResponse) {
+                        // todo 对方同意后才算成功，后面需要修改
+                        if (stringBaseResponse.getData().equals("true")) {
+                            mUserEntity.setIsFriend(1); // 是否是好友 0不是 1是
+                            updateFriendsView(mUserEntity);
+                        }
+                    }
+                });
     }
 
     private int mContactId;
@@ -154,15 +191,26 @@ public class FriendInfoActivity extends BaseActivity {
         if (TextUtils.isEmpty(userEntity.getMainName()))
             mNameView.setText(userEntity.getMainName());
         if (!TextUtils.isEmpty(userEntity.getCompanyName()))
+        {
             mCompanyView.setText(userEntity.getCompanyName());
+            mCompanyDesView.setText(userEntity.getCompanyName());
+        }
         if (!TextUtils.isEmpty(userEntity.getDeptName()))
             mDepartmentView.setText(userEntity.getDeptName());
+        if (!TextUtils.isEmpty(userEntity.getJobName()))
+            mJobView.setText(userEntity.getJobName());
         if (!TextUtils.isEmpty(userEntity.getMobile()))
             mPhoneView.setText(userEntity.getMobile());
         if (!TextUtils.isEmpty(userEntity.getEmail()))
             mEmailView.setText(userEntity.getEmail());
 
-        mAddFriendView.setVisibility(userEntity.isFriend() ? View.GONE : View.VISIBLE);
+        updateFriendsView(userEntity);
+    }
+
+    private void updateFriendsView(UserEntity userEntity) {
+        boolean isFriends = userEntity.isFriend();
+        mRemarkView.setVisibility(isFriends ? View.VISIBLE : View.GONE);
+        mAddFriendView.setVisibility(isFriends ? View.GONE : View.VISIBLE);
     }
 
     /**
