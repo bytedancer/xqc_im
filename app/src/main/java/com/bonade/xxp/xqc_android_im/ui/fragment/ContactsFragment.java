@@ -139,8 +139,10 @@ public class ContactsFragment extends BaseFragment {
                         int action = commContact.getAction();
                         switch (action) {
                             case CommContact.ACTION_NEW_FRIEND:
+                                NewFriendFragment.launch(_mActivity);
                                 break;
                             case CommContact.ACTION_GROUP_CHAT:
+                                GroupChatFragment.launch(_mActivity);
                                 break;
                             case CommContact.ACTION_XQC_FRIEND:
                                 break;

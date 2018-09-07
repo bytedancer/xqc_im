@@ -2,7 +2,7 @@ package com.bonade.xxp.xqc_android_im.config;
 
 public interface SysConstant {
 
-    String MSG_SERVER_IP = "192.168.12.96";
+    String MSG_SERVER_IP = "192.168.12.184";
     int MSG_SERVER_PORT  = 18080;
 
     /**
