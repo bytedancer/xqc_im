@@ -88,6 +88,7 @@
                 android:background="@color/white">
 
                 <TextView
+                    android:id="@+id/tv_company_des"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="企业信息（安徽伯仲信息科技有限公司）"
@@ -242,26 +243,27 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_remark"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:orientation="horizontal"
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/cb_circle_checked"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginLeft="16dp" />
+                android:layout_gravity="center_vertical">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="他的动态"
+                    android:id="@+id/tv_tag_modify"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:background="@color/white"
+                    android:text="添加备注"
                     android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:gravity="left|center"
+                    android:drawableRight="@mipmap/ic_arrow_right" />
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

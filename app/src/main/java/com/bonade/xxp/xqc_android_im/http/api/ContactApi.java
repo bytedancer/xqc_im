@@ -3,6 +3,7 @@ package com.bonade.xxp.xqc_android_im.http.api;
 import com.bonade.xxp.xqc_android_im.DB.entity.UserEntity;
 import com.bonade.xxp.xqc_android_im.http.base.BaseResponse;
 import com.bonade.xxp.xqc_android_im.http.response.GetListEmployeeResp;
+import com.bonade.xxp.xqc_android_im.model.DataFriendsRequest;
 
 import java.util.List;
 
@@ -45,4 +46,47 @@ public interface ContactApi {
     @FormUrlEncoded
     @POST("/im/imUserInfo/synchronizeUserGroupInfo")
     Observable<BaseResponse<List<UserEntity>>> getAllUsers(@Field("userIds") String userIds, @Field("groupIds") String groupIds);
+
+    /**
+     * 好友申请列表
+     * @param userId
+     * @return
+     */
+    // @Field parameters can only be used with form encoding
+    @FormUrlEncoded
+    @POST("/im/imFriendRequest/listFriendRequest")
+    Observable<BaseResponse<List<DataFriendsRequest>>> getFriendsRequestList(@Field("userId") int userId);
+
+    /**
+     * 接受好友请求
+     * @param userId
+     * @param friendUserId
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/im/imFriend/addFriend")
+    Observable<BaseResponse<String>> acceptFriends(@Field("userId") int userId,
+                                                   @Field("friendUserId") int friendUserId);
+
+    /**
+     * 隐藏好友请求
+     * @param userId
+     * @param friendRequestId
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/im/imFriendRequest/hideFriend")
+    Observable<BaseResponse<String>> rejectFriends(@Field("userId") int userId,
+                                                   @Field("friendRequestId") int friendRequestId);
+
+    /**
+     * 申请好友
+     * @param userId
+     * @param friendRequestId
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/im/imFriendRequest/applyFriend")
+    Observable<BaseResponse<String>> addFriends(@Field("userId") int userId,
+                                                @Field("friendRequestId") int friendRequestId);
 }
