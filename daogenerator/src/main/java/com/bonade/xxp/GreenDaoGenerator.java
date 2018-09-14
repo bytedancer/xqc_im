@@ -25,7 +25,7 @@ public class GreenDaoGenerator {
 
         schema.enableKeepSectionsByDefault();
         addUserInfo(schema);
-        addDepartment(schema);
+//        addDepartment(schema);
         addGroupInfo(schema);
         addMessage(schema);
         addSessionInfo(schema);
@@ -71,7 +71,7 @@ public class GreenDaoGenerator {
         userInfo.addIntProperty("isFriend");
         userInfo.addStringProperty("email");
         userInfo.addStringProperty("userName");
-
+        userInfo.addIntProperty("status");
         userInfo.addIntProperty("created");
         userInfo.addIntProperty("updated");
 
@@ -86,17 +86,17 @@ public class GreenDaoGenerator {
 
         groupInfo.addLongProperty("cid").primaryKey().autoincrement();
         groupInfo.addIntProperty("peerId").unique().notNull();
-        groupInfo.addIntProperty("groupType").notNull();
-        groupInfo.addStringProperty("mainName").notNull();
-        groupInfo.addStringProperty("avatar").notNull();
-        groupInfo.addIntProperty("creatorId").notNull();
-        groupInfo.addIntProperty("userCount").notNull();
+        groupInfo.addIntProperty("groupType");
+        groupInfo.addStringProperty("mainName");
+        groupInfo.addStringProperty("avatar");
+        groupInfo.addIntProperty("creatorId");
+        groupInfo.addIntProperty("userCount");
 
-        groupInfo.addStringProperty("userIds").notNull();
-        groupInfo.addIntProperty("version").notNull();
-        groupInfo.addIntProperty("status").notNull();
-        groupInfo.addIntProperty("created").notNull();
-        groupInfo.addIntProperty("updated").notNull();
+        groupInfo.addStringProperty("userIds");
+        groupInfo.addIntProperty("version");
+        groupInfo.addIntProperty("status");
+        groupInfo.addIntProperty("created");
+        groupInfo.addIntProperty("updated");
     }
 
     private static void addMessage(Schema schema){
@@ -108,7 +108,7 @@ public class GreenDaoGenerator {
         message.implementsSerializable();
         message.addIdProperty().autoincrement();
         Property msgProId = message.addIntProperty("msgId").notNull().getProperty();
-        message.addIntProperty("fromId").notNull();
+        message.addIntProperty("fromId");
         message.addIntProperty("toId").notNull();
         // 是不是需要添加一个sessionkey标示一下，登陆的用户在前面
         Property sessionPro  = message.addStringProperty("sessionKey").notNull().getProperty();
@@ -116,9 +116,9 @@ public class GreenDaoGenerator {
         message.addIntProperty("msgType").notNull();
         message.addIntProperty("displayType").notNull();
 
-        message.addIntProperty("status").notNull().index();
-        message.addIntProperty("created").notNull().index();
-        message.addIntProperty("updated").notNull();
+        message.addIntProperty("status").index();
+        message.addIntProperty("created").index();
+        message.addIntProperty("updated");
 
         Index index = new Index();
         index.addProperty(msgProId);
@@ -138,17 +138,14 @@ public class GreenDaoGenerator {
         //point to userId/groupId need sessionType 区分
         sessionInfo.addIdProperty().autoincrement();
         sessionInfo.addStringProperty("sessionKey").unique().notNull(); //.unique()
-        sessionInfo.addIntProperty("peerId").notNull();
-        sessionInfo.addIntProperty("peerType").notNull();
-
-        sessionInfo.addIntProperty("latestMsgType").notNull();
-        sessionInfo.addIntProperty("latestMsgId").notNull();
-        sessionInfo.addStringProperty("latestMsgData").notNull();
-
-        sessionInfo.addIntProperty("talkId").notNull();
-        sessionInfo.addIntProperty("created").notNull();
-        sessionInfo.addIntProperty("updated").notNull();
-
+        sessionInfo.addIntProperty("peerId");
+        sessionInfo.addIntProperty("peerType");
+        sessionInfo.addIntProperty("latestMsgType");
+        sessionInfo.addIntProperty("latestMsgId");
+        sessionInfo.addStringProperty("latestMsgData");
+        sessionInfo.addIntProperty("talkId");
+        sessionInfo.addIntProperty("created");
+        sessionInfo.addIntProperty("updated");
         sessionInfo.setHasKeepSections(true);
     }
 }

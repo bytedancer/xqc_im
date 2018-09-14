@@ -133,7 +133,8 @@ public class HomeActivity extends BaseActivity {
     }
 
     public void setUnreadMessageCount(int unreadCount) {
-        unreadCount = 19;
+        if (unreadCount <= 0)
+            return;
         mBottomBarTabs.get(0).setRedPointCount(unreadCount);
     }
 }

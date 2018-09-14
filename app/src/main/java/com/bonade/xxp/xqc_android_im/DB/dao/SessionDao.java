@@ -26,14 +26,14 @@ public class SessionDao extends AbstractDao<SessionEntity, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property SessionKey = new Property(1, String.class, "sessionKey", false, "SESSION_KEY");
-        public final static Property PeerId = new Property(2, int.class, "peerId", false, "PEER_ID");
-        public final static Property PeerType = new Property(3, int.class, "peerType", false, "PEER_TYPE");
-        public final static Property LatestMsgType = new Property(4, int.class, "latestMsgType", false, "LATEST_MSG_TYPE");
-        public final static Property LatestMsgId = new Property(5, int.class, "latestMsgId", false, "LATEST_MSG_ID");
+        public final static Property PeerId = new Property(2, Integer.class, "peerId", false, "PEER_ID");
+        public final static Property PeerType = new Property(3, Integer.class, "peerType", false, "PEER_TYPE");
+        public final static Property LatestMsgType = new Property(4, Integer.class, "latestMsgType", false, "LATEST_MSG_TYPE");
+        public final static Property LatestMsgId = new Property(5, Integer.class, "latestMsgId", false, "LATEST_MSG_ID");
         public final static Property LatestMsgData = new Property(6, String.class, "latestMsgData", false, "LATEST_MSG_DATA");
-        public final static Property TalkId = new Property(7, int.class, "talkId", false, "TALK_ID");
-        public final static Property Created = new Property(8, int.class, "created", false, "CREATED");
-        public final static Property Updated = new Property(9, int.class, "updated", false, "UPDATED");
+        public final static Property TalkId = new Property(7, Integer.class, "talkId", false, "TALK_ID");
+        public final static Property Created = new Property(8, Integer.class, "created", false, "CREATED");
+        public final static Property Updated = new Property(9, Integer.class, "updated", false, "UPDATED");
     }
 
 
@@ -51,14 +51,14 @@ public class SessionDao extends AbstractDao<SessionEntity, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"Session\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"SESSION_KEY\" TEXT NOT NULL UNIQUE ," + // 1: sessionKey
-                "\"PEER_ID\" INTEGER NOT NULL ," + // 2: peerId
-                "\"PEER_TYPE\" INTEGER NOT NULL ," + // 3: peerType
-                "\"LATEST_MSG_TYPE\" INTEGER NOT NULL ," + // 4: latestMsgType
-                "\"LATEST_MSG_ID\" INTEGER NOT NULL ," + // 5: latestMsgId
-                "\"LATEST_MSG_DATA\" TEXT NOT NULL ," + // 6: latestMsgData
-                "\"TALK_ID\" INTEGER NOT NULL ," + // 7: talkId
-                "\"CREATED\" INTEGER NOT NULL ," + // 8: created
-                "\"UPDATED\" INTEGER NOT NULL );"); // 9: updated
+                "\"PEER_ID\" INTEGER," + // 2: peerId
+                "\"PEER_TYPE\" INTEGER," + // 3: peerType
+                "\"LATEST_MSG_TYPE\" INTEGER," + // 4: latestMsgType
+                "\"LATEST_MSG_ID\" INTEGER," + // 5: latestMsgId
+                "\"LATEST_MSG_DATA\" TEXT," + // 6: latestMsgData
+                "\"TALK_ID\" INTEGER," + // 7: talkId
+                "\"CREATED\" INTEGER," + // 8: created
+                "\"UPDATED\" INTEGER);"); // 9: updated
     }
 
     /** Drops the underlying database table. */
@@ -76,14 +76,46 @@ public class SessionDao extends AbstractDao<SessionEntity, Long> {
             stmt.bindLong(1, id);
         }
         stmt.bindString(2, entity.getSessionKey());
-        stmt.bindLong(3, entity.getPeerId());
-        stmt.bindLong(4, entity.getPeerType());
-        stmt.bindLong(5, entity.getLatestMsgType());
-        stmt.bindLong(6, entity.getLatestMsgId());
-        stmt.bindString(7, entity.getLatestMsgData());
-        stmt.bindLong(8, entity.getTalkId());
-        stmt.bindLong(9, entity.getCreated());
-        stmt.bindLong(10, entity.getUpdated());
+ 
+        Integer peerId = entity.getPeerId();
+        if (peerId != null) {
+            stmt.bindLong(3, peerId);
+        }
+ 
+        Integer peerType = entity.getPeerType();
+        if (peerType != null) {
+            stmt.bindLong(4, peerType);
+        }
+ 
+        Integer latestMsgType = entity.getLatestMsgType();
+        if (latestMsgType != null) {
+            stmt.bindLong(5, latestMsgType);
+        }
+ 
+        Integer latestMsgId = entity.getLatestMsgId();
+        if (latestMsgId != null) {
+            stmt.bindLong(6, latestMsgId);
+        }
+ 
+        String latestMsgData = entity.getLatestMsgData();
+        if (latestMsgData != null) {
+            stmt.bindString(7, latestMsgData);
+        }
+ 
+        Integer talkId = entity.getTalkId();
+        if (talkId != null) {
+            stmt.bindLong(8, talkId);
+        }
+ 
+        Integer created = entity.getCreated();
+        if (created != null) {
+            stmt.bindLong(9, created);
+        }
+ 
+        Integer updated = entity.getUpdated();
+        if (updated != null) {
+            stmt.bindLong(10, updated);
+        }
     }
 
     @Override
@@ -95,14 +127,46 @@ public class SessionDao extends AbstractDao<SessionEntity, Long> {
             stmt.bindLong(1, id);
         }
         stmt.bindString(2, entity.getSessionKey());
-        stmt.bindLong(3, entity.getPeerId());
-        stmt.bindLong(4, entity.getPeerType());
-        stmt.bindLong(5, entity.getLatestMsgType());
-        stmt.bindLong(6, entity.getLatestMsgId());
-        stmt.bindString(7, entity.getLatestMsgData());
-        stmt.bindLong(8, entity.getTalkId());
-        stmt.bindLong(9, entity.getCreated());
-        stmt.bindLong(10, entity.getUpdated());
+ 
+        Integer peerId = entity.getPeerId();
+        if (peerId != null) {
+            stmt.bindLong(3, peerId);
+        }
+ 
+        Integer peerType = entity.getPeerType();
+        if (peerType != null) {
+            stmt.bindLong(4, peerType);
+        }
+ 
+        Integer latestMsgType = entity.getLatestMsgType();
+        if (latestMsgType != null) {
+            stmt.bindLong(5, latestMsgType);
+        }
+ 
+        Integer latestMsgId = entity.getLatestMsgId();
+        if (latestMsgId != null) {
+            stmt.bindLong(6, latestMsgId);
+        }
+ 
+        String latestMsgData = entity.getLatestMsgData();
+        if (latestMsgData != null) {
+            stmt.bindString(7, latestMsgData);
+        }
+ 
+        Integer talkId = entity.getTalkId();
+        if (talkId != null) {
+            stmt.bindLong(8, talkId);
+        }
+ 
+        Integer created = entity.getCreated();
+        if (created != null) {
+            stmt.bindLong(9, created);
+        }
+ 
+        Integer updated = entity.getUpdated();
+        if (updated != null) {
+            stmt.bindLong(10, updated);
+        }
     }
 
     @Override
@@ -115,14 +179,14 @@ public class SessionDao extends AbstractDao<SessionEntity, Long> {
         SessionEntity entity = new SessionEntity( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // sessionKey
-            cursor.getInt(offset + 2), // peerId
-            cursor.getInt(offset + 3), // peerType
-            cursor.getInt(offset + 4), // latestMsgType
-            cursor.getInt(offset + 5), // latestMsgId
-            cursor.getString(offset + 6), // latestMsgData
-            cursor.getInt(offset + 7), // talkId
-            cursor.getInt(offset + 8), // created
-            cursor.getInt(offset + 9) // updated
+            cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2), // peerId
+            cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // peerType
+            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // latestMsgType
+            cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5), // latestMsgId
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // latestMsgData
+            cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7), // talkId
+            cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8), // created
+            cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9) // updated
         );
         return entity;
     }
@@ -131,14 +195,14 @@ public class SessionDao extends AbstractDao<SessionEntity, Long> {
     public void readEntity(Cursor cursor, SessionEntity entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setSessionKey(cursor.getString(offset + 1));
-        entity.setPeerId(cursor.getInt(offset + 2));
-        entity.setPeerType(cursor.getInt(offset + 3));
-        entity.setLatestMsgType(cursor.getInt(offset + 4));
-        entity.setLatestMsgId(cursor.getInt(offset + 5));
-        entity.setLatestMsgData(cursor.getString(offset + 6));
-        entity.setTalkId(cursor.getInt(offset + 7));
-        entity.setCreated(cursor.getInt(offset + 8));
-        entity.setUpdated(cursor.getInt(offset + 9));
+        entity.setPeerId(cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2));
+        entity.setPeerType(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
+        entity.setLatestMsgType(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
+        entity.setLatestMsgId(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));
+        entity.setLatestMsgData(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setTalkId(cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7));
+        entity.setCreated(cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8));
+        entity.setUpdated(cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9));
      }
     
     @Override

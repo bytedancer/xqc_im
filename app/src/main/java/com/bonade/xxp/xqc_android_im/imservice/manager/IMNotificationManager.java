@@ -158,7 +158,8 @@ public class IMNotificationManager extends IMManager {
         int totalUnread = unreadEntity.getUnReadCount();
 
         if (unreadEntity.getSessionType() == DBConstant.SESSION_TYPE_SINGLE) {
-            UserEntity contact = IMContactManager.getInstance().findContact(peerId);
+//            UserEntity contact = IMContactManager.getInstance().findContact(peerId);
+            UserEntity contact = null;
             if (contact != null) {
                 title = contact.getMainName();
                 avatarUrl = contact.getAvatar();
@@ -179,9 +180,8 @@ public class IMNotificationManager extends IMManager {
 
         final String ticker = String.format("[%d%s]%s: %s", totalUnread, unit, title, content);
         final int notificationId = getSessionNotificationId(unreadEntity.getSessionKey());
-        ChatActivity.launch(context, unreadEntity.getSessionKey());
         final Intent intent = new Intent(context, ChatActivity.class);
-        intent.putExtra(ChatActivity.SESSION_KEY, unreadEntity.getSessionKey());
+        intent.putExtra(ChatActivity.KEY_SESSION_KEY, unreadEntity.getSessionKey());
 
         logger.d("notification#notification avatarUrl:%s", avatarUrl);
         final String finalTitle = title;

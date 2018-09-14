@@ -2,7 +2,7 @@ package com.bonade.xxp.xqc_android_im.config;
 
 public interface SysConstant {
 
-    String MSG_SERVER_IP = "192.168.12.96";
+    String MSG_SERVER_IP = "192.168.12.66";
     int MSG_SERVER_PORT  = 18080;
 
     /**
@@ -15,8 +15,12 @@ public interface SysConstant {
     char PROTOCOL_RESERVED = '0';
 
     short PROTOCOL_FLAG_LOGIN = 1;
-    short PROTOCOL_FLAG_MESSAGE = 2;
+    short PROTOCOL_FLAG_MESSAGE  = 2;
     short PROTOCOL_FLAG_HEARTBEAT = 3;
+    short PROTOCOL_FLAG_LOGIN_RESP = 4;
+    short PROTOCOL_FLAG_MESSAGE_RESP = 5;
+    short PROTOCOL_FLAG_HEARTBEAT_RESP = 6;
+
 
     /**
      * 读取磁盘上文件， 分支判断其类型
@@ -25,6 +29,7 @@ public interface SysConstant {
     int FILE_SAVE_TYPE_AUDIO = 0X00014;
 
     float MAX_SOUND_RECORD_TIME = 60.0f;// 单位秒
+    int MAX_SELECT_IMAGE_COUNT = 6;
 
     /**表情使用*/
     int pageSize = 21;
@@ -33,7 +38,6 @@ public interface SysConstant {
      * 配置的全局key
      */
     String SETTING_GLOBAL = "Global";
-    String UPLOAD_IMAGE_INTENT_PARAMS = "com.bonade.xxp.upload.image.intent";
 
     /**
      * event 优先级
@@ -45,4 +49,7 @@ public interface SysConstant {
      * message 每次拉取的条数
      */
     int MSG_CNT_PER_PAGE = 18;
+
+    int MSG_CONTENT_TYPE_TEXT = 1;
+    int MSG_CONTENT_TYPE_IMAGE = 2;
 }

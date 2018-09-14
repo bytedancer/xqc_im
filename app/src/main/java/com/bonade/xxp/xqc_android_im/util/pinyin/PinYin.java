@@ -2,12 +2,13 @@ package com.bonade.xxp.xqc_android_im.util.pinyin;
 
 import com.bonade.xxp.xqc_android_im.util.pinyin.HanziToPinyin3.Token;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PinYin {
 
-    public static class PinYinElement {
+    public static class PinYinElement implements Serializable {
 
         // 开源TT ==> kaiyuantt
         public String pinyin;

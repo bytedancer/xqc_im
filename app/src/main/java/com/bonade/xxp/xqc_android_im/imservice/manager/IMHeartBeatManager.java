@@ -16,7 +16,6 @@ import com.bonade.xxp.xqc_android_im.util.Logger;
 
 /**
  * 采用AlarmManager 进行心跳的检测
- *
  * 登陆之后就开始触发心跳检测 【仅仅是在线，重连就会取消的】
  * 退出reset 会释放alarmManager 资源
  */
@@ -32,7 +31,7 @@ public class IMHeartBeatManager extends IMManager {
     private IMHeartBeatManager(){}
 
 //    private final int HEARTBEAT_INTERVAL = 4 * 60 * 1000;
-    private final int HEARTBEAT_INTERVAL = 4 * 1000;
+    private final int HEARTBEAT_INTERVAL = 2 * 1000;
     private final String ACTION_SENDING_HEARTBEAT = "com.bonade.xxp.xqc_android_im.imservice.manager.imheartbeatmanager";
     private PendingIntent pendingIntent;
 

@@ -34,9 +34,11 @@ public class IMLoginManager extends IMManager {
     private Logger logger = Logger.getLogger(IMLoginManager.class);
 
     private static IMLoginManager instance = new IMLoginManager();
+
     public static IMLoginManager getInstance() {
         return instance;
     }
+
     private IMLoginManager() {
         logger.d("login#creating IMLoginManager");
     }
@@ -62,7 +64,7 @@ public class IMLoginManager extends IMManager {
     //本地包含登陆信息了[可以理解为支持离线登陆了]
     private boolean isLocalLogin = false;
 
-    private LoginEvent loginStatus= LoginEvent.NONE;
+    private LoginEvent loginStatus = LoginEvent.NONE;
 
 
     @Override
@@ -75,15 +77,16 @@ public class IMLoginManager extends IMManager {
         loginId = -1;
         loginInfo = null;
         identityChanged = false;
-        isKickout=false;
+        isKickout = false;
         isPcOnline = false;
         everLogined = false;
-        loginStatus= LoginEvent.NONE;
+        loginStatus = LoginEvent.NONE;
         isLocalLogin = false;
     }
 
     /**
      * 实现自身的事件驱动
+     *
      * @param event
      */
     public void triggerEvent(LoginEvent event) {
@@ -100,7 +103,7 @@ public class IMLoginManager extends IMManager {
     public void logOut() {
         logger.d("login#logOut");
         logger.d("login#stop reconnecting");
-        everLogined =  false;
+        everLogined = false;
         isLocalLogin = false;
         reqLoginOut();
     }
@@ -133,43 +136,37 @@ public class IMLoginManager extends IMManager {
     /**
      * 自动登录
      */
-    public void login(LoginSp.SpLoginIdentity identity) {
-        if (identity == null) {
-            triggerEvent(LoginEvent.LOGIN_AUTH_FAILED);
-            return;
-        }
+    public void autoLogin(int loginId) {
         identityChanged = false;
 
-        long mLoginId = identity.getLoginId();
         // 初始化数据库
-        DBInterface.getInstance().initDbHelp(context, mLoginId);
-        UserEntity loginEntity = DBInterface.getInstance().getByLoginId(mLoginId);
+        DBInterface.getInstance().initDbHelp(context, loginId);
+        UserEntity loginEntity = DBInterface.getInstance().getByLoginId(loginId);
         do {
             if (loginEntity == null) {
                 break;
             }
-            loginInfo = loginEntity;
-            loginId = loginEntity.getPeerId();
+            this.loginInfo = loginEntity;
+            this.loginId = loginEntity.getPeerId();
             // 这两个状态不要忘记掉
             isLocalLogin = true;
             everLogined = true;
             triggerEvent(LoginEvent.LOCAL_LOGIN_SUCCESS);
         } while (false);
-        // 开始请求网络
+
         imSocketManager.reqMsgServerAddrs();
     }
 
     public void login(int userId) {
         logger.i("login#login -> userId:%s", userId);
 
-        LoginSp.SpLoginIdentity identity = LoginSp.getInstance().getLoginIdentity();
-        if (identity != null) {
-            login(identity);
+        int loginId = LoginSp.getInstance().getLoginId();
+        if (loginId == userId) {
+            autoLogin(loginId);
         }
 
-        loginId = userId;
+        this.loginId = userId;
         identityChanged = true;
-
         imSocketManager.reqMsgServerAddrs();
     }
 
@@ -194,11 +191,11 @@ public class IMLoginManager extends IMManager {
             @Override
             public void onSuccess(Object response) {
                 try {
-                    IMLogin.IMLoginRes imLoginRes = IMLogin.IMLoginRes.parseFrom((CodedInputStream)response);
+                    IMLogin.IMLoginRes imLoginRes = IMLogin.IMLoginRes.parseFrom((CodedInputStream) response);
                     onRepMsgServerLogin(imLoginRes);
                 } catch (IOException e) {
                     triggerEvent(LoginEvent.LOGIN_INNER_FAILED);
-                    logger.e("login failed,cause by %s"+e.getCause());
+                    logger.e("login failed,cause by %s" + e.getCause());
                 }
             }
 
@@ -226,44 +223,65 @@ public class IMLoginManager extends IMManager {
             return;
         }
 
-        int result = loginRes.getResult();
-        switch (result) {
-            case 1:
-                loginId = Integer.parseInt(loginRes.getUserId());
-                ApiFactory.getUserApi().getUserInfo(loginId, loginId)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Observer<BaseResponse<UserEntity>>() {
-                            @Override
-                            public void onCompleted() {
+        ApiFactory.getUserApi().getUserInfo(loginId, loginId)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<BaseResponse<UserEntity>>() {
+                    @Override
+                    public void onCompleted() {
 
-                            }
+                    }
 
-                            @Override
-                            public void onError(Throwable e) {
-                                triggerEvent(LoginEvent.LOGIN_AUTH_FAILED);
-                            }
+                    @Override
+                    public void onError(Throwable e) {
+                        triggerEvent(LoginEvent.LOGIN_AUTH_FAILED);
+                    }
 
-                            @Override
-                            public void onNext(BaseResponse<UserEntity> baseResponse) {
-                                if (baseResponse == null || baseResponse.getData() == null) {
-                                    triggerEvent(LoginEvent.LOGIN_AUTH_FAILED);
-                                    return;
-                                }
-                                loginInfo = baseResponse.getData();
-                                onLoginOk();
-                            }
-                        });
-                break;
-            case 0:
-                logger.e("login#login msg server failed, result:%s"+ result);
-                triggerEvent(LoginEvent.LOGIN_AUTH_FAILED);
-                break;
-            default:
-                logger.e("login#login msg server failed, result:%s"+ result);
-                triggerEvent(LoginEvent.LOGIN_AUTH_FAILED);
-                break;
-        }
+                    @Override
+                    public void onNext(BaseResponse<UserEntity> baseResponse) {
+                        if (baseResponse == null || baseResponse.getData() == null) {
+                            triggerEvent(LoginEvent.LOGIN_AUTH_FAILED);
+                            return;
+                        }
+                        loginInfo = baseResponse.getData();
+                        onLoginOk();
+                    }
+                });
+
+//        int result = loginRes.getResult();
+//        switch (result) {
+//            case 1:
+//                loginId = Integer.parseInt(loginRes.getUserId());
+//                ApiFactory.getUserApi().getUserInfo(loginId, loginId)
+//                        .subscribeOn(Schedulers.io())
+//                        .subscribe(new Observer<BaseResponse<UserEntity>>() {
+//                            @Override
+//                            public void onCompleted() {
+//
+//                            }
+//
+//                            @Override
+//                            public void onError(Throwable e) {
+//                                triggerEvent(LoginEvent.LOGIN_AUTH_FAILED);
+//                            }
+//
+//                            @Override
+//                            public void onNext(BaseResponse<UserEntity> baseResponse) {
+//                                if (baseResponse == null || baseResponse.getData() == null) {
+//                                    triggerEvent(LoginEvent.LOGIN_AUTH_FAILED);
+//                                    return;
+//                                }
+//                                loginInfo = baseResponse.getData();
+//                                onLoginOk();
+//                            }
+//                        });
+//                break;
+//            case 0:
+//                triggerEvent(LoginEvent.LOGIN_AUTH_FAILED);
+//                break;
+//            default:
+//                triggerEvent(LoginEvent.LOGIN_AUTH_FAILED);
+//                break;
+//        }
     }
 
     public void onLoginOk() {

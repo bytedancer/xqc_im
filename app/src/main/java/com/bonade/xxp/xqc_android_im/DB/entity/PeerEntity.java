@@ -3,10 +3,12 @@ package com.bonade.xxp.xqc_android_im.DB.entity;
 import com.bonade.xxp.xqc_android_im.protobuf.helper.EntityChangeEngine;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * 聊天对象抽象类  may be user/group
  */
-public abstract class PeerEntity {
+public abstract class PeerEntity implements Serializable{
 
     protected Long cid;
     @SerializedName(value = "id", alternate = {"groupId"})
@@ -20,6 +22,7 @@ public abstract class PeerEntity {
     /** Not-null value.*/
     @SerializedName(value = "userLogo", alternate = {"groupLogo"})
     protected String avatar;
+    protected int status;
     protected int created;
     protected int updated;
 

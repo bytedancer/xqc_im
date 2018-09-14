@@ -36,8 +36,9 @@ public class UserDao extends AbstractDao<UserEntity, Long> {
         public final static Property IsFriend = new Property(9, Integer.class, "isFriend", false, "IS_FRIEND");
         public final static Property Email = new Property(10, String.class, "email", false, "EMAIL");
         public final static Property UserName = new Property(11, String.class, "userName", false, "USER_NAME");
-        public final static Property Created = new Property(12, Integer.class, "created", false, "CREATED");
-        public final static Property Updated = new Property(13, Integer.class, "updated", false, "UPDATED");
+        public final static Property Status = new Property(12, Integer.class, "status", false, "STATUS");
+        public final static Property Created = new Property(13, Integer.class, "created", false, "CREATED");
+        public final static Property Updated = new Property(14, Integer.class, "updated", false, "UPDATED");
     }
 
 
@@ -65,8 +66,9 @@ public class UserDao extends AbstractDao<UserEntity, Long> {
                 "\"IS_FRIEND\" INTEGER," + // 9: isFriend
                 "\"EMAIL\" TEXT," + // 10: email
                 "\"USER_NAME\" TEXT," + // 11: userName
-                "\"CREATED\" INTEGER," + // 12: created
-                "\"UPDATED\" INTEGER);"); // 13: updated
+                "\"STATUS\" INTEGER," + // 12: status
+                "\"CREATED\" INTEGER," + // 13: created
+                "\"UPDATED\" INTEGER);"); // 14: updated
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_UserInfo_PEER_ID ON \"UserInfo\"" +
                 " (\"PEER_ID\");");
@@ -138,14 +140,19 @@ public class UserDao extends AbstractDao<UserEntity, Long> {
             stmt.bindString(12, userName);
         }
  
+        Integer status = entity.getStatus();
+        if (status != null) {
+            stmt.bindLong(13, status);
+        }
+ 
         Integer created = entity.getCreated();
         if (created != null) {
-            stmt.bindLong(13, created);
+            stmt.bindLong(14, created);
         }
  
         Integer updated = entity.getUpdated();
         if (updated != null) {
-            stmt.bindLong(14, updated);
+            stmt.bindLong(15, updated);
         }
     }
 
@@ -209,14 +216,19 @@ public class UserDao extends AbstractDao<UserEntity, Long> {
             stmt.bindString(12, userName);
         }
  
+        Integer status = entity.getStatus();
+        if (status != null) {
+            stmt.bindLong(13, status);
+        }
+ 
         Integer created = entity.getCreated();
         if (created != null) {
-            stmt.bindLong(13, created);
+            stmt.bindLong(14, created);
         }
  
         Integer updated = entity.getUpdated();
         if (updated != null) {
-            stmt.bindLong(14, updated);
+            stmt.bindLong(15, updated);
         }
     }
 
@@ -240,8 +252,9 @@ public class UserDao extends AbstractDao<UserEntity, Long> {
             cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9), // isFriend
             cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // email
             cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // userName
-            cursor.isNull(offset + 12) ? null : cursor.getInt(offset + 12), // created
-            cursor.isNull(offset + 13) ? null : cursor.getInt(offset + 13) // updated
+            cursor.isNull(offset + 12) ? null : cursor.getInt(offset + 12), // status
+            cursor.isNull(offset + 13) ? null : cursor.getInt(offset + 13), // created
+            cursor.isNull(offset + 14) ? null : cursor.getInt(offset + 14) // updated
         );
         return entity;
     }
@@ -260,8 +273,9 @@ public class UserDao extends AbstractDao<UserEntity, Long> {
         entity.setIsFriend(cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9));
         entity.setEmail(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
         entity.setUserName(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
-        entity.setCreated(cursor.isNull(offset + 12) ? null : cursor.getInt(offset + 12));
-        entity.setUpdated(cursor.isNull(offset + 13) ? null : cursor.getInt(offset + 13));
+        entity.setStatus(cursor.isNull(offset + 12) ? null : cursor.getInt(offset + 12));
+        entity.setCreated(cursor.isNull(offset + 13) ? null : cursor.getInt(offset + 13));
+        entity.setUpdated(cursor.isNull(offset + 14) ? null : cursor.getInt(offset + 14));
      }
     
     @Override

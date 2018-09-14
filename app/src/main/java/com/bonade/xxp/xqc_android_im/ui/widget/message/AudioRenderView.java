@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -41,49 +42,46 @@ public class AudioRenderView extends BaseMsgRenderView {
 
     public interface BtnImageListener {
 
-        void  onClickUnread();
-        void  onClickReaded();
+        void onClickUnread();
+
+        void onClickReaded();
     }
 
-    public void setBtnImageListener(BtnImageListener btnImageListener){
+    public void setBtnImageListener(BtnImageListener btnImageListener) {
         this.btnImageListener = btnImageListener;
     }
 
     public AudioRenderView(Context context, AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    public static AudioRenderView inflater(Context context, ViewGroup viewGroup, boolean isMine) {
+        int resoure = isMine ? R.layout.item_mine_audio_message : R.layout.item_other_audio_message;
+        AudioRenderView audioRenderView = (AudioRenderView) LayoutInflater.from(context).inflate(resoure, viewGroup, false);
+        audioRenderView.setMine(isMine);
+        return audioRenderView;
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
         msgLayout = findViewById(R.id.message_layout);
         audioAnttView = findViewById(R.id.view_audio_antt);
         audioDuration = findViewById(R.id.tv_audio_duration);
         audioUnreadNotify = findViewById(R.id.view_audio_unread_notify);
     }
 
-//    public static AudioRenderView inflater(Context context, boolean isMine) {
-//        int resoure = isMine ? R.layout.item_mine_audio_message:R.layout.item_other_audio_message;
-//        AudioRenderView audioRenderView = (AudioRenderView) LayoutInflater.from(context).inflate(resoure, null);
-//        audioRenderView.setMine(isMine);
-//        return audioRenderView;
-//    }
-//
-//    @Override
-//    protected void onFinishInflate() {
-//        super.onFinishInflate();
-//        msgLayout = findViewById(R.id.message_layout);
-//        audioAnttView = findViewById(R.id.view_audio_antt);
-//        audioDuration = findViewById(R.id.tv_audio_duration);
-//        audioUnreadNotify = findViewById(R.id.view_audio_unread_notify);
-//    }
-
     /**
      * 控件赋值
      * 是不是采用callback的形式
      *
      * @param messageEntity
-     * @param userEntity
+     * @param context
      */
     @Override
-    public void render(@NonNull MessageEntity messageEntity, @NonNull UserEntity userEntity, Context context) {
+    public void render(@NonNull MessageEntity messageEntity, UserEntity userEntity, Context context) {
         super.render(messageEntity, userEntity, context);
-        final AudioMessage audioMessage = (AudioMessage)messageEntity;
+        final AudioMessage audioMessage = (AudioMessage) messageEntity;
 
         final String audioPath = audioMessage.getAudioPath();
         final int audioReadStatus = audioMessage.getReadStatus();
@@ -99,13 +97,13 @@ public class AudioRenderView extends BaseMsgRenderView {
 
                 switch (audioReadStatus) {
                     case MessageConstant.AUDIO_UNREAD:
-                        if(btnImageListener != null){
+                        if (btnImageListener != null) {
                             btnImageListener.onClickUnread();
                             audioUnreadNotify.setVisibility(View.GONE);
                         }
                         break;
                     case MessageConstant.AUDIO_READED:
-                        if(btnImageListener != null){
+                        if (btnImageListener != null) {
                             btnImageListener.onClickReaded();
                         }
                         break;
@@ -125,7 +123,7 @@ public class AudioRenderView extends BaseMsgRenderView {
                 AudioPlayerHandler.getInstance().setAudioListener(new AudioPlayerHandler.AudioListener() {
                     @Override
                     public void onStop() {
-                        if(animationDrawable!=null && animationDrawable.isRunning()){
+                        if (animationDrawable != null && animationDrawable.isRunning()) {
                             animationDrawable.stop();
                             animationDrawable.selectDrawable(0);
                         }
@@ -152,7 +150,7 @@ public class AudioRenderView extends BaseMsgRenderView {
 
         // 针对path的设定
         if (null != audioPath) {
-            int resource = isMine ? R.drawable.voice_play_mine:R.drawable.voice_play_other;
+            int resource = isMine ? R.drawable.voice_play_mine : R.drawable.voice_play_other;
             audioAnttView.setBackgroundResource(resource);
             AnimationDrawable animationDrawable = (AnimationDrawable) audioAnttView.getBackground();
 
@@ -200,7 +198,7 @@ public class AudioRenderView extends BaseMsgRenderView {
         animationDrawable.start();
     }
 
-    public void stopAnimation(){
+    public void stopAnimation() {
         AnimationDrawable animationDrawable = (AnimationDrawable) audioAnttView.getBackground();
         if (animationDrawable.isRunning()) {
             animationDrawable.stop();
@@ -212,14 +210,14 @@ public class AudioRenderView extends BaseMsgRenderView {
      * unread与alreadRead的区别是什么
      */
     private void audioUnread() {
-        if(isMine){
+        if (isMine) {
             audioUnreadNotify.setVisibility(View.GONE);
-        }else{
+        } else {
             audioUnreadNotify.setVisibility(View.VISIBLE);
         }
     }
 
-    private void  audioAlreadyRead(){
+    private void audioAlreadyRead() {
         audioUnreadNotify.setVisibility(View.GONE);
     }
 

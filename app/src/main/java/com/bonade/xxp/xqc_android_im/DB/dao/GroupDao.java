@@ -26,16 +26,16 @@ public class GroupDao extends AbstractDao<GroupEntity, Long> {
     public static class Properties {
         public final static Property Cid = new Property(0, Long.class, "cid", true, "CID");
         public final static Property PeerId = new Property(1, int.class, "peerId", false, "PEER_ID");
-        public final static Property GroupType = new Property(2, int.class, "groupType", false, "GROUP_TYPE");
+        public final static Property GroupType = new Property(2, Integer.class, "groupType", false, "GROUP_TYPE");
         public final static Property MainName = new Property(3, String.class, "mainName", false, "MAIN_NAME");
         public final static Property Avatar = new Property(4, String.class, "avatar", false, "AVATAR");
-        public final static Property CreatorId = new Property(5, int.class, "creatorId", false, "CREATOR_ID");
-        public final static Property UserCount = new Property(6, int.class, "userCount", false, "USER_COUNT");
+        public final static Property CreatorId = new Property(5, Integer.class, "creatorId", false, "CREATOR_ID");
+        public final static Property UserCount = new Property(6, Integer.class, "userCount", false, "USER_COUNT");
         public final static Property UserIds = new Property(7, String.class, "userIds", false, "USER_IDS");
-        public final static Property Version = new Property(8, int.class, "version", false, "VERSION");
-        public final static Property Status = new Property(9, int.class, "status", false, "STATUS");
-        public final static Property Created = new Property(10, int.class, "created", false, "CREATED");
-        public final static Property Updated = new Property(11, int.class, "updated", false, "UPDATED");
+        public final static Property Version = new Property(8, Integer.class, "version", false, "VERSION");
+        public final static Property Status = new Property(9, Integer.class, "status", false, "STATUS");
+        public final static Property Created = new Property(10, Integer.class, "created", false, "CREATED");
+        public final static Property Updated = new Property(11, Integer.class, "updated", false, "UPDATED");
     }
 
 
@@ -53,16 +53,16 @@ public class GroupDao extends AbstractDao<GroupEntity, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"GroupInfo\" (" + //
                 "\"CID\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: cid
                 "\"PEER_ID\" INTEGER NOT NULL UNIQUE ," + // 1: peerId
-                "\"GROUP_TYPE\" INTEGER NOT NULL ," + // 2: groupType
-                "\"MAIN_NAME\" TEXT NOT NULL ," + // 3: mainName
-                "\"AVATAR\" TEXT NOT NULL ," + // 4: avatar
-                "\"CREATOR_ID\" INTEGER NOT NULL ," + // 5: creatorId
-                "\"USER_COUNT\" INTEGER NOT NULL ," + // 6: userCount
-                "\"USER_IDS\" TEXT NOT NULL ," + // 7: userIds
-                "\"VERSION\" INTEGER NOT NULL ," + // 8: version
-                "\"STATUS\" INTEGER NOT NULL ," + // 9: status
-                "\"CREATED\" INTEGER NOT NULL ," + // 10: created
-                "\"UPDATED\" INTEGER NOT NULL );"); // 11: updated
+                "\"GROUP_TYPE\" INTEGER," + // 2: groupType
+                "\"MAIN_NAME\" TEXT," + // 3: mainName
+                "\"AVATAR\" TEXT," + // 4: avatar
+                "\"CREATOR_ID\" INTEGER," + // 5: creatorId
+                "\"USER_COUNT\" INTEGER," + // 6: userCount
+                "\"USER_IDS\" TEXT," + // 7: userIds
+                "\"VERSION\" INTEGER," + // 8: version
+                "\"STATUS\" INTEGER," + // 9: status
+                "\"CREATED\" INTEGER," + // 10: created
+                "\"UPDATED\" INTEGER);"); // 11: updated
     }
 
     /** Drops the underlying database table. */
@@ -80,16 +80,56 @@ public class GroupDao extends AbstractDao<GroupEntity, Long> {
             stmt.bindLong(1, cid);
         }
         stmt.bindLong(2, entity.getPeerId());
-        stmt.bindLong(3, entity.getGroupType());
-        stmt.bindString(4, entity.getMainName());
-        stmt.bindString(5, entity.getAvatar());
-        stmt.bindLong(6, entity.getCreatorId());
-        stmt.bindLong(7, entity.getUserCount());
-        stmt.bindString(8, entity.getUserIds());
-        stmt.bindLong(9, entity.getVersion());
-        stmt.bindLong(10, entity.getStatus());
-        stmt.bindLong(11, entity.getCreated());
-        stmt.bindLong(12, entity.getUpdated());
+ 
+        Integer groupType = entity.getGroupType();
+        if (groupType != null) {
+            stmt.bindLong(3, groupType);
+        }
+ 
+        String mainName = entity.getMainName();
+        if (mainName != null) {
+            stmt.bindString(4, mainName);
+        }
+ 
+        String avatar = entity.getAvatar();
+        if (avatar != null) {
+            stmt.bindString(5, avatar);
+        }
+ 
+        Integer creatorId = entity.getCreatorId();
+        if (creatorId != null) {
+            stmt.bindLong(6, creatorId);
+        }
+ 
+        Integer userCount = entity.getUserCount();
+        if (userCount != null) {
+            stmt.bindLong(7, userCount);
+        }
+ 
+        String userIds = entity.getUserIds();
+        if (userIds != null) {
+            stmt.bindString(8, userIds);
+        }
+ 
+        Integer version = entity.getVersion();
+        if (version != null) {
+            stmt.bindLong(9, version);
+        }
+ 
+        Integer status = entity.getStatus();
+        if (status != null) {
+            stmt.bindLong(10, status);
+        }
+ 
+        Integer created = entity.getCreated();
+        if (created != null) {
+            stmt.bindLong(11, created);
+        }
+ 
+        Integer updated = entity.getUpdated();
+        if (updated != null) {
+            stmt.bindLong(12, updated);
+        }
     }
 
     @Override
@@ -101,16 +141,56 @@ public class GroupDao extends AbstractDao<GroupEntity, Long> {
             stmt.bindLong(1, cid);
         }
         stmt.bindLong(2, entity.getPeerId());
-        stmt.bindLong(3, entity.getGroupType());
-        stmt.bindString(4, entity.getMainName());
-        stmt.bindString(5, entity.getAvatar());
-        stmt.bindLong(6, entity.getCreatorId());
-        stmt.bindLong(7, entity.getUserCount());
-        stmt.bindString(8, entity.getUserIds());
-        stmt.bindLong(9, entity.getVersion());
-        stmt.bindLong(10, entity.getStatus());
-        stmt.bindLong(11, entity.getCreated());
-        stmt.bindLong(12, entity.getUpdated());
+ 
+        Integer groupType = entity.getGroupType();
+        if (groupType != null) {
+            stmt.bindLong(3, groupType);
+        }
+ 
+        String mainName = entity.getMainName();
+        if (mainName != null) {
+            stmt.bindString(4, mainName);
+        }
+ 
+        String avatar = entity.getAvatar();
+        if (avatar != null) {
+            stmt.bindString(5, avatar);
+        }
+ 
+        Integer creatorId = entity.getCreatorId();
+        if (creatorId != null) {
+            stmt.bindLong(6, creatorId);
+        }
+ 
+        Integer userCount = entity.getUserCount();
+        if (userCount != null) {
+            stmt.bindLong(7, userCount);
+        }
+ 
+        String userIds = entity.getUserIds();
+        if (userIds != null) {
+            stmt.bindString(8, userIds);
+        }
+ 
+        Integer version = entity.getVersion();
+        if (version != null) {
+            stmt.bindLong(9, version);
+        }
+ 
+        Integer status = entity.getStatus();
+        if (status != null) {
+            stmt.bindLong(10, status);
+        }
+ 
+        Integer created = entity.getCreated();
+        if (created != null) {
+            stmt.bindLong(11, created);
+        }
+ 
+        Integer updated = entity.getUpdated();
+        if (updated != null) {
+            stmt.bindLong(12, updated);
+        }
     }
 
     @Override
@@ -123,16 +203,16 @@ public class GroupDao extends AbstractDao<GroupEntity, Long> {
         GroupEntity entity = new GroupEntity( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // cid
             cursor.getInt(offset + 1), // peerId
-            cursor.getInt(offset + 2), // groupType
-            cursor.getString(offset + 3), // mainName
-            cursor.getString(offset + 4), // avatar
-            cursor.getInt(offset + 5), // creatorId
-            cursor.getInt(offset + 6), // userCount
-            cursor.getString(offset + 7), // userIds
-            cursor.getInt(offset + 8), // version
-            cursor.getInt(offset + 9), // status
-            cursor.getInt(offset + 10), // created
-            cursor.getInt(offset + 11) // updated
+            cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2), // groupType
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // mainName
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // avatar
+            cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5), // creatorId
+            cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6), // userCount
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // userIds
+            cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8), // version
+            cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9), // status
+            cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10), // created
+            cursor.isNull(offset + 11) ? null : cursor.getInt(offset + 11) // updated
         );
         return entity;
     }
@@ -141,16 +221,16 @@ public class GroupDao extends AbstractDao<GroupEntity, Long> {
     public void readEntity(Cursor cursor, GroupEntity entity, int offset) {
         entity.setCid(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setPeerId(cursor.getInt(offset + 1));
-        entity.setGroupType(cursor.getInt(offset + 2));
-        entity.setMainName(cursor.getString(offset + 3));
-        entity.setAvatar(cursor.getString(offset + 4));
-        entity.setCreatorId(cursor.getInt(offset + 5));
-        entity.setUserCount(cursor.getInt(offset + 6));
-        entity.setUserIds(cursor.getString(offset + 7));
-        entity.setVersion(cursor.getInt(offset + 8));
-        entity.setStatus(cursor.getInt(offset + 9));
-        entity.setCreated(cursor.getInt(offset + 10));
-        entity.setUpdated(cursor.getInt(offset + 11));
+        entity.setGroupType(cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2));
+        entity.setMainName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setAvatar(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setCreatorId(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));
+        entity.setUserCount(cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6));
+        entity.setUserIds(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setVersion(cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8));
+        entity.setStatus(cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9));
+        entity.setCreated(cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10));
+        entity.setUpdated(cursor.isNull(offset + 11) ? null : cursor.getInt(offset + 11));
      }
     
     @Override

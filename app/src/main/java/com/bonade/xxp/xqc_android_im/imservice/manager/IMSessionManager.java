@@ -10,6 +10,9 @@ import com.bonade.xxp.xqc_android_im.DB.entity.SessionEntity;
 import com.bonade.xxp.xqc_android_im.DB.entity.UserEntity;
 import com.bonade.xxp.xqc_android_im.DB.sp.ConfigurationSp;
 import com.bonade.xxp.xqc_android_im.config.DBConstant;
+import com.bonade.xxp.xqc_android_im.http.ApiFactory;
+import com.bonade.xxp.xqc_android_im.http.base.BaseResponse;
+import com.bonade.xxp.xqc_android_im.http.entity.UnreadMessage;
 import com.bonade.xxp.xqc_android_im.imservice.entity.RecentInfo;
 import com.bonade.xxp.xqc_android_im.imservice.entity.UnreadEntity;
 import com.bonade.xxp.xqc_android_im.imservice.event.SessionEvent;
@@ -17,18 +20,24 @@ import com.bonade.xxp.xqc_android_im.protobuf.IMBaseDefine;
 import com.bonade.xxp.xqc_android_im.protobuf.IMBuddy;
 import com.bonade.xxp.xqc_android_im.protobuf.helper.EntityChangeEngine;
 import com.bonade.xxp.xqc_android_im.protobuf.helper.Java2ProtoBuf;
+import com.bonade.xxp.xqc_android_im.protobuf.helper.Json2JavaBean;
 import com.bonade.xxp.xqc_android_im.protobuf.helper.ProtoBuf2JavaBean;
 import com.bonade.xxp.xqc_android_im.util.Logger;
+import com.bonade.xxp.xqc_android_im.util.ViewUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import rx.Observer;
+import rx.schedulers.Schedulers;
 
 /**
  * app显示首页
@@ -39,10 +48,13 @@ public class IMSessionManager extends IMManager {
     private Logger logger = Logger.getLogger(IMSessionManager.class);
 
     private static IMSessionManager instance = new IMSessionManager();
+
     public static IMSessionManager getInstance() {
         return instance;
     }
-    private IMSessionManager(){};
+
+    private IMSessionManager() {
+    }
 
     private IMSocketManager imSocketManager = IMSocketManager.getInstance();
     private IMLoginManager imLoginManager = IMLoginManager.getInstance();
@@ -67,10 +79,11 @@ public class IMSessionManager extends IMManager {
 
     /**
      * 实现自身的事件驱动
+     *
      * @param event
      */
     public void triggerEvent(SessionEvent event) {
-        switch (event){
+        switch (event) {
             case RECENT_SESSION_LIST_SUCCESS:
                 sessionListReady = true;
                 break;
@@ -96,49 +109,62 @@ public class IMSessionManager extends IMManager {
 
     public void onLocalNetOk() {
         int latestUpdateTime = dbInterface.getSessionLastTime();
-        logger.d("session#更新时间:%d",latestUpdateTime);
+        logger.d("session#更新时间:%d", latestUpdateTime);
         reqGetRecentContacts(latestUpdateTime);
     }
 
     /**
      * 请求最近会话
+     *
      * @param latestUpdateTime
      */
     private void reqGetRecentContacts(int latestUpdateTime) {
-//        logger.i("session#reqGetRecentContacts");
-//        int loginId = IMLoginManager.getInstance().getLoginId();
-//        IMBuddy.IMRecentContactSessionReq recentContactSessionReq = IMBuddy.IMRecentContactSessionReq
-//                .newBuilder()
-//                .setLatestUpdateTime(latestUpdateTime)
-//                .setUserId(loginId)
-//                .build();
-//        int sid = IMBaseDefine.ServiceID.SID_BUDDY_LIST_VALUE;
-//        int cid = IMBaseDefine.BuddyListCmdID.CID_BUDDY_LIST_RECENT_CONTACT_SESSION_REQUEST_VALUE;
-//        imSocketManager.sendRequest(recentContactSessionReq, sid, cid);
+        ApiFactory.getMessageApi().getUnreadMsgList(imLoginManager.getLoginId())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<BaseResponse<List<UnreadMessage>>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ViewUtil.showMessage(e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(BaseResponse<List<UnreadMessage>> response) {
+                        if (response == null
+                                || response.getData() == null
+                                || response.getData().isEmpty()) {
+                            return;
+                        }
+                        onRepRecentContacts(response.getData());
+                    }
+                });
     }
 
     /**
      * 最近会话返回
      * 与本地的进行merge
-     * @param recentContactSessionRsp
+     *
+     * @param unreadMessages
      */
-    public void onRepRecentContacts(IMBuddy.IMRecentContactSessionRsp recentContactSessionRsp) {
-        logger.i("session#onRepRecentContacts");
-        int userId = recentContactSessionRsp.getUserId();
-        List<IMBaseDefine.ContactSessionInfo> contactSessionInfoList = recentContactSessionRsp.getContactSessionListList();
-        logger.i("contact#user:%d  cnt:%d",userId,contactSessionInfoList.size());
+    public void onRepRecentContacts(List<UnreadMessage> unreadMessages) {
+        Map<String, UnreadMessage> map = new HashMap<>();
+        for (UnreadMessage unreadMessage : unreadMessages) {
+            String sessionKey = unreadMessage.getSessionId();
+            map.put(sessionKey, unreadMessage);
+        }
 
-        // 更新最近联系人列表
+        // 更新最近列表
         ArrayList<SessionEntity> needDB = new ArrayList<>();
-        for (IMBaseDefine.ContactSessionInfo sessionInfo : contactSessionInfoList) {
-            // 返回的没有主键Id
-            SessionEntity sessionEntity = ProtoBuf2JavaBean.getSessionEntity(sessionInfo);
-            // 并没有按照时间来排序
+        for (String sessionKey : map.keySet()) {
+            SessionEntity sessionEntity = Json2JavaBean.getSessionEntity(map.get(sessionKey));
             sessionMap.put(sessionEntity.getSessionKey(), sessionEntity);
             needDB.add(sessionEntity);
         }
         logger.d("session#onRepRecentContacts is ready,now broadcast");
-
         // 将最新的session信息保存到DB中
         dbInterface.batchInsertOrUpdateSession(needDB);
         if (needDB.size() > 0) {
@@ -148,6 +174,7 @@ public class IMSessionManager extends IMManager {
 
     /**
      * 请求删除会话
+     *
      * @param recentInfo
      */
     public void reqRemoveSession(RecentInfo recentInfo) {
@@ -181,7 +208,7 @@ public class IMSessionManager extends IMManager {
     public void onRepRemoveSession(IMBuddy.IMRemoveSessionRsp removeSessionRsp) {
         logger.i("session#onRepRemoveSession");
         int resultCode = removeSessionRsp.getResultCode();
-        if(0 != resultCode){
+        if (0 != resultCode) {
             logger.e("session#removeSession failed");
             return;
         }
@@ -189,6 +216,7 @@ public class IMSessionManager extends IMManager {
 
     /**
      * 新建群组时候的更新
+     *
      * @param groupEntity
      */
     public void updateSession(GroupEntity groupEntity) {
@@ -214,6 +242,7 @@ public class IMSessionManager extends IMManager {
     /**
      * 1.自己发送消息
      * 2.收到消息
+     *
      * @param msg
      */
     public void updateSession(MessageEntity msg) {
@@ -235,9 +264,9 @@ public class IMSessionManager extends IMManager {
             sessionEntity.setPeerId(peerId);
             sessionEntity.buildSessionKey();
             // 判断群组的信息是否存在
-            if(sessionEntity.getPeerType() == DBConstant.SESSION_TYPE_GROUP){
+            if (sessionEntity.getPeerType() == DBConstant.SESSION_TYPE_GROUP) {
                 GroupEntity groupEntity = imGroupManager.findGroup(peerId);
-                if(groupEntity == null){
+                if (groupEntity == null) {
                     imGroupManager.reqGroupDetailInfo(peerId);
                 }
             }
@@ -261,28 +290,28 @@ public class IMSessionManager extends IMManager {
     }
 
     public List<SessionEntity> getRecentSessionList() {
-         List<SessionEntity> recentInfoList = new ArrayList<>(sessionMap.size());
-         return recentInfoList;
+        List<SessionEntity> recentInfoList = new ArrayList<>(sessionMap.values());
+        return recentInfoList;
     }
 
     private static void sort(List<RecentInfo> data) {
         Collections.sort(data, new Comparator<RecentInfo>() {
             public int compare(RecentInfo o1, RecentInfo o2) {
-                Integer a =  o1.getUpdateTime();
+                Integer a = o1.getUpdateTime();
                 Integer b = o2.getUpdateTime();
 
                 boolean isTopA = o1.isTop();
                 boolean isTopB = o2.isTop();
 
-                if(isTopA == isTopB){
+                if (isTopA == isTopB) {
                     // 升序
                     //return a.compareTo(b);
                     // 降序
-                    return  b.compareTo(a);
-                }else{
-                    if(isTopA){
+                    return b.compareTo(a);
+                } else {
+                    if (isTopA) {
                         return -1;
-                    }else{
+                    } else {
                         return 1;
                     }
                 }
@@ -292,6 +321,7 @@ public class IMSessionManager extends IMManager {
 
     /**
      * 获取最近联系人列表，RecentInfo 是sessionEntity unreadEntity user/group 等等实体的封装
+     *
      * @return
      */
     public List<RecentInfo> getRecentListInfo() {
@@ -302,7 +332,7 @@ public class IMSessionManager extends IMManager {
         List<SessionEntity> sessionList = getRecentSessionList();
         Map<Integer, UserEntity> userMap = IMContactManager.getInstance().getUserMap();
         Map<String, UnreadEntity> unreadMsgMap = IMUnreadMsgManager.getInstance().getUnreadMsgMap();
-        Map<Integer,GroupEntity> groupMap = IMGroupManager.getInstance().getGroupMap();
+        Map<Integer, GroupEntity> groupEntityMap = IMGroupManager.getInstance().getGroupMap();
         HashSet<String> topList = ConfigurationSp.getInstance(context, loginId).getSessionTopList();
 
         for (SessionEntity recentSession : sessionList) {
@@ -312,26 +342,27 @@ public class IMSessionManager extends IMManager {
 
             UnreadEntity unreadEntity = unreadMsgMap.get(sessionKey);
             if (sessionType == DBConstant.SESSION_TYPE_GROUP) {
-                GroupEntity groupEntity = groupMap.get(peerId);
+                GroupEntity groupEntity = groupEntityMap.get(peerId);
+                groupEntity.setPeerId(peerId);
                 RecentInfo recentInfo = new RecentInfo(recentSession, groupEntity, unreadEntity);
                 if (topList != null && topList.contains(sessionKey)) {
                     recentInfo.setTop(true);
                 }
 
-                // 谁说的这条消息，只有群组需要，例如【XXX:您好】
                 int lastFromId = recentSession.getTalkId();
                 UserEntity talkUser = userMap.get(lastFromId);
-                // 用户已经不存在了
+                // 用户不存在
                 if (talkUser != null) {
                     String oriContent = recentInfo.getLatestMsgData();
-                    String finalContent = talkUser.getMainName() + ": "+oriContent;
+                    String finalContent = talkUser.getMainName() + ": " + oriContent;
                     recentInfo.setLatestMsgData(finalContent);
                 }
+
                 recentSessionList.add(recentInfo);
             } else if (sessionType == DBConstant.SESSION_TYPE_SINGLE) {
                 UserEntity userEntity = userMap.get(peerId);
                 RecentInfo recentInfo = new RecentInfo(recentSession, userEntity, unreadEntity);
-                if(topList !=null && topList.contains(sessionKey)){
+                if (topList != null && topList.contains(sessionKey)) {
                     recentInfo.setTop(true);
                 }
                 recentSessionList.add(recentInfo);

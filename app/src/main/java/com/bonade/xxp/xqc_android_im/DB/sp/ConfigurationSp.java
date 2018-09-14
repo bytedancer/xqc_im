@@ -14,9 +14,9 @@ import java.util.Set;
 /**
  * 特定用户的配置文件
  * User_userId.ini
- *
+ * <p>
  * 1.lastUpdate 2.lastVersion 3.listMsg 需要保存嘛
- *
+ * <p>
  * 群置顶的功能也会放在这里
  * 现在的有两种key  sessionKey 以及 DBConstant的Global
  * 多端的状态最好不放在这里。备注: 例如屏蔽的状态
@@ -48,6 +48,7 @@ public class ConfigurationSp {
 
     /**
      * 获取全部置顶的session
+     *
      * @return
      */
     public HashSet<String> getSessionTopList() {
@@ -60,7 +61,7 @@ public class ConfigurationSp {
     }
 
     public boolean isTopSession(String sessionKey) {
-        HashSet<String> list =  getSessionTopList();
+        HashSet<String> list = getSessionTopList();
         if (list != null && list.size() > 0 && list.contains(sessionKey)) {
             return true;
         }
@@ -99,6 +100,40 @@ public class ConfigurationSp {
         EventBus.getDefault().post(SessionEvent.SET_SESSION_TOP);
     }
 
+    public boolean isShield(String sessionKey) {
+        HashSet<String> list = getSessionTopList();
+        if (list != null && list.size() > 0 && list.contains(sessionKey)) {
+            return true;
+        }
+        return false;
+    }
+
+    public void setShield(String sessionKey, boolean isShield) {
+        if (TextUtils.isEmpty(sessionKey)) {
+            return;
+        }
+
+        Set<String> shieldList = sharedPreferences.getStringSet(ConfigDimension.FORBIDDEN.name(), null);
+        Set<String> newList = new HashSet<>();
+        if (shieldList != null && shieldList.size() > 0) {
+            newList.addAll(shieldList);
+        }
+
+        if (isShield) {
+            newList.add(sessionKey);
+        } else {
+            if (newList.contains(sessionKey)) {
+                newList.remove(sessionKey);
+            }
+        }
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putStringSet(ConfigDimension.FORBIDDEN.name(), newList);
+        //提交当前数据
+        editor.apply();
+        EventBus.getDefault().post(SessionEvent.SET_FORBIDDEN);
+    }
+
     public boolean getConfig(String key, ConfigDimension dimension) {
         boolean defaultOnOff = dimension == ConfigDimension.NOTIFICATION ? false : true;
         boolean onOff = sharedPreferences.getBoolean(dimension.name() + key, defaultOnOff);
@@ -122,6 +157,7 @@ public class ConfigurationSp {
 
         //置顶session 设定
         SESSIONTOP,
+        FORBIDDEN
     }
 
 

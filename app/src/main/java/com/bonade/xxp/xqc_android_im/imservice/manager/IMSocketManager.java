@@ -129,6 +129,7 @@ public class IMSocketManager extends IMManager {
         int commandId = header.getCommandId();
         int serviceId = header.getServiceId();
         int seqNo = header.getSeqnum();
+        short flag = header.getFlag();
         logger.d("dispatch packet, serviceId:%d, commandId:%d", serviceId,
                 commandId);
         CodedInputStream codedInputStream = CodedInputStream.newInstance(new ChannelBufferInputStream(buffer.getOrignalBuffer()));
@@ -139,23 +140,25 @@ public class IMSocketManager extends IMManager {
             return;
         }
 
+        IMPacketDispatcher.packetDispatcher(flag, codedInputStream);
+
         // 抽象 父类执行
-        switch (serviceId) {
-            case IMBaseDefine.ServiceID.SID_LOGIN_VALUE:
-                IMPacketDispatcher.loginPacketDispatcher(commandId,codedInputStream);
-                break;
-            case IMBaseDefine.ServiceID.SID_BUDDY_LIST_VALUE:
-                IMPacketDispatcher.buddyPacketDispatcher(commandId,codedInputStream);
-                break;
-            case IMBaseDefine.ServiceID.SID_MSG_VALUE:
-                IMPacketDispatcher.msgPacketDispatcher(commandId,codedInputStream);
-                break;
-            case IMBaseDefine.ServiceID.SID_GROUP_VALUE:
-                IMPacketDispatcher.groupPacketDispatcher(commandId,codedInputStream);
-                break;
-            default:
-                break;
-        }
+//        switch (serviceId) {
+//            case IMBaseDefine.ServiceID.SID_LOGIN_VALUE:
+//                IMPacketDispatcher.loginPacketDispatcher(commandId,codedInputStream);
+//                break;
+//            case IMBaseDefine.ServiceID.SID_BUDDY_LIST_VALUE:
+//                IMPacketDispatcher.buddyPacketDispatcher(commandId,codedInputStream);
+//                break;
+//            case IMBaseDefine.ServiceID.SID_MSG_VALUE:
+//                IMPacketDispatcher.msgPacketDispatcher(commandId,codedInputStream);
+//                break;
+//            case IMBaseDefine.ServiceID.SID_GROUP_VALUE:
+//                IMPacketDispatcher.groupPacketDispatcher(commandId,codedInputStream);
+//                break;
+//            default:
+//                break;
+//        }
     }
 
     public void reqMsgServerAddrs() {

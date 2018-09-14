@@ -46,6 +46,7 @@ import com.bonade.xxp.xqc_android_im.ui.fragment.ContactsSelectFragment;
 import com.bonade.xxp.xqc_android_im.ui.widget.FloatMenu;
 import com.bonade.xxp.xqc_android_im.ui.widget.PopIMMore;
 import com.bonade.xxp.xqc_android_im.util.CommonUtil;
+import com.bonade.xxp.xqc_android_im.util.DateUtil;
 import com.bonade.xxp.xqc_android_im.util.Logger;
 import com.bonade.xxp.xqc_android_im.util.NetworkUtil;
 import com.bonade.xxp.xqc_android_im.util.ViewUtil;
@@ -397,7 +398,7 @@ public class ConversationContentFragment extends BaseFragment {
             return;
         }
         // 更新某个sessionId
-//        contactAdapter.updateRecentInfoByShield(entity);
+        mConversationAdapter.updateRecentInfoByShield(entity);
         IMUnreadMsgManager unreadMsgManager = imService.getUnReadMsgManager();
 
         int totalUnreadMsgCnt = unreadMsgManager.getTotalUnreadCount();
@@ -483,8 +484,10 @@ public class ConversationContentFragment extends BaseFragment {
      * 这个处理过于粗暴
      */
     private void onRecentContactDataReady() {
+        boolean isUserData = imService.getContactManager().isUserDataReady();
         boolean isSessionData = imService.getSessionManager().isSessionListReady();
-        if (!isSessionData) {
+        boolean isGroupData = imService.getGroupManager().isGroupReady();
+        if (!(isUserData && isSessionData && isGroupData)) {
             return;
         }
 
@@ -496,7 +499,7 @@ public class ConversationContentFragment extends BaseFragment {
 
         List<RecentInfo> recentSessionList = imService.getSessionManager().getRecentListInfo();
         setNoConversationView(recentSessionList);
-        mConversationAdapter.addData(recentSessionList);
+        mConversationAdapter.setNewData(recentSessionList);
         mReconnectLoadingView.setVisibility(View.GONE);
     }
 
@@ -561,8 +564,8 @@ public class ConversationContentFragment extends BaseFragment {
 
         private void setBaseView(BaseViewHolder helper, RecentInfo item) {
             String avatarUrl = null;
-            if (item.getAvatar() != null && item.getAvatar().size() > 0) {
-                avatarUrl = item.getAvatar().get(0);
+            if (item.getAvatar() != null) {
+                avatarUrl = item.getAvatar();
             }
 
             mRequestManager
@@ -575,7 +578,7 @@ public class ConversationContentFragment extends BaseFragment {
 
             helper.setText(R.id.tv_name, item.getName());
             helper.setText(R.id.tv_message_body, item.getLatestMsgData());
-            helper.setText(R.id.tv_message_time, item.getUpdateTime());
+            helper.setText(R.id.tv_message_time, DateUtil.getSessionTime(item.getUpdateTime()));
 
             TextView unReadCountView = helper.getView(R.id.tv_message_count_notify);
             int unReadCount = item.getUnReadCount();
@@ -652,7 +655,7 @@ public class ConversationContentFragment extends BaseFragment {
             for (RecentInfo recentInfo : getData()) {
                 if (recentInfo.getSessionKey().equals(sessionKey)) {
                     int status = entity.getStatus();
-                    boolean isForbidden = status == DBConstant.GROUP_STATUS_SHIELD;
+                    boolean isForbidden = status == DBConstant.STATUS_SHIELD;
                     recentInfo.setForbidden(isForbidden);
                     notifyDataSetChanged();
                     break;

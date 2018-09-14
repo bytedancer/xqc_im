@@ -29,7 +29,6 @@ import com.bonade.xxp.xqc_android_im.util.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 
 /**

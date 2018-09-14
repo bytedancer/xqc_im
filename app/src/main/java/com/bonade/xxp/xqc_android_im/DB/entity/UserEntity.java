@@ -14,20 +14,21 @@ import com.bonade.xxp.xqc_android_im.util.pinyin.PinYin;
 import com.google.gson.annotations.SerializedName;
 
 import org.greenrobot.greendao.annotation.NotNull;
+
+import java.io.Serializable;
 // KEEP INCLUDES END
 
 /**
  * Entity mapped to table "UserInfo".
  */
-
 public class UserEntity extends PeerEntity {
 
-    private int companyId;
+    private Integer companyId;
     private String companyName;
     private String jobName;
     private String deptName;
     private String mobile;
-    private int isFriend;
+    private Integer isFriend;
     private String email;
     private String userName;
 
@@ -36,7 +37,7 @@ public class UserEntity extends PeerEntity {
     private SearchElement searchElement = new SearchElement();
     // KEEP FIELDS END
 
-
+    @Generated
     public UserEntity() {
     }
 
@@ -44,7 +45,8 @@ public class UserEntity extends PeerEntity {
         this.cid = cid;
     }
 
-    public UserEntity(Long cid, int peerId, String mainName, String avatar, Integer companyId, String companyName, String jobName, String deptName, String mobile, Integer isFriend, String email, String userName, Integer created, Integer updated) {
+    @Generated
+    public UserEntity(Long cid, int peerId, String mainName, String avatar, Integer companyId, String companyName, String jobName, String deptName, String mobile, Integer isFriend, String email, String userName, Integer status, Integer created, Integer updated) {
         this.cid = cid;
         this.peerId = peerId;
         this.mainName = mainName;
@@ -57,6 +59,7 @@ public class UserEntity extends PeerEntity {
         this.isFriend = isFriend;
         this.email = email;
         this.userName = userName;
+        this.status = status;
         this.created = created;
         this.updated = updated;
     }
@@ -78,11 +81,7 @@ public class UserEntity extends PeerEntity {
     }
 
     public String getMainName() {
-        if (!TextUtils.isEmpty(mainName))
-            return mainName;
-        if (!TextUtils.isEmpty(userName))
-            return userName;
-        return "";
+        return mainName;
     }
 
     public void setMainName(String mainName) {
@@ -161,11 +160,19 @@ public class UserEntity extends PeerEntity {
         this.userName = userName;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     public int getCreated() {
         return created;
     }
 
-    public void setCreated(Integer created) {
+    public void setCreated(int created) {
         this.created = created;
     }
 
@@ -173,15 +180,15 @@ public class UserEntity extends PeerEntity {
         return updated;
     }
 
-    public void setUpdated(Integer updated) {
+    public void setUpdated(int updated) {
         this.updated = updated;
     }
 
+    // KEEP METHODS - put your custom methods here
     public boolean isFriend() {
         return isFriend == 1;
     }
 
-    // KEEP METHODS - put your custom methods here
     public PinYin.PinYinElement getPinyinElement() {
         return pinyinElement;
     }
@@ -195,7 +202,6 @@ public class UserEntity extends PeerEntity {
     public int getType() {
         return DBConstant.SESSION_TYPE_SINGLE;
     }
-
     // KEEP METHODS END
 
 }

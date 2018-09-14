@@ -49,24 +49,19 @@ public class BaseMsgRenderView extends RelativeLayout {
         mContext = context;
         mRequestManager = Glide.with(context);
         mTransformation = new CropCircleTransformation(Glide.get(context).getBitmapPool());
-
-        avatarView = findViewById(R.id.iv_avatar);
-        messageFailedView = findViewById(R.id.iv_message_state_failed);
-        loadingView = findViewById(R.id.pb_loading);
-        nameView = findViewById(R.id.tv_name);
     }
 
     /**
      * 渲染之后做的事情，子类会调用到这个地方吗？
      */
-//    @Override
-//    protected void onFinishInflate() {
-//        super.onFinishInflate();
-//        avatarView = findViewById(R.id.iv_avatar);
-//        messageFailedView = findViewById(R.id.iv_message_state_failed);
-//        loadingView = findViewById(R.id.pb_loading);
-//        nameView = findViewById(R.id.tv_name);
-//    }
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        avatarView = findViewById(R.id.iv_avatar);
+        messageFailedView = findViewById(R.id.iv_message_state_failed);
+        loadingView = findViewById(R.id.pb_loading);
+        nameView = findViewById(R.id.tv_name);
+    }
 
     /**
      * 消息失败绑定事件 三种不同的弹窗
@@ -108,9 +103,9 @@ public class BaseMsgRenderView extends RelativeLayout {
     /**
      * 控件赋值
      * @param messageEntity
-     * @param userEntity
+     * @param context
      */
-    public void render(@NonNull MessageEntity messageEntity, @NonNull UserEntity userEntity, Context context) {
+    public void render(@NonNull MessageEntity messageEntity, UserEntity userEntity, Context context) {
         this.messageEntity = messageEntity;
         String avatar = userEntity.getAvatar();
         int msgStatus = messageEntity.getStatus();
@@ -128,11 +123,10 @@ public class BaseMsgRenderView extends RelativeLayout {
             nameView.setText(userEntity.getMainName());
             nameView.setVisibility(View.VISIBLE);
         } else {
-            nameView.setVisibility(View.GONE);
+            // TODO: 2018/9/10 设置我的头像
         }
 
         // 头像的跳转暂时放在这里 todo 业务结合紧密，但是应该不会改了
-        final int userId = userEntity.getPeerId();
         avatarView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

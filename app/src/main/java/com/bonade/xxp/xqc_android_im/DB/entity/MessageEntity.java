@@ -21,7 +21,7 @@ public class MessageEntity implements java.io.Serializable {
     @Id(autoincrement = true)
     protected Long id;
     protected int msgId;
-    protected int fromId;
+    protected Integer fromId;
     protected int toId;
 
     @NotNull
@@ -33,11 +33,11 @@ public class MessageEntity implements java.io.Serializable {
     protected int displayType;
 
     @Index
-    protected int status;
+    protected Integer status;
 
     @Index
-    protected int created;
-    protected int updated;
+    protected Integer created;
+    protected Integer updated;
 
     // KEEP FIELDS - put your custom fields here
     protected boolean isGIfEmo;
@@ -52,7 +52,7 @@ public class MessageEntity implements java.io.Serializable {
     }
 
     @Generated
-    public MessageEntity(Long id, int msgId, int fromId, int toId, String sessionKey, String content, int msgType, int displayType, int status, int created, int updated) {
+    public MessageEntity(Long id, int msgId, Integer fromId, int toId, String sessionKey, String content, int msgType, int displayType, Integer status, Integer created, Integer updated) {
         this.id = id;
         this.msgId = msgId;
         this.fromId = fromId;
@@ -82,11 +82,11 @@ public class MessageEntity implements java.io.Serializable {
         this.msgId = msgId;
     }
 
-    public int getFromId() {
+    public Integer getFromId() {
         return fromId;
     }
 
-    public void setFromId(int fromId) {
+    public void setFromId(Integer fromId) {
         this.fromId = fromId;
     }
 
@@ -134,41 +134,44 @@ public class MessageEntity implements java.io.Serializable {
         this.displayType = displayType;
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
-    public int getCreated() {
+    public Integer getCreated() {
         return created;
     }
 
-    public void setCreated(int created) {
+    public void setCreated(Integer created) {
         this.created = created;
     }
 
-    public int getUpdated() {
+    public Integer getUpdated() {
         return updated;
     }
 
-    public void setUpdated(int updated) {
+    public void setUpdated(Integer updated) {
         this.updated = updated;
     }
 
     // KEEP METHODS - put your custom methods here
+
     /**
      * -----根据自身状态判断的---------
      */
     public int getSessionType() {
         switch (msgType) {
-            case  DBConstant.MSG_TYPE_SINGLE_TEXT:
-            case  DBConstant.MSG_TYPE_SINGLE_AUDIO:
+            case DBConstant.MSG_TYPE_SINGLE_TEXT:
+            case DBConstant.MSG_TYPE_SINGLE_AUDIO:
+            case DBConstant.MSG_TYPE_SINGLE_IMAGE:
                 return DBConstant.SESSION_TYPE_SINGLE;
             case DBConstant.MSG_TYPE_GROUP_TEXT:
             case DBConstant.MSG_TYPE_GROUP_AUDIO:
+            case DBConstant.MSG_TYPE_GROUP_IMAGE:
                 return DBConstant.SESSION_TYPE_GROUP;
             default:
                 //todo 有问题
@@ -177,7 +180,7 @@ public class MessageEntity implements java.io.Serializable {
     }
 
     public String getMessageDisplay() {
-        switch (displayType){
+        switch (displayType) {
             case DBConstant.SHOW_AUDIO_TYPE:
                 return DBConstant.DISPLAY_FOR_AUDIO;
             case DBConstant.SHOW_ORIGIN_TEXT_TYPE:
@@ -248,16 +251,17 @@ public class MessageEntity implements java.io.Serializable {
 
     /**
      * 获取会话的sessionId
+     *
      * @param isSend
      * @return
      */
-    public int getPeerId(boolean isSend){
-        if(isSend){
+    public int getPeerId(boolean isSend) {
+        if (isSend) {
             /**自己发出去的*/
             return toId;
-        }else{
+        } else {
             /**接受到的*/
-            switch (getSessionType()){
+            switch (getSessionType()) {
                 case DBConstant.SESSION_TYPE_SINGLE:
                     return fromId;
                 case DBConstant.SESSION_TYPE_GROUP:
@@ -268,7 +272,7 @@ public class MessageEntity implements java.io.Serializable {
         }
     }
 
-    public byte[] getSendContent(){
+    public byte[] getSendContent() {
         return null;
     }
 
@@ -280,15 +284,15 @@ public class MessageEntity implements java.io.Serializable {
         this.isGIfEmo = isGIfEmo;
     }
 
-    public boolean isSend(int loginId){
-        boolean isSend = (loginId==fromId)?true:false;
+    public boolean isSend(int loginId) {
+        boolean isSend = (loginId == fromId) ? true : false;
         return isSend;
     }
 
-    public String buildSessionKey(boolean isSend){
+    public String buildSessionKey(boolean isSend) {
         int sessionType = getSessionType();
         int peerId = getPeerId(isSend);
-        sessionKey = EntityChangeEngine.getSessionKey(peerId,sessionType);
+        sessionKey = EntityChangeEngine.getSessionKey(peerId, sessionType);
         return sessionKey;
     }
     // KEEP METHODS END

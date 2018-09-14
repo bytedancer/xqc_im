@@ -1,6 +1,8 @@
 package com.bonade.xxp.xqc_android_im.imservice.entity;
 
-public class SearchElement {
+import java.io.Serializable;
+
+public class SearchElement implements Serializable {
 
     public int startIndex = -1;
     public int endIndex = -1;

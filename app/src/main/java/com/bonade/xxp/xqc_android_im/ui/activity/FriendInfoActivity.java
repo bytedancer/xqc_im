@@ -15,6 +15,7 @@ import com.bonade.xxp.xqc_android_im.DB.entity.UserEntity;
 import com.bonade.xxp.xqc_android_im.R;
 import com.bonade.xxp.xqc_android_im.http.ApiFactory;
 import com.bonade.xxp.xqc_android_im.http.base.BaseResponse;
+import com.bonade.xxp.xqc_android_im.imservice.manager.IMContactManager;
 import com.bonade.xxp.xqc_android_im.imservice.manager.IMLoginManager;
 import com.bonade.xxp.xqc_android_im.model.Person;
 import com.bonade.xxp.xqc_android_im.ui.base.BaseActivity;
@@ -91,8 +92,10 @@ public class FriendInfoActivity extends BaseActivity {
 
     @OnClick(R.id.fl_send_msg)
     void sendMsgClick() {
-        ChatActivity.launch(this, mUserEntity.getSessionKey());
-        ViewUtil.showMessage("发消息");
+        if (mUserEntity == null)
+            return;
+        IMContactManager.getInstance().addContact(mUserEntity);
+        ChatActivity.launch(this, IMLoginManager.getInstance().getLoginInfo().getSessionKey());
     }
 
     @OnClick(R.id.fl_add_friend)

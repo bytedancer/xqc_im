@@ -28,11 +28,12 @@ public class SequenceNumberMaker {
         return mSquence;
     }
 
-    /**依旧比较 Ugly 的解决办法
+    /**
+     * 依旧比较 Ugly 的解决办法
      * 多线程情况下，生成相同的msgId
-     * */
-    public int makelocalUniqueMsgId(){
-        synchronized(SequenceNumberMaker.this) {
+     */
+    public int makelocalUniqueMsgId() {
+        synchronized (SequenceNumberMaker.this) {
             int timeStamp = (int) (System.currentTimeMillis() % 10000000);
             int localId = timeStamp + 90000000;
             //logger.e("#yingmu2#之前的msgId:%d",preMsgId);
@@ -47,9 +48,11 @@ public class SequenceNumberMaker {
         }
     }
 
-    /**比较 Ugly 的解决办法,但是比较实用*/
-    public boolean isFailure(int msgId){
-        if(msgId>=90000000){
+    /**
+     * 比较 Ugly 的解决办法,但是比较实用
+     */
+    public boolean isFailure(int msgId) {
+        if (msgId >= 90000000) {
             return true;
         }
         return false;

@@ -6,20 +6,34 @@ import android.text.TextUtils;
 
 import com.bonade.xxp.xqc_android_im.DB.entity.GroupEntity;
 import com.bonade.xxp.xqc_android_im.DB.entity.MessageEntity;
+import com.bonade.xxp.xqc_android_im.DB.entity.UserEntity;
+import com.bonade.xxp.xqc_android_im.DB.sp.ConfigurationSp;
 import com.bonade.xxp.xqc_android_im.config.DBConstant;
+import com.bonade.xxp.xqc_android_im.http.ApiFactory;
+import com.bonade.xxp.xqc_android_im.http.base.BaseResponse;
+import com.bonade.xxp.xqc_android_im.http.entity.UnreadMessage;
 import com.bonade.xxp.xqc_android_im.imservice.entity.UnreadEntity;
 import com.bonade.xxp.xqc_android_im.imservice.event.UnreadEvent;
 import com.bonade.xxp.xqc_android_im.protobuf.IMBaseDefine;
 import com.bonade.xxp.xqc_android_im.protobuf.IMMessage;
 import com.bonade.xxp.xqc_android_im.protobuf.helper.EntityChangeEngine;
 import com.bonade.xxp.xqc_android_im.protobuf.helper.Java2ProtoBuf;
+import com.bonade.xxp.xqc_android_im.protobuf.helper.Json2JavaBean;
 import com.bonade.xxp.xqc_android_im.protobuf.helper.ProtoBuf2JavaBean;
 import com.bonade.xxp.xqc_android_im.util.Logger;
+import com.bonade.xxp.xqc_android_im.util.ViewUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * 未读消息相关的处理，归属于messageEvent中
@@ -47,7 +61,6 @@ public class IMUnreadMsgManager extends IMManager {
      * key --> sessionKey
      */
     private ConcurrentHashMap<String, UnreadEntity> unreadMsgMap = new ConcurrentHashMap<>();
-    private int totalUnreadCount = 0;
 
     private boolean unreadListReady = false;
 
@@ -61,12 +74,12 @@ public class IMUnreadMsgManager extends IMManager {
      */
     public void onNormalLoginOk() {
         unreadMsgMap.clear();
-        reqUnreadMsgContactList();
+        reqUnreadMsgList();
     }
 
     public void onLocalNetOk() {
         unreadMsgMap.clear();
-        reqUnreadMsgContactList();
+        reqUnreadMsgList();
     }
 
     @Override
@@ -93,30 +106,53 @@ public class IMUnreadMsgManager extends IMManager {
     /**
      * 请求未读消息列表
      */
-    private void reqUnreadMsgContactList() {
-//        logger.i("unread#1reqUnreadMsgContactList");
-//        int loginId = IMLoginManager.getInstance().getLoginId();
-//        IMMessage.IMUnreadMsgCntReq  unreadMsgCntReq  = IMMessage.IMUnreadMsgCntReq
-//                .newBuilder()
-//                .setUserId(loginId)
-//                .build();
-//        int sid = IMBaseDefine.ServiceID.SID_MSG_VALUE;
-//        int cid = IMBaseDefine.MessageCmdID.CID_MSG_UNREAD_CNT_REQUEST_VALUE;
-//        imSocketManager.sendRequest(unreadMsgCntReq,sid,cid);
+    private void reqUnreadMsgList() {
+        ApiFactory.getMessageApi().getUnreadMsgList(imLoginManager.getLoginId())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<BaseResponse<List<UnreadMessage>>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ViewUtil.showMessage(e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(BaseResponse<List<UnreadMessage>> response) {
+                        if (response == null
+                                || response.getData() == null
+                                || response.getData().isEmpty()) {
+                            return;
+                        }
+                        onRepUnreadMsgList(response.getData());
+                    }
+                });
     }
 
-    public void onRepUnreadMsgContactList(IMMessage.IMUnreadMsgCntRsp unreadMsgCntRsp) {
-        logger.i("unread#2onRepUnreadMsgContactList");
-        totalUnreadCount = unreadMsgCntRsp.getTotalCnt();
-        List<IMBaseDefine.UnreadInfo> unreadInfoList = unreadMsgCntRsp.getUnreadinfoListList();
-        logger.i("unread#unreadMsgCnt:%d, unreadMsgInfoCnt:%d", unreadInfoList.size(), totalUnreadCount);
+    public void onRepUnreadMsgList(List<UnreadMessage> unreadMessages) {
+        Map<String, List<UnreadMessage>> map = new HashMap<>();
+        for (UnreadMessage unreadMessage : unreadMessages) {
+            String sessionKey = unreadMessage.getSessionId();
+            if (map.containsKey(sessionKey)) {
+                map.get(sessionKey).add(unreadMessage);
+            } else {
+                List<UnreadMessage> list = new ArrayList<>();
+                list.add(unreadMessage);
+                map.put(sessionKey, list);
+            }
+        }
 
-        for (IMBaseDefine.UnreadInfo unreadInfo : unreadInfoList) {
-            UnreadEntity unreadEntity = ProtoBuf2JavaBean.getUnreadEntity(unreadInfo);
-            //屏蔽的设定
+        for (String sessionKey : map.keySet()) {
+            List<UnreadMessage> list = map.get(sessionKey);
+            UnreadMessage unreadMessage = list.get(list.size() - 1);
+            UnreadEntity unreadEntity = Json2JavaBean.getUnreadEntity(unreadMessage, list.size());
             addIsForbidden(unreadEntity);
             unreadMsgMap.put(unreadEntity.getSessionKey(), unreadEntity);
         }
+
         triggerEvent(new UnreadEvent(UnreadEvent.Event.UNREAD_MSG_LIST_OK));
     }
 
@@ -124,16 +160,14 @@ public class IMUnreadMsgManager extends IMManager {
      * 回话是否已经被设定为屏蔽
      */
     private void addIsForbidden(UnreadEntity unreadEntity) {
-        if (unreadEntity.getSessionType() == DBConstant.SESSION_TYPE_GROUP) {
-            GroupEntity groupEntity = IMGroupManager.getInstance().findGroup(unreadEntity.getPeerId());
-            if (groupEntity != null && groupEntity.getStatus() == DBConstant.GROUP_STATUS_SHIELD) {
-                unreadEntity.setForbidden(true);
-            }
+        boolean isForbidden = ConfigurationSp.getInstance(context, imLoginManager.getLoginId()).isShield(unreadEntity.getSessionKey());
+        if (isForbidden) {
+            unreadEntity.setForbidden(true);
         }
     }
 
     /**
-     * 设定未读回话为屏蔽回话 仅限于群组
+     * 设定未读回话为屏蔽回话
      *
      * @param sessionKey
      * @param isFor
@@ -233,35 +267,35 @@ public class IMUnreadMsgManager extends IMManager {
      * @param readNotify
      */
     public void onNotifyRead(IMMessage.IMMsgDataReadNotify readNotify) {
-        logger.d("chat#onNotifyRead");
-        // 发送此信令的用户id
-        int trigerId = readNotify.getUserId();
-        int loginId = IMLoginManager.getInstance().getLoginId();
-        if (trigerId != loginId) {
-            logger.i("onNotifyRead# trigerId:%s,loginId:%s not Equal", trigerId, loginId);
-            return;
-        }
-        // 现在的逻辑是msgId之后的 全部都是已读的
-        // 不做复杂判断了，简单处理
-        int msgId = readNotify.getMsgId();
-        int peerId = readNotify.getSessionId();
-        int sessionType = ProtoBuf2JavaBean.getJavaSessionType(readNotify.getSessionType());
-        String sessionKey = EntityChangeEngine.getSessionKey(peerId, sessionType);
-
-        // 通知栏也要去除掉
-        NotificationManager notifyMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (notifyMgr == null) {
-            return;
-        }
-        int notificationId = IMNotificationManager.getInstance().getSessionNotificationId(sessionKey);
-        notifyMgr.cancel(notificationId);
-
-        UnreadEntity unreadSession = findUnread(sessionKey);
-        if (unreadSession != null && unreadSession.getLatestMsgId() <= msgId) {
-            // 清空会话session
-            logger.d("chat#onNotifyRead# unreadSession onLoginOut");
-            readUnreadSession(sessionKey);
-        }
+//        logger.d("chat#onNotifyRead");
+//        // 发送此信令的用户id
+//        int trigerId = readNotify.getUserId();
+//        int loginId = IMLoginManager.getInstance().getLoginId();
+//        if (trigerId != loginId) {
+//            logger.i("onNotifyRead# trigerId:%s,loginId:%s not Equal", trigerId, loginId);
+//            return;
+//        }
+//        // 现在的逻辑是msgId之后的 全部都是已读的
+//        // 不做复杂判断了，简单处理
+//        int msgId = readNotify.getMsgId();
+//        int peerId = readNotify.getSessionId();
+//        int sessionType = ProtoBuf2JavaBean.getJavaSessionType(readNotify.getSessionType());
+//        String sessionKey = EntityChangeEngine.getSessionKey(peerId, sessionType);
+//
+//        // 通知栏也要去除掉
+//        NotificationManager notifyMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+//        if (notifyMgr == null) {
+//            return;
+//        }
+//        int notificationId = IMNotificationManager.getInstance().getSessionNotificationId(sessionKey);
+//        notifyMgr.cancel(notificationId);
+//
+//        UnreadEntity unreadSession = findUnread(sessionKey);
+//        if (unreadSession != null && unreadSession.getLatestMsgId() <= msgId) {
+//            // 清空会话session
+//            logger.d("chat#onNotifyRead# unreadSession onLoginOut");
+//            readUnreadSession(sessionKey);
+//        }
     }
 
     /**

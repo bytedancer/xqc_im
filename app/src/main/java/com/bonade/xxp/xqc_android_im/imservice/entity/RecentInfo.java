@@ -1,6 +1,7 @@
 package com.bonade.xxp.xqc_android_im.imservice.entity;
 
 import com.bonade.xxp.xqc_android_im.DB.entity.GroupEntity;
+import com.bonade.xxp.xqc_android_im.DB.entity.PeerEntity;
 import com.bonade.xxp.xqc_android_im.DB.entity.SessionEntity;
 import com.bonade.xxp.xqc_android_im.DB.entity.UserEntity;
 import com.bonade.xxp.xqc_android_im.config.DBConstant;
@@ -30,7 +31,7 @@ public class RecentInfo {
      * Group/UserEntity
      */
     private String name;
-    private List<String> avatar;
+    private String avatar;
 
     /**
      * 是否置顶
@@ -43,7 +44,7 @@ public class RecentInfo {
 
     public RecentInfo(){}
 
-    public RecentInfo(SessionEntity sessionEntity, UserEntity entity, UnreadEntity unreadEntity){
+    public RecentInfo(SessionEntity sessionEntity, UserEntity userEntity, UnreadEntity unreadEntity){
         sessionKey = sessionEntity.getSessionKey();
         peerId = sessionEntity.getPeerId();
         sessionType = DBConstant.SESSION_TYPE_SINGLE;
@@ -55,11 +56,16 @@ public class RecentInfo {
         if(unreadEntity !=null)
             unReadCount = unreadEntity.getUnReadCount();
 
-        if(entity != null){
-            name = entity.getMainName();
-            ArrayList<String> avatarList = new ArrayList<>();
-            avatarList.add(entity.getAvatar());
-            avatar = avatarList;
+        if(userEntity != null){
+            name = userEntity.getMainName();
+
+            // 免打扰的设定
+            int status = userEntity.getStatus();
+            if (status == DBConstant.STATUS_SHIELD) {
+                isForbidden = true;
+            }
+
+            avatar = userEntity.getAvatar();
         }
     }
 
@@ -77,28 +83,15 @@ public class RecentInfo {
         }
 
         if (groupEntity != null) {
-            ArrayList<String> avatarList = new ArrayList<>();
             name = groupEntity.getMainName();
 
             // 免打扰的设定
             int status = groupEntity.getStatus();
-            if (status == DBConstant.GROUP_STATUS_SHIELD) {
+            if (status == DBConstant.STATUS_SHIELD) {
                 isForbidden = true;
             }
 
-            ArrayList<Integer> list = new ArrayList<>();
-            list.addAll(groupEntity.getGroupMemberIds());
-            for (Integer userId : list) {
-                UserEntity userEntity = null;
-//                UserEntity entity = IMContactManager.instance().findContact(userId);
-                if (userEntity != null) {
-                    avatarList.add(userEntity.getAvatar());
-                }
-                if(avatarList.size() >= 4){
-                    break;
-                }
-            }
-            avatar = avatarList;
+            avatar = groupEntity.getAvatar();
         }
     }
 
@@ -174,11 +167,11 @@ public class RecentInfo {
         this.name = name;
     }
 
-    public List<String> getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(List<String> avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
 

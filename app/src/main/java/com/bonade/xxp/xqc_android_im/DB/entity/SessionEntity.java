@@ -21,16 +21,14 @@ public class SessionEntity {
     @NotNull
     @Unique
     private String sessionKey;
-    private int peerId;
-    private int peerType;
-    private int latestMsgType;
-    private int latestMsgId;
-
-    @NotNull
+    private Integer peerId;
+    private Integer peerType;
+    private Integer latestMsgType;
+    private Integer latestMsgId;
     private String latestMsgData;
-    private int talkId;
-    private int created;
-    private int updated;
+    private Integer talkId;
+    private Integer created;
+    private Integer updated;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -44,7 +42,7 @@ public class SessionEntity {
     }
 
     @Generated
-    public SessionEntity(Long id, String sessionKey, int peerId, int peerType, int latestMsgType, int latestMsgId, String latestMsgData, int talkId, int created, int updated) {
+    public SessionEntity(Long id, String sessionKey, Integer peerId, Integer peerType, Integer latestMsgType, Integer latestMsgId, String latestMsgData, Integer talkId, Integer created, Integer updated) {
         this.id = id;
         this.sessionKey = sessionKey;
         this.peerId = peerId;
@@ -75,75 +73,73 @@ public class SessionEntity {
         this.sessionKey = sessionKey;
     }
 
-    public int getPeerId() {
+    public Integer getPeerId() {
         return peerId;
     }
 
-    public void setPeerId(int peerId) {
+    public void setPeerId(Integer peerId) {
         this.peerId = peerId;
     }
 
-    public int getPeerType() {
+    public Integer getPeerType() {
         return peerType;
     }
 
-    public void setPeerType(int peerType) {
+    public void setPeerType(Integer peerType) {
         this.peerType = peerType;
     }
 
-    public int getLatestMsgType() {
+    public Integer getLatestMsgType() {
         return latestMsgType;
     }
 
-    public void setLatestMsgType(int latestMsgType) {
+    public void setLatestMsgType(Integer latestMsgType) {
         this.latestMsgType = latestMsgType;
     }
 
-    public int getLatestMsgId() {
+    public Integer getLatestMsgId() {
         return latestMsgId;
     }
 
-    public void setLatestMsgId(int latestMsgId) {
+    public void setLatestMsgId(Integer latestMsgId) {
         this.latestMsgId = latestMsgId;
     }
 
-    @NotNull
     public String getLatestMsgData() {
         return latestMsgData;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setLatestMsgData(@NotNull String latestMsgData) {
+    public void setLatestMsgData(String latestMsgData) {
         this.latestMsgData = latestMsgData;
     }
 
-    public int getTalkId() {
+    public Integer getTalkId() {
         return talkId;
     }
 
-    public void setTalkId(int talkId) {
+    public void setTalkId(Integer talkId) {
         this.talkId = talkId;
     }
 
-    public int getCreated() {
+    public Integer getCreated() {
         return created;
     }
 
-    public void setCreated(int created) {
+    public void setCreated(Integer created) {
         this.created = created;
     }
 
-    public int getUpdated() {
+    public Integer getUpdated() {
         return updated;
     }
 
-    public void setUpdated(int updated) {
+    public void setUpdated(Integer updated) {
         this.updated = updated;
     }
 
     // KEEP METHODS - put your custom methods here
-    public String buildSessionKey(){
-        if (peerType <= 0 || peerId <= 0){
+    public String buildSessionKey() {
+        if (peerType <= 0 || peerId <= 0) {
             throw new IllegalArgumentException(
                     "SessionEntity buildSessionKey error,cause by some params <=0");
         }

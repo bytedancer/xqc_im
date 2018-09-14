@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bonade.xxp.xqc_android_im.DB.entity.MessageEntity;
@@ -37,27 +38,23 @@ public class ImageRenderView extends BaseMsgRenderView {
 
     public ImageRenderView(Context context, AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    public static ImageRenderView inflater(Context context, ViewGroup viewGroup, boolean isMine) {
+        int resource = isMine ? R.layout.item_mine_image_message : R.layout.item_other_image_message;
+        ImageRenderView imageRenderView = (ImageRenderView) LayoutInflater.from(context).inflate(resource, viewGroup, false);
+        imageRenderView.setMine(isMine);
+        return imageRenderView;
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
         msgLayout = findViewById(R.id.message_layout);
         msgImage = findViewById(R.id.message_image);
         imageProgress = findViewById(R.id.pb_image);
         imageProgress.setShowText(false);
     }
-
-//    public static ImageRenderView inflater(Context context, boolean isMine) {
-//        int resource = isMine ? R.layout.item_mine_image_message : R.layout.item_other_image_message;
-//        ImageRenderView imageRenderView = (ImageRenderView) LayoutInflater.from(context).inflate(resource, null);
-//        imageRenderView.setMine(isMine);
-//        return imageRenderView;
-//    }
-//
-//    @Override
-//    protected void onFinishInflate() {
-//        super.onFinishInflate();
-//        msgLayout = findViewById(R.id.message_layout);
-//        msgImage = findViewById(R.id.message_image);
-//        imageProgress = findViewById(R.id.pb_image);
-//        imageProgress.setShowText(false);
-//    }
 
     /**
      * 控件赋值
@@ -69,10 +66,9 @@ public class ImageRenderView extends BaseMsgRenderView {
      * 2. 然后分析loadStatus 判断消息的展示状态
      *
      * @param messageEntity
-     * @param userEntity
      */
     @Override
-    public void render(@NonNull MessageEntity messageEntity, @NonNull UserEntity userEntity, Context context) {
+    public void render(@NonNull MessageEntity messageEntity, UserEntity userEntity, Context context) {
         super.render(messageEntity, userEntity, context);
     }
 

@@ -5,9 +5,13 @@ import com.bonade.xxp.xqc_android_im.DB.entity.GroupEntity;
 import com.bonade.xxp.xqc_android_im.DB.entity.SessionEntity;
 import com.bonade.xxp.xqc_android_im.DB.entity.UserEntity;
 import com.bonade.xxp.xqc_android_im.config.DBConstant;
+import com.bonade.xxp.xqc_android_im.http.ApiFactory;
+import com.bonade.xxp.xqc_android_im.http.base.BaseResponse;
 import com.bonade.xxp.xqc_android_im.imservice.callback.Packetlistener;
 import com.bonade.xxp.xqc_android_im.imservice.event.GroupEvent;
+import com.bonade.xxp.xqc_android_im.imservice.event.LoginEvent;
 import com.bonade.xxp.xqc_android_im.imservice.event.SessionEvent;
+import com.bonade.xxp.xqc_android_im.model.Group;
 import com.bonade.xxp.xqc_android_im.protobuf.IMBaseDefine;
 import com.bonade.xxp.xqc_android_im.protobuf.IMGroup;
 import com.bonade.xxp.xqc_android_im.protobuf.helper.EntityChangeEngine;
@@ -29,15 +33,21 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import rx.Observer;
+import rx.schedulers.Schedulers;
+
 public class IMGroupManager extends IMManager {
 
     private Logger logger = Logger.getLogger(IMGroupManager.class);
 
     private static IMGroupManager instance = new IMGroupManager();
+
     public static IMGroupManager getInstance() {
         return instance;
     }
-    private IMGroupManager(){}
+
+    private IMGroupManager() {
+    }
 
     // 依赖的服务管理
     private IMSocketManager imSocketManager = IMSocketManager.getInstance();
@@ -77,7 +87,7 @@ public class IMGroupManager extends IMManager {
     }
 
     public void onLocalNetOk() {
-        reqGetNormalGroupList();
+        reqGetGroupList();
     }
 
     @Override
@@ -88,8 +98,8 @@ public class IMGroupManager extends IMManager {
     }
 
     @Subscribe(sticky = true)
-    public void onEvent(SessionEvent event){
-        switch (event){
+    public void onEvent(SessionEvent event) {
+        switch (event) {
             case RECENT_SESSION_LIST_UPDATE:
                 // groupMap 本地已经加载完毕之后才触发
                 loadSessionGroupInfo();
@@ -99,6 +109,7 @@ public class IMGroupManager extends IMManager {
 
     /**
      * 实现自身的事件驱动
+     *
      * @param event
      */
     public synchronized void triggerEvent(GroupEvent event) {
@@ -117,7 +128,7 @@ public class IMGroupManager extends IMManager {
      * 1. 加载本地信息
      * 2. 从session中获取 群组信息，从本地中获取这些群组的version信息
      * 3. 合并上述的merge结果， version groupId 请求
-     * */
+     */
     private void loadSessionGroupInfo() {
         logger.i("group#loadSessionGroupInfo");
 
@@ -126,7 +137,7 @@ public class IMGroupManager extends IMManager {
         for (SessionEntity sessionInfo : sessionInfoList) {
             int version = 0;
             // 是群组
-            if (sessionInfo.getPeerType() == DBConstant.SESSION_TYPE_GROUP ) {
+            if (sessionInfo.getPeerType() == DBConstant.SESSION_TYPE_GROUP) {
                 if (groupMap.containsKey(sessionInfo.getPeerId())) {
                     version = groupMap.get(sessionInfo.getPeerId()).getVersion();
                 }
@@ -142,7 +153,7 @@ public class IMGroupManager extends IMManager {
         // 事件触发的时候需要注意
         if (needReqList.size() > 0) {
             reqGetGroupDetailInfo(needReqList);
-            return ;
+            return;
         }
     }
 
@@ -150,32 +161,57 @@ public class IMGroupManager extends IMManager {
      * 联系人页面正式群的请求
      * todo 正式群与临时群逻辑上的分开的，但是底层应该是想通的
      */
-    private void reqGetNormalGroupList() {
-//        logger.i("group#reqGetNormalGroupList");
-//        int loginId = imLoginManager.getLoginId();
-//        IMGroup.IMNormalGroupListReq  normalGroupListReq = IMGroup.IMNormalGroupListReq.newBuilder()
-//                .setUserId(loginId)
-//                .build();
-//        int sid = IMBaseDefine.ServiceID.SID_GROUP_VALUE;
-//        int cid = IMBaseDefine.GroupCmdID.CID_GROUP_NORMAL_LIST_REQUEST_VALUE;
-//        imSocketManager.sendRequest(normalGroupListReq,sid,cid);
-//        logger.i("group#send packet to server");
+    private void reqGetGroupList() {
+        ApiFactory.getGroupApi().getAllGroups(imLoginManager.getLoginId())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<BaseResponse<List<GroupEntity>>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(BaseResponse<List<GroupEntity>> response) {
+                        if (response == null || response.getData() == null) {
+                            return;
+                        }
+                        onRepGroupList(response.getData());
+                    }
+                });
+    }
+
+    private void onRepGroupList(List<GroupEntity> groups) {
+        if (groups.isEmpty()) {
+            return;
+        }
+
+        for (GroupEntity groupEntity : groups) {
+            groupMap.put(groupEntity.getPeerId(), groupEntity);
+        }
+
+        dbInterface.batchInsertOrUpdateGroup(groups);
+        triggerEvent(new GroupEvent(GroupEvent.Event.GROUP_INFO_UPDATED));
     }
 
     public void onRepNormalGroupList(IMGroup.IMNormalGroupListRsp normalGroupListRsp) {
         logger.i("group#onRepNormalGroupList");
         int groupSize = normalGroupListRsp.getGroupVersionListCount();
-        logger.i("group#onRepNormalGroupList cnt:%d",groupSize);
-        List<IMBaseDefine.GroupVersionInfo> versionInfoList =  normalGroupListRsp.getGroupVersionListList();
+        logger.i("group#onRepNormalGroupList cnt:%d", groupSize);
+        List<IMBaseDefine.GroupVersionInfo> versionInfoList = normalGroupListRsp.getGroupVersionListList();
 
         /**对比DB中的version字段*/
         // 这块对比的可以抽离出来
         List<IMBaseDefine.GroupVersionInfo> needInfoList = new ArrayList<>();
-        for(IMBaseDefine.GroupVersionInfo groupVersionInfo:versionInfoList ){
-            int groupId =  groupVersionInfo.getGroupId();
-            int version =  groupVersionInfo.getVersion();
-            if(groupMap.containsKey(groupId) &&
-                    groupMap.get(groupId).getVersion() ==version ){
+        for (IMBaseDefine.GroupVersionInfo groupVersionInfo : versionInfoList) {
+            int groupId = groupVersionInfo.getGroupId();
+            int version = groupVersionInfo.getVersion();
+            if (groupMap.containsKey(groupId) &&
+                    groupMap.get(groupId).getVersion() == version) {
                 continue;
             }
             IMBaseDefine.GroupVersionInfo versionInfo = IMBaseDefine.GroupVersionInfo.newBuilder()
@@ -186,12 +222,12 @@ public class IMGroupManager extends IMManager {
         }
 
         // 事件触发的时候需要注意 todo
-        if(needInfoList.size() > 0){
+        if (needInfoList.size() > 0) {
             reqGetGroupDetailInfo(needInfoList);
         }
     }
 
-    public void  reqGroupDetailInfo(int groupId){
+    public void reqGroupDetailInfo(int groupId) {
         IMBaseDefine.GroupVersionInfo groupVersionInfo = IMBaseDefine.GroupVersionInfo.newBuilder()
                 .setGroupId(groupId)
                 .setVersion(0)
@@ -203,6 +239,7 @@ public class IMGroupManager extends IMManager {
 
     /**
      * 请求群组的详细信息
+     *
      * @param versionInfoList
      */
     public void reqGetGroupDetailInfo(List<IMBaseDefine.GroupVersionInfo> versionInfoList) {
@@ -227,18 +264,18 @@ public class IMGroupManager extends IMManager {
         int groupSize = groupInfoListRsp.getGroupInfoListCount();
         int userId = groupInfoListRsp.getUserId();
         int loginId = imLoginManager.getLoginId();
-        logger.i("group#onRepGroupDetailInfo cnt:%d",groupSize);
+        logger.i("group#onRepGroupDetailInfo cnt:%d", groupSize);
         if (groupSize <= 0 || userId != loginId) {
-            logger.i("group#onRepGroupDetailInfo size empty or userid[%d]≠ loginId[%d]",userId,loginId);
+            logger.i("group#onRepGroupDetailInfo size empty or userid[%d]≠ loginId[%d]", userId, loginId);
             return;
         }
         ArrayList<GroupEntity> needDb = new ArrayList<>();
-        for(IMBaseDefine.GroupInfo groupInfo:groupInfoListRsp.getGroupInfoListList()){
+        for (IMBaseDefine.GroupInfo groupInfo : groupInfoListRsp.getGroupInfoListList()) {
             // 群组的详细信息
             // 保存在DB中
             // GroupManager 中的变量
             GroupEntity groupEntity = ProtoBuf2JavaBean.getGroupEntity(groupInfo);
-            groupMap.put(groupEntity.getPeerId(),groupEntity);
+            groupMap.put(groupEntity.getPeerId(), groupEntity);
             needDb.add(groupEntity);
         }
 
@@ -249,6 +286,7 @@ public class IMGroupManager extends IMManager {
     /**
      * 创建群
      * 默认是创建临时群，且客户端只能创建临时群
+     *
      * @param groupName
      * @param memberList
      */
@@ -305,7 +343,7 @@ public class IMGroupManager extends IMManager {
         groupMap.put(groupEntity.getPeerId(), groupEntity);
 
         IMSessionManager.getInstance().updateSession(groupEntity);
-        dbInterface.insertOrUpdateGroup(groupEntity);
+//        dbInterface.insertOrUpdateGroup(groupEntity);
         // 接收到之后修改UI
         triggerEvent(new GroupEvent(groupEntity, GroupEvent.Event.CREATE_GROUP_SUCCESS));
     }
@@ -314,6 +352,7 @@ public class IMGroupManager extends IMManager {
      * 删除群成员
      * REMOVE_CHANGE_MEMBER_TYPE
      * 可能会触发头像的修改
+     *
      * @param groupId
      * @param removeMemberList
      */
@@ -325,6 +364,7 @@ public class IMGroupManager extends IMManager {
      * 新增群成员
      * ADD_CHANGE_MEMBER_TYPE
      * 可能会触发头像的修改
+     *
      * @param groupId
      * @param addMemberList
      */
@@ -383,7 +423,7 @@ public class IMGroupManager extends IMManager {
         GroupEntity groupEntityRet = groupMap.get(groupId);
         groupEntityRet.setGroupMemberIds(groupChangeMemberRsp.getCurUserIdListList());
         groupMap.put(groupId, groupEntityRet);
-        dbInterface.insertOrUpdateGroup(groupEntityRet);
+//        dbInterface.insertOrUpdateGroup(groupEntityRet);
 
         GroupEvent groupEvent = new GroupEvent(GroupEvent.Event.CHANGE_GROUP_MEMBER_SUCCESS);
         groupEvent.setChangeList(changeUserIdList);
@@ -396,6 +436,7 @@ public class IMGroupManager extends IMManager {
      * 屏蔽群消息
      * IMGroupShieldReq
      * 备注:屏蔽之后大部分操作依旧需要客户端做
+     *
      * @param groupId
      * @param shieldType
      */
@@ -457,18 +498,19 @@ public class IMGroupManager extends IMManager {
      * 收到群成员发生变更消息
      * 服务端主动发出
      * DB
+     *
      * @param notify
      */
     public void receiveGroupChangeMemberNotify(IMGroup.IMGroupChangeMemberNotify notify) {
         int groupId = notify.getGroupId();
         int changeType = ProtoBuf2JavaBean.getGroupChangeType(notify.getChangeType());
-        List<Integer> changeList =  notify.getChgUserIdListList();
+        List<Integer> changeList = notify.getChgUserIdListList();
 
         List<Integer> curMemberList = notify.getCurUserIdListList();
         if (groupMap.containsKey(groupId)) {
             GroupEntity groupEntity = groupMap.get(groupId);
             groupEntity.setGroupMemberIds(curMemberList);
-            dbInterface.insertOrUpdateGroup(groupEntity);
+//            dbInterface.insertOrUpdateGroup(groupEntity);
             groupMap.put(groupId, groupEntity);
 
             GroupEvent groupEvent = new GroupEvent(GroupEvent.Event.CHANGE_GROUP_MEMBER_SUCCESS);
@@ -498,6 +540,7 @@ public class IMGroupManager extends IMManager {
 
     /**
      * 该方法只有正式群
+     *
      * @return
      */
     public List<GroupEntity> getNormalGroupSortedList() {
@@ -539,28 +582,31 @@ public class IMGroupManager extends IMManager {
     }
 
     public List<UserEntity> getGroupMembers(int groupId) {
-        logger.d("group#getGroupMembers groupId:%s", groupId);
-
-        GroupEntity groupEntity = findGroup(groupId);
-        if (groupEntity == null) {
-            logger.e("group#no such group id:%s", groupId);
-            return null;
-        }
-
-        Set<Integer> userList = groupEntity.getGroupMemberIds();
-        ArrayList<UserEntity> memberList = new ArrayList<>();
-        for (Integer id : userList) {
-            UserEntity contact = IMContactManager.getInstance().findContact(id);
-            if (contact == null) {
-                logger.e("group#no such contact id:%s", id);
-                continue;
-            }
-            memberList.add(contact);
-        }
-        return memberList;
+//        logger.d("group#getGroupMembers groupId:%s", groupId);
+//
+//        GroupEntity groupEntity = findGroup(groupId);
+//        if (groupEntity == null) {
+//            logger.e("group#no such group id:%s", groupId);
+//            return null;
+//        }
+//
+//        Set<Integer> userList = groupEntity.getGroupMemberIds();
+//        ArrayList<UserEntity> memberList = new ArrayList<>();
+//        for (Integer id : userList) {
+//            UserEntity contact = IMContactManager.getInstance().findContact(id);
+//            if (contact == null) {
+//                logger.e("group#no such contact id:%s", id);
+//                continue;
+//            }
+//            memberList.add(contact);
+//        }
+//        return memberList;
+        return null;
     }
 
-    /**------set/get 的定义*/
+    /**
+     * ------set/get 的定义
+     */
     public Map<Integer, GroupEntity> getGroupMap() {
         return groupMap;
     }

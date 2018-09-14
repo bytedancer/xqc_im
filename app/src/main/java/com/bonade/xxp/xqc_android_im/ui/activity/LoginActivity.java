@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.bonade.xxp.xqc_android_im.App;
+import com.bonade.xxp.xqc_android_im.DB.entity.UserEntity;
 import com.bonade.xxp.xqc_android_im.DB.sp.LoginSp;
 import com.bonade.xxp.xqc_android_im.DB.sp.SystemConfigSp;
 import com.bonade.xxp.xqc_android_im.R;
@@ -74,13 +75,13 @@ public class LoginActivity extends BaseActivity {
                         break;
                     }
 
-                    LoginSp.SpLoginIdentity loginIdentity = loginSp.getLoginIdentity();
-                    if (loginIdentity == null) {
-                        // 之前没有保存任何登陆相关的，跳转到登陆页面
+                    int loginId = loginSp.getLoginId();
+                    if (loginId == 0) {
+                        // 之前没有保存用户信息，跳转到登陆页面
                         break;
                     }
 
-                    handleGotLoginIdentity(loginIdentity);
+                    handleGotLoginIdentity(loginId);
                 } while (false);
 
                 // 异常分支都会执行这个
@@ -141,9 +142,9 @@ public class LoginActivity extends BaseActivity {
 
     /**
      * 自动登录
-     * @param loginIdentity
+     * @param loginId
      */
-    private void handleGotLoginIdentity(final LoginSp.SpLoginIdentity loginIdentity) {
+    private void handleGotLoginIdentity(final int loginId) {
         logger.i("login#handleGotLoginIdentity");
 
         uiHandler.postDelayed(new Runnable() {
@@ -154,7 +155,7 @@ public class LoginActivity extends BaseActivity {
                     Toast.makeText(LoginActivity.this, "登陆失败,请重试", Toast.LENGTH_SHORT).show();
                     ViewUtil.createProgressDialog(LoginActivity.this, "登录中...");
                 }
-                imService.getLoginManager().login(loginIdentity);
+                imService.getLoginManager().login(loginId);
             }
         }, 500);
     }
@@ -174,55 +175,56 @@ public class LoginActivity extends BaseActivity {
         }
 
         ViewUtil.createProgressDialog(this, "登录中...");
-        if (imService != null) {
-            password = XqcPwdEncryptUtils.loginPwdEncrypt(password);
-
-            ApiFactory.getUserApi().login(username, password)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Observer<DataBindUserToken>() {
-                        @Override
-                        public void onCompleted() {
-
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            ViewUtil.dismissProgressDialog();
-                            ViewUtil.showMessage(e.getMessage());
-                        }
-
-                        @Override
-                        public void onNext(DataBindUserToken dataBindUserToken) {
-                            String accessToken = "";
-                            if (dataBindUserToken != null && dataBindUserToken.getData() != null && !TextUtils.isEmpty(dataBindUserToken.getData().getAccess_token())) {
-                                accessToken = dataBindUserToken.getData().getAccess_token();
-                            }
-                            App.getContext().setAccount(username);
-                            ApiFactory.getUserApi().getUserInfoForAppLogin(accessToken, "false")
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(new Observer<DataUserInfo>() {
-                                        @Override
-                                        public void onCompleted() {
-
-                                        }
-
-                                        @Override
-                                        public void onError(Throwable e) {
-                                            ViewUtil.dismissProgressDialog();
-                                            ViewUtil.showMessage(e.getMessage());
-                                        }
-
-                                        @Override
-                                        public void onNext(DataUserInfo dataUserInfo) {
-                                            int loginId = (int)dataUserInfo.getData().getUserInfo().getId();
-                                            imService.getLoginManager().login(loginId);
-                                        }
-                                    });
-                        }
-                    });
-        }
+        imService.getLoginManager().login(6476);
+//        if (imService != null) {
+//            password = XqcPwdEncryptUtils.loginPwdEncrypt(password);
+//
+//            ApiFactory.getUserApi().login(username, password)
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(new Observer<DataBindUserToken>() {
+//                        @Override
+//                        public void onCompleted() {
+//
+//                        }
+//
+//                        @Override
+//                        public void onError(Throwable e) {
+//                            ViewUtil.dismissProgressDialog();
+//                            ViewUtil.showMessage(e.getMessage());
+//                        }
+//
+//                        @Override
+//                        public void onNext(DataBindUserToken dataBindUserToken) {
+//                            String accessToken = "";
+//                            if (dataBindUserToken != null && dataBindUserToken.getData() != null && !TextUtils.isEmpty(dataBindUserToken.getData().getAccess_token())) {
+//                                accessToken = dataBindUserToken.getData().getAccess_token();
+//                            }
+//                            App.getContext().setAccount(username);
+//                            ApiFactory.getUserApi().getUserInfoForAppLogin(accessToken, "false")
+//                                    .subscribeOn(Schedulers.io())
+//                                    .observeOn(AndroidSchedulers.mainThread())
+//                                    .subscribe(new Observer<DataUserInfo>() {
+//                                        @Override
+//                                        public void onCompleted() {
+//
+//                                        }
+//
+//                                        @Override
+//                                        public void onError(Throwable e) {
+//                                            ViewUtil.dismissProgressDialog();
+//                                            ViewUtil.showMessage(e.getMessage());
+//                                        }
+//
+//                                        @Override
+//                                        public void onNext(DataUserInfo dataUserInfo) {
+//                                            int loginId = (int) dataUserInfo.getData().getUserInfo().getId();
+//                                            imService.getLoginManager().login(loginId);
+//                                        }
+//                                    });
+//                        }
+//                    });
+//        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

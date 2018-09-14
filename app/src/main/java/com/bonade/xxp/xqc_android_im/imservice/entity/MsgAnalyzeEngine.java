@@ -6,6 +6,7 @@ import com.bonade.xxp.xqc_android_im.DB.entity.MessageEntity;
 import com.bonade.xxp.xqc_android_im.config.DBConstant;
 import com.bonade.xxp.xqc_android_im.config.MessageConstant;
 import com.bonade.xxp.xqc_android_im.protobuf.IMBaseDefine;
+import com.bonade.xxp.xqc_android_im.protobuf.IMMessage;
 import com.bonade.xxp.xqc_android_im.protobuf.helper.ProtoBuf2JavaBean;
 
 import org.json.JSONException;
@@ -51,22 +52,16 @@ public class MsgAnalyzeEngine {
 
 
     // 抽离放在同一的地方
-    public static MessageEntity analyzeMessage(IMBaseDefine.MsgInfo msgInfo) {
+    public static MessageEntity analyzeMessage(IMMessage.IMMsgData msgData) {
         MessageEntity messageEntity = new MessageEntity();
-
-        messageEntity.setCreated(msgInfo.getCreateTime());
-        messageEntity.setUpdated(msgInfo.getCreateTime());
-        messageEntity.setFromId(msgInfo.getFromSessionId());
-        messageEntity.setMsgId(msgInfo.getMsgId());
-        messageEntity.setMsgType(ProtoBuf2JavaBean.getJavaMsgType(msgInfo.getMsgType()));
+        int createTime = (int) (msgData.getTimestamp() / 1000);
+        messageEntity.setCreated(createTime);
+        messageEntity.setUpdated(createTime);
+        messageEntity.setFromId(Integer.parseInt(msgData.getFromUserId()));
+        messageEntity.setMsgId(Integer.parseInt(msgData.getMsgId()));
+        messageEntity.setMsgType(ProtoBuf2JavaBean.getJavaMsgType(msgData.getMsgType(), msgData.getMsgContentType()));
         messageEntity.setStatus(MessageConstant.MSG_SUCCESS);
-        messageEntity.setContent(msgInfo.getMsgData().toStringUtf8());
-        /**
-         * 解密文本信息
-         */
-//        String desMessage = new String(com.mogujie.tt.Security.getInstance().DecryptMsg(msgInfo.getMsgData().toStringUtf8()));
-//        messageEntity.setContent(desMessage);
-        String message = msgInfo.getMsgData().toStringUtf8();
+        String message = msgData.getMsgContent();
         messageEntity.setContent(message);
 
         // 文本信息不为空

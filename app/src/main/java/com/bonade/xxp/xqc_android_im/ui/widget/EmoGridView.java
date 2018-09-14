@@ -162,7 +162,7 @@ public class EmoGridView extends LinearLayout {
         if (onEmoGridViewItemClick == null) {
             return;
         }
-        list_Views = new ArrayList<GridView>();
+        list_Views = new ArrayList<>();
         for (int i = 0; i < viewPager_size; i++) {
             list_Views.add(getViewPagerItem(i));
         }

@@ -20,14 +20,14 @@ message IMMsgServRsp{
 message IMLoginReq{
     //cmd id:		0x0103
     required string userId = 1; // 用户id
-    required int64 timestamp = 2; // 时间戳 毫秒
+    optional int64 timestamp = 2; // 时间戳 毫秒
 }
 
 message IMLoginRes{
     //cmd id:		0x0104
-    required string userId = 1; // 用户id
-    required int64 timestamp = 2; // 时间戳 毫秒
-    required int32 result = 3; // 返回消息结果 0失败 1成功
+    optional string userId = 1; // 用户id
+    optional int64 timestamp = 2; // 时间戳 毫秒
+    optional int32 result = 3; // 返回消息结果 0失败 1成功
 }
 
 message IMLogoutReq{

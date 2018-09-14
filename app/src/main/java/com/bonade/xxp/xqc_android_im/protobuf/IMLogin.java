@@ -1109,7 +1109,7 @@ public final class IMLogin {
         getUserIdBytes();
 
     /**
-     * <code>required int64 timestamp = 2;</code>
+     * <code>optional int64 timestamp = 2;</code>
      *
      * <pre>
      * 时间戳 毫秒
@@ -1117,7 +1117,7 @@ public final class IMLogin {
      */
     boolean hasTimestamp();
     /**
-     * <code>required int64 timestamp = 2;</code>
+     * <code>optional int64 timestamp = 2;</code>
      *
      * <pre>
      * 时间戳 毫秒
@@ -1277,7 +1277,7 @@ public final class IMLogin {
     public static final int TIMESTAMP_FIELD_NUMBER = 2;
     private long timestamp_;
     /**
-     * <code>required int64 timestamp = 2;</code>
+     * <code>optional int64 timestamp = 2;</code>
      *
      * <pre>
      * 时间戳 毫秒
@@ -1287,7 +1287,7 @@ public final class IMLogin {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>required int64 timestamp = 2;</code>
+     * <code>optional int64 timestamp = 2;</code>
      *
      * <pre>
      * 时间戳 毫秒
@@ -1308,10 +1308,6 @@ public final class IMLogin {
       if (isInitialized == 0) return false;
 
       if (!hasUserId()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasTimestamp()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -1498,10 +1494,6 @@ public final class IMLogin {
           
           return false;
         }
-        if (!hasTimestamp()) {
-          
-          return false;
-        }
         return true;
       }
 
@@ -1626,7 +1618,7 @@ public final class IMLogin {
 
       private long timestamp_ ;
       /**
-       * <code>required int64 timestamp = 2;</code>
+       * <code>optional int64 timestamp = 2;</code>
        *
        * <pre>
        * 时间戳 毫秒
@@ -1636,7 +1628,7 @@ public final class IMLogin {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>required int64 timestamp = 2;</code>
+       * <code>optional int64 timestamp = 2;</code>
        *
        * <pre>
        * 时间戳 毫秒
@@ -1646,7 +1638,7 @@ public final class IMLogin {
         return timestamp_;
       }
       /**
-       * <code>required int64 timestamp = 2;</code>
+       * <code>optional int64 timestamp = 2;</code>
        *
        * <pre>
        * 时间戳 毫秒
@@ -1659,7 +1651,7 @@ public final class IMLogin {
         return this;
       }
       /**
-       * <code>required int64 timestamp = 2;</code>
+       * <code>optional int64 timestamp = 2;</code>
        *
        * <pre>
        * 时间戳 毫秒
@@ -1688,7 +1680,7 @@ public final class IMLogin {
       com.google.protobuf.MessageLiteOrBuilder {
 
     /**
-     * <code>required string userId = 1;</code>
+     * <code>optional string userId = 1;</code>
      *
      * <pre>
      *cmd id:		0x0104
@@ -1696,7 +1688,7 @@ public final class IMLogin {
      */
     boolean hasUserId();
     /**
-     * <code>required string userId = 1;</code>
+     * <code>optional string userId = 1;</code>
      *
      * <pre>
      *cmd id:		0x0104
@@ -1704,7 +1696,7 @@ public final class IMLogin {
      */
     String getUserId();
     /**
-     * <code>required string userId = 1;</code>
+     * <code>optional string userId = 1;</code>
      *
      * <pre>
      *cmd id:		0x0104
@@ -1714,7 +1706,7 @@ public final class IMLogin {
         getUserIdBytes();
 
     /**
-     * <code>required int64 timestamp = 2;</code>
+     * <code>optional int64 timestamp = 2;</code>
      *
      * <pre>
      * 时间戳 毫秒
@@ -1722,7 +1714,7 @@ public final class IMLogin {
      */
     boolean hasTimestamp();
     /**
-     * <code>required int64 timestamp = 2;</code>
+     * <code>optional int64 timestamp = 2;</code>
      *
      * <pre>
      * 时间戳 毫秒
@@ -1731,7 +1723,7 @@ public final class IMLogin {
     long getTimestamp();
 
     /**
-     * <code>required int32 result = 3;</code>
+     * <code>optional int32 result = 3;</code>
      *
      * <pre>
      * 返回消息结果 0失败 1成功
@@ -1739,7 +1731,7 @@ public final class IMLogin {
      */
     boolean hasResult();
     /**
-     * <code>required int32 result = 3;</code>
+     * <code>optional int32 result = 3;</code>
      *
      * <pre>
      * 返回消息结果 0失败 1成功
@@ -1850,7 +1842,7 @@ public final class IMLogin {
     public static final int USERID_FIELD_NUMBER = 1;
     private Object userId_;
     /**
-     * <code>required string userId = 1;</code>
+     * <code>optional string userId = 1;</code>
      *
      * <pre>
      *cmd id:		0x0104
@@ -1860,7 +1852,7 @@ public final class IMLogin {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required string userId = 1;</code>
+     * <code>optional string userId = 1;</code>
      *
      * <pre>
      *cmd id:		0x0104
@@ -1881,7 +1873,7 @@ public final class IMLogin {
       }
     }
     /**
-     * <code>required string userId = 1;</code>
+     * <code>optional string userId = 1;</code>
      *
      * <pre>
      *cmd id:		0x0104
@@ -1904,7 +1896,7 @@ public final class IMLogin {
     public static final int TIMESTAMP_FIELD_NUMBER = 2;
     private long timestamp_;
     /**
-     * <code>required int64 timestamp = 2;</code>
+     * <code>optional int64 timestamp = 2;</code>
      *
      * <pre>
      * 时间戳 毫秒
@@ -1914,7 +1906,7 @@ public final class IMLogin {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>required int64 timestamp = 2;</code>
+     * <code>optional int64 timestamp = 2;</code>
      *
      * <pre>
      * 时间戳 毫秒
@@ -1927,7 +1919,7 @@ public final class IMLogin {
     public static final int RESULT_FIELD_NUMBER = 3;
     private int result_;
     /**
-     * <code>required int32 result = 3;</code>
+     * <code>optional int32 result = 3;</code>
      *
      * <pre>
      * 返回消息结果 0失败 1成功
@@ -1937,7 +1929,7 @@ public final class IMLogin {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>required int32 result = 3;</code>
+     * <code>optional int32 result = 3;</code>
      *
      * <pre>
      * 返回消息结果 0失败 1成功
@@ -1958,18 +1950,6 @@ public final class IMLogin {
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
 
-      if (!hasUserId()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasTimestamp()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasResult()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -2165,18 +2145,6 @@ public final class IMLogin {
       }
 
       public final boolean isInitialized() {
-        if (!hasUserId()) {
-          
-          return false;
-        }
-        if (!hasTimestamp()) {
-          
-          return false;
-        }
-        if (!hasResult()) {
-          
-          return false;
-        }
         return true;
       }
 
@@ -2201,7 +2169,7 @@ public final class IMLogin {
 
       private Object userId_ = "";
       /**
-       * <code>required string userId = 1;</code>
+       * <code>optional string userId = 1;</code>
        *
        * <pre>
        *cmd id:		0x0104
@@ -2211,7 +2179,7 @@ public final class IMLogin {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required string userId = 1;</code>
+       * <code>optional string userId = 1;</code>
        *
        * <pre>
        *cmd id:		0x0104
@@ -2232,7 +2200,7 @@ public final class IMLogin {
         }
       }
       /**
-       * <code>required string userId = 1;</code>
+       * <code>optional string userId = 1;</code>
        *
        * <pre>
        *cmd id:		0x0104
@@ -2252,7 +2220,7 @@ public final class IMLogin {
         }
       }
       /**
-       * <code>required string userId = 1;</code>
+       * <code>optional string userId = 1;</code>
        *
        * <pre>
        *cmd id:		0x0104
@@ -2269,7 +2237,7 @@ public final class IMLogin {
         return this;
       }
       /**
-       * <code>required string userId = 1;</code>
+       * <code>optional string userId = 1;</code>
        *
        * <pre>
        *cmd id:		0x0104
@@ -2282,7 +2250,7 @@ public final class IMLogin {
         return this;
       }
       /**
-       * <code>required string userId = 1;</code>
+       * <code>optional string userId = 1;</code>
        *
        * <pre>
        *cmd id:		0x0104
@@ -2301,7 +2269,7 @@ public final class IMLogin {
 
       private long timestamp_ ;
       /**
-       * <code>required int64 timestamp = 2;</code>
+       * <code>optional int64 timestamp = 2;</code>
        *
        * <pre>
        * 时间戳 毫秒
@@ -2311,7 +2279,7 @@ public final class IMLogin {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>required int64 timestamp = 2;</code>
+       * <code>optional int64 timestamp = 2;</code>
        *
        * <pre>
        * 时间戳 毫秒
@@ -2321,7 +2289,7 @@ public final class IMLogin {
         return timestamp_;
       }
       /**
-       * <code>required int64 timestamp = 2;</code>
+       * <code>optional int64 timestamp = 2;</code>
        *
        * <pre>
        * 时间戳 毫秒
@@ -2334,7 +2302,7 @@ public final class IMLogin {
         return this;
       }
       /**
-       * <code>required int64 timestamp = 2;</code>
+       * <code>optional int64 timestamp = 2;</code>
        *
        * <pre>
        * 时间戳 毫秒
@@ -2349,7 +2317,7 @@ public final class IMLogin {
 
       private int result_ ;
       /**
-       * <code>required int32 result = 3;</code>
+       * <code>optional int32 result = 3;</code>
        *
        * <pre>
        * 返回消息结果 0失败 1成功
@@ -2359,7 +2327,7 @@ public final class IMLogin {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>required int32 result = 3;</code>
+       * <code>optional int32 result = 3;</code>
        *
        * <pre>
        * 返回消息结果 0失败 1成功
@@ -2369,7 +2337,7 @@ public final class IMLogin {
         return result_;
       }
       /**
-       * <code>required int32 result = 3;</code>
+       * <code>optional int32 result = 3;</code>
        *
        * <pre>
        * 返回消息结果 0失败 1成功
@@ -2382,7 +2350,7 @@ public final class IMLogin {
         return this;
       }
       /**
-       * <code>required int32 result = 3;</code>
+       * <code>optional int32 result = 3;</code>
        *
        * <pre>
        * 返回消息结果 0失败 1成功

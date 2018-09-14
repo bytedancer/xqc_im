@@ -21,16 +21,13 @@ import java.util.TreeSet;
 /**
  * Entity mapped to table "GroupInfo".
  */
-
 public class GroupEntity extends PeerEntity {
 
-    private int groupType;
-    private int creatorId;
-    private int userCount;
+    private Integer groupType;
+    private Integer creatorId;
+    private Integer userCount;
     private String userIds;
-    private int version;
-    private int status;
-
+    private Integer version;
 
     // KEEP FIELDS - put your custom fields here
     private PinYin.PinYinElement pinyinElement = new PinYin.PinYinElement();
@@ -46,7 +43,7 @@ public class GroupEntity extends PeerEntity {
     }
 
     @Generated
-    public GroupEntity(Long cid, int peerId, int groupType, String mainName, String avatar, int creatorId, int userCount, String userIds, int version, int status, int created, int updated) {
+    public GroupEntity(Long cid, int peerId, Integer groupType, String mainName, String avatar, Integer creatorId, Integer userCount, String userIds, Integer version, Integer status, Integer created, Integer updated) {
         this.cid = cid;
         this.peerId = peerId;
         this.groupType = groupType;
@@ -77,65 +74,59 @@ public class GroupEntity extends PeerEntity {
         this.peerId = peerId;
     }
 
-    public int getGroupType() {
+    public Integer getGroupType() {
         return groupType;
     }
 
-    public void setGroupType(int groupType) {
+    public void setGroupType(Integer groupType) {
         this.groupType = groupType;
     }
 
-    @NotNull
     public String getMainName() {
         return mainName;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setMainName(@NotNull String mainName) {
+    public void setMainName(String mainName) {
         this.mainName = mainName;
     }
 
-    @NotNull
     public String getAvatar() {
         return avatar;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setAvatar(@NotNull String avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
 
-    public int getCreatorId() {
+    public Integer getCreatorId() {
         return creatorId;
     }
 
-    public void setCreatorId(int creatorId) {
+    public void setCreatorId(Integer creatorId) {
         this.creatorId = creatorId;
     }
 
-    public int getUserCount() {
+    public Integer getUserCount() {
         return userCount;
     }
 
-    public void setUserCount(int userCount) {
+    public void setUserCount(Integer userCount) {
         this.userCount = userCount;
     }
 
-    @NotNull
     public String getUserIds() {
         return userIds;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setUserIds(@NotNull String userIds) {
+    public void setUserIds(String userIds) {
         this.userIds = userIds;
     }
 
-    public int getVersion() {
+    public Integer getVersion() {
         return version;
     }
 
-    public void setVersion(int version) {
+    public void setVersion(Integer version) {
         this.version = version;
     }
 
@@ -192,6 +183,7 @@ public class GroupEntity extends PeerEntity {
     /**
      * todo 入参变为 set【自动去重】
      * 每次都要转换 性能不是太好，todo
+     *
      * @param memberIds
      */
     public void setGroupMemberIds(List<Integer> memberIds) {

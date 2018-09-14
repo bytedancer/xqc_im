@@ -6,12 +6,10 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.bonade.xxp.xqc_android_im.DB.dao.DaoMaster;
 import com.bonade.xxp.xqc_android_im.DB.dao.DaoSession;
-import com.bonade.xxp.xqc_android_im.DB.dao.DepartmentDao;
 import com.bonade.xxp.xqc_android_im.DB.dao.GroupDao;
 import com.bonade.xxp.xqc_android_im.DB.dao.MessageDao;
 import com.bonade.xxp.xqc_android_im.DB.dao.SessionDao;
 import com.bonade.xxp.xqc_android_im.DB.dao.UserDao;
-import com.bonade.xxp.xqc_android_im.DB.entity.DepartmentEntity;
 import com.bonade.xxp.xqc_android_im.DB.entity.GroupEntity;
 import com.bonade.xxp.xqc_android_im.DB.entity.MessageEntity;
 import com.bonade.xxp.xqc_android_im.DB.entity.SessionEntity;
@@ -118,111 +116,74 @@ public class DBInterface {
         }
     }
 
+    /**-------------------------下面开始User 操作相关---------------------------------------*/
     /**
-     * -------------------------下面开始department 操作相关---------------------------------------
+     * @return
+     *  todo  USER_STATUS_LEAVE
      */
-    public void batchInsertOrUpdateDepart(List<DepartmentEntity> entityList) {
-        if (entityList.size() <= 0) {
-            return;
-        }
-        DepartmentDao dao = openWritableDb().getDepartmentDao();
-        dao.insertOrReplaceInTx(entityList);
-    }
-
-    /**
-     * update
-     */
-    public int getDeptLastTime() {
-        DepartmentDao dao = openReadableDb().getDepartmentDao();
-        DepartmentEntity entity = dao.queryBuilder()
-                .orderDesc(DepartmentDao.Properties.Updated)
-                .limit(1)
-                .unique();
-        if (entity == null) {
-            return 0;
-        } else {
-            return entity.getUpdated();
-        }
-    }
-
-    // 部门被删除的情况
-    public List<DepartmentEntity> loadAllDept() {
-        DepartmentDao dao = openReadableDb().getDepartmentDao();
-        List<DepartmentEntity> result = dao.loadAll();
-        return result;
-    }
-
-    /**
-     * -------------------------下面开始User 操作相关---------------------------------------
-     */
-    public List<UserEntity> loadAllUsers() {
+    public List<UserEntity> loadAllUsers(){
         UserDao dao = openReadableDb().getUserDao();
         List<UserEntity> result = dao.loadAll();
         return result;
     }
 
-//    public UserEntity getByUserName(String uName) {
+//    public UserEntity getByUserName(String uName){
 //        UserDao dao = openReadableDb().getUserDao();
 //        UserEntity entity = dao.queryBuilder().where(UserDao.Properties.PinyinName.eq(uName)).unique();
 //        return entity;
 //    }
 
-    public UserEntity getByLoginId(long loginId) {
+    public UserEntity getByLoginId(int loginId){
         UserDao dao = openReadableDb().getUserDao();
         UserEntity entity = dao.queryBuilder().where(UserDao.Properties.PeerId.eq(loginId)).unique();
         return entity;
     }
 
-    public void insertOrUpdateUser(UserEntity entity) {
-        UserDao userDao = openWritableDb().getUserDao();
+
+    public void insertOrUpdateUser(UserEntity entity){
+        UserDao userDao =  openWritableDb().getUserDao();
         long rowId = userDao.insertOrReplace(entity);
     }
 
-    public void batchInsertOrUpdateUser(List<UserEntity> entityList) {
-        if (entityList.size() <= 0) {
-            return;
+    public void  batchInsertOrUpdateUser(List<UserEntity> entityList){
+        if(entityList.size() <=0){
+            return ;
         }
-        UserDao userDao = openWritableDb().getUserDao();
+        UserDao userDao =  openWritableDb().getUserDao();
         userDao.insertOrReplaceInTx(entityList);
     }
 
-    /**
-     * update
-     */
-    public int getUserInfoLastTime() {
-        UserDao sessionDao = openReadableDb().getUserDao();
+    /**update*/
+    public int getUserInfoLastTime(){
+        UserDao sessionDao =  openReadableDb().getUserDao();
         UserEntity userEntity = sessionDao.queryBuilder()
                 .orderDesc(UserDao.Properties.Updated)
                 .limit(1)
                 .unique();
-        if (userEntity == null) {
+        if(userEntity == null){
             return 0;
-        } else {
+        }else{
             return userEntity.getUpdated();
         }
     }
 
     /**-------------------------下面开始Group 操作相关---------------------------------------*/
-
     /**
      * 载入Group的所有数据
-     *
      * @return
      */
-    public List<GroupEntity> loadAllGroup() {
+    public List<GroupEntity> loadAllGroup(){
         GroupDao dao = openReadableDb().getGroupDao();
         List<GroupEntity> result = dao.loadAll();
         return result;
     }
-
-    public long insertOrUpdateGroup(GroupEntity groupEntity) {
+    public  long insertOrUpdateGroup(GroupEntity groupEntity){
         GroupDao dao = openWritableDb().getGroupDao();
-        long pkId = dao.insertOrReplace(groupEntity);
+        long pkId =  dao.insertOrReplace(groupEntity);
         return pkId;
     }
-
-    public void batchInsertOrUpdateGroup(List<GroupEntity> entityList) {
-        if (entityList.size() <= 0) {
+    public void batchInsertOrUpdateGroup(List<GroupEntity> entityList){
+        if(entityList.size() <=0){
             return;
         }
         GroupDao dao = openWritableDb().getGroupDao();
@@ -305,9 +266,11 @@ public class DBInterface {
         /**解决消息重复的问题*/
         int preMsgId = lastMsgId + 1;
         MessageDao dao = openReadableDb().getMessageDao();
-        List<MessageEntity> listMsg = dao.queryBuilder().where(MessageDao.Properties.Created.le(lastCreateTime)
-                , MessageDao.Properties.SessionKey.eq(chatKey)
-                , MessageDao.Properties.MsgId.notEq(preMsgId))
+        List<MessageEntity> listMsg = dao.queryBuilder()
+                .where(
+                        MessageDao.Properties.Created.le(lastCreateTime),
+                        MessageDao.Properties.SessionKey.eq(chatKey),
+                        MessageDao.Properties.MsgId.notEq(preMsgId))
                 .whereOr(MessageDao.Properties.MsgId.le(lastMsgId),
                         MessageDao.Properties.MsgId.gt(90000000))
                 .orderDesc(MessageDao.Properties.Created)

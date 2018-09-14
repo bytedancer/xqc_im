@@ -13,83 +13,234 @@ public final class IMMessage {
       com.google.protobuf.MessageLiteOrBuilder {
 
     /**
-     * <code>required uint32 from_user_id = 1;</code>
+     * <code>optional string sessionId = 1;</code>
+     */
+    boolean hasSessionId();
+    /**
+     * <code>optional string sessionId = 1;</code>
+     */
+    String getSessionId();
+    /**
+     * <code>optional string sessionId = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getSessionIdBytes();
+
+    /**
+     * <code>optional string fromUserId = 2;</code>
      *
      * <pre>
-     *cmd id:		0x0301
+     *消息发送方
      * </pre>
      */
     boolean hasFromUserId();
     /**
-     * <code>required uint32 from_user_id = 1;</code>
+     * <code>optional string fromUserId = 2;</code>
      *
      * <pre>
-     *cmd id:		0x0301
+     *消息发送方
      * </pre>
      */
-    int getFromUserId();
+    String getFromUserId();
+    /**
+     * <code>optional string fromUserId = 2;</code>
+     *
+     * <pre>
+     *消息发送方
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getFromUserIdBytes();
 
     /**
-     * <code>required uint32 to_session_id = 2;</code>
+     * <code>optional string fromUserNickName = 3;</code>
+     */
+    boolean hasFromUserNickName();
+    /**
+     * <code>optional string fromUserNickName = 3;</code>
+     */
+    String getFromUserNickName();
+    /**
+     * <code>optional string fromUserNickName = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getFromUserNickNameBytes();
+
+    /**
+     * <code>optional string fromUserLogo = 4;</code>
+     */
+    boolean hasFromUserLogo();
+    /**
+     * <code>optional string fromUserLogo = 4;</code>
+     */
+    String getFromUserLogo();
+    /**
+     * <code>optional string fromUserLogo = 4;</code>
+     */
+    com.google.protobuf.ByteString
+        getFromUserLogoBytes();
+
+    /**
+     * <code>optional string toUserId = 5;</code>
      *
      * <pre>
      *消息接受方
      * </pre>
      */
-    boolean hasToSessionId();
+    boolean hasToUserId();
     /**
-     * <code>required uint32 to_session_id = 2;</code>
+     * <code>optional string toUserId = 5;</code>
      *
      * <pre>
      *消息接受方
      * </pre>
      */
-    int getToSessionId();
+    String getToUserId();
+    /**
+     * <code>optional string toUserId = 5;</code>
+     *
+     * <pre>
+     *消息接受方
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getToUserIdBytes();
 
     /**
-     * <code>required uint32 msg_id = 3;</code>
+     * <code>optional string groupId = 6;</code>
+     */
+    boolean hasGroupId();
+    /**
+     * <code>optional string groupId = 6;</code>
+     */
+    String getGroupId();
+    /**
+     * <code>optional string groupId = 6;</code>
+     */
+    com.google.protobuf.ByteString
+        getGroupIdBytes();
+
+    /**
+     * <code>optional string groupName = 7;</code>
+     */
+    boolean hasGroupName();
+    /**
+     * <code>optional string groupName = 7;</code>
+     */
+    String getGroupName();
+    /**
+     * <code>optional string groupName = 7;</code>
+     */
+    com.google.protobuf.ByteString
+        getGroupNameBytes();
+
+    /**
+     * <code>optional string groupLogo = 8;</code>
+     */
+    boolean hasGroupLogo();
+    /**
+     * <code>optional string groupLogo = 8;</code>
+     */
+    String getGroupLogo();
+    /**
+     * <code>optional string groupLogo = 8;</code>
+     */
+    com.google.protobuf.ByteString
+        getGroupLogoBytes();
+
+    /**
+     * <code>optional int32 groupCount = 9;</code>
+     */
+    boolean hasGroupCount();
+    /**
+     * <code>optional int32 groupCount = 9;</code>
+     */
+    int getGroupCount();
+
+    /**
+     * <code>optional string msgId = 10;</code>
      */
     boolean hasMsgId();
     /**
-     * <code>required uint32 msg_id = 3;</code>
+     * <code>optional string msgId = 10;</code>
      */
-    int getMsgId();
+    String getMsgId();
+    /**
+     * <code>optional string msgId = 10;</code>
+     */
+    com.google.protobuf.ByteString
+        getMsgIdBytes();
 
     /**
-     * <code>required uint32 create_time = 4;</code>
+     * <code>optional string msgContent = 11;</code>
      */
-    boolean hasCreateTime();
+    boolean hasMsgContent();
     /**
-     * <code>required uint32 create_time = 4;</code>
+     * <code>optional string msgContent = 11;</code>
      */
-    int getCreateTime();
+    String getMsgContent();
+    /**
+     * <code>optional string msgContent = 11;</code>
+     */
+    com.google.protobuf.ByteString
+        getMsgContentBytes();
 
     /**
-     * <code>required .IM.BaseDefine.MsgType msg_type = 5;</code>
+     * <code>optional int32 msgType = 12;</code>
+     *
+     * <pre>
+     *消息类型 1、私聊 2、群聊
+     * </pre>
      */
     boolean hasMsgType();
     /**
-     * <code>required .IM.BaseDefine.MsgType msg_type = 5;</code>
+     * <code>optional int32 msgType = 12;</code>
+     *
+     * <pre>
+     *消息类型 1、私聊 2、群聊
+     * </pre>
      */
-    IMBaseDefine.MsgType getMsgType();
+    int getMsgType();
 
     /**
-     * <code>required bytes msg_data = 6;</code>
+     * <code>optional string sendTime = 13;</code>
      */
-    boolean hasMsgData();
+    boolean hasSendTime();
     /**
-     * <code>required bytes msg_data = 6;</code>
+     * <code>optional string sendTime = 13;</code>
      */
-    com.google.protobuf.ByteString getMsgData();
+    String getSendTime();
+    /**
+     * <code>optional string sendTime = 13;</code>
+     */
+    com.google.protobuf.ByteString
+        getSendTimeBytes();
 
     /**
-     * <code>optional bytes attach_data = 20;</code>
+     * <code>optional int32 msgContentType = 14;</code>
+     *
+     * <pre>
+     *消息内容类型，1：文字 2：图片 3：提示
+     * </pre>
      */
-    boolean hasAttachData();
+    boolean hasMsgContentType();
     /**
-     * <code>optional bytes attach_data = 20;</code>
+     * <code>optional int32 msgContentType = 14;</code>
+     *
+     * <pre>
+     *消息内容类型，1：文字 2：图片 3：提示
+     * </pre>
      */
-    com.google.protobuf.ByteString getAttachData();
+    int getMsgContentType();
+
+    /**
+     * <code>optional int64 timestamp = 15;</code>
+     */
+    boolean hasTimestamp();
+    /**
+     * <code>optional int64 timestamp = 15;</code>
+     */
+    long getTimestamp();
   }
   /**
    * Protobuf type {@code IM.Message.IMMsgData}
@@ -145,46 +296,90 @@ public final class IMMessage {
               }
               break;
             }
-            case 8: {
+            case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              fromUserId_ = input.readUInt32();
+              sessionId_ = bs;
               break;
             }
-            case 16: {
+            case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              toSessionId_ = input.readUInt32();
+              fromUserId_ = bs;
               break;
             }
-            case 24: {
+            case 26: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000004;
-              msgId_ = input.readUInt32();
+              fromUserNickName_ = bs;
               break;
             }
-            case 32: {
+            case 34: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000008;
-              createTime_ = input.readUInt32();
+              fromUserLogo_ = bs;
               break;
             }
-            case 40: {
-              int rawValue = input.readEnum();
-              IMBaseDefine.MsgType value = IMBaseDefine.MsgType.valueOf(rawValue);
-              if (value == null) {
-                unknownFieldsCodedOutput.writeRawVarint32(tag);
-                unknownFieldsCodedOutput.writeRawVarint32(rawValue);
-              } else {
-                bitField0_ |= 0x00000010;
-                msgType_ = value;
-              }
+            case 42: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000010;
+              toUserId_ = bs;
               break;
             }
             case 50: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000020;
-              msgData_ = input.readBytes();
+              groupId_ = bs;
               break;
             }
-            case 162: {
+            case 58: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000040;
-              attachData_ = input.readBytes();
+              groupName_ = bs;
+              break;
+            }
+            case 66: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000080;
+              groupLogo_ = bs;
+              break;
+            }
+            case 72: {
+              bitField0_ |= 0x00000100;
+              groupCount_ = input.readInt32();
+              break;
+            }
+            case 82: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000200;
+              msgId_ = bs;
+              break;
+            }
+            case 90: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000400;
+              msgContent_ = bs;
+              break;
+            }
+            case 96: {
+              bitField0_ |= 0x00000800;
+              msgType_ = input.readInt32();
+              break;
+            }
+            case 106: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00001000;
+              sendTime_ = bs;
+              break;
+            }
+            case 112: {
+              bitField0_ |= 0x00002000;
+              msgContentType_ = input.readInt32();
+              break;
+            }
+            case 120: {
+              bitField0_ |= 0x00004000;
+              timestamp_ = input.readInt64();
               break;
             }
           }
@@ -221,135 +416,584 @@ public final class IMMessage {
     }
 
     private int bitField0_;
-    public static final int FROM_USER_ID_FIELD_NUMBER = 1;
-    private int fromUserId_;
+    public static final int SESSIONID_FIELD_NUMBER = 1;
+    private Object sessionId_;
     /**
-     * <code>required uint32 from_user_id = 1;</code>
-     *
-     * <pre>
-     *cmd id:		0x0301
-     * </pre>
+     * <code>optional string sessionId = 1;</code>
      */
-    public boolean hasFromUserId() {
+    public boolean hasSessionId() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required uint32 from_user_id = 1;</code>
-     *
-     * <pre>
-     *cmd id:		0x0301
-     * </pre>
+     * <code>optional string sessionId = 1;</code>
      */
-    public int getFromUserId() {
-      return fromUserId_;
+    public String getSessionId() {
+      Object ref = sessionId_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          sessionId_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string sessionId = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getSessionIdBytes() {
+      Object ref = sessionId_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        sessionId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
-    public static final int TO_SESSION_ID_FIELD_NUMBER = 2;
-    private int toSessionId_;
+    public static final int FROMUSERID_FIELD_NUMBER = 2;
+    private Object fromUserId_;
     /**
-     * <code>required uint32 to_session_id = 2;</code>
+     * <code>optional string fromUserId = 2;</code>
      *
      * <pre>
-     *消息接受方
+     *消息发送方
      * </pre>
      */
-    public boolean hasToSessionId() {
+    public boolean hasFromUserId() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>required uint32 to_session_id = 2;</code>
+     * <code>optional string fromUserId = 2;</code>
+     *
+     * <pre>
+     *消息发送方
+     * </pre>
+     */
+    public String getFromUserId() {
+      Object ref = fromUserId_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          fromUserId_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string fromUserId = 2;</code>
+     *
+     * <pre>
+     *消息发送方
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getFromUserIdBytes() {
+      Object ref = fromUserId_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        fromUserId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int FROMUSERNICKNAME_FIELD_NUMBER = 3;
+    private Object fromUserNickName_;
+    /**
+     * <code>optional string fromUserNickName = 3;</code>
+     */
+    public boolean hasFromUserNickName() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional string fromUserNickName = 3;</code>
+     */
+    public String getFromUserNickName() {
+      Object ref = fromUserNickName_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          fromUserNickName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string fromUserNickName = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getFromUserNickNameBytes() {
+      Object ref = fromUserNickName_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        fromUserNickName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int FROMUSERLOGO_FIELD_NUMBER = 4;
+    private Object fromUserLogo_;
+    /**
+     * <code>optional string fromUserLogo = 4;</code>
+     */
+    public boolean hasFromUserLogo() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional string fromUserLogo = 4;</code>
+     */
+    public String getFromUserLogo() {
+      Object ref = fromUserLogo_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          fromUserLogo_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string fromUserLogo = 4;</code>
+     */
+    public com.google.protobuf.ByteString
+        getFromUserLogoBytes() {
+      Object ref = fromUserLogo_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        fromUserLogo_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int TOUSERID_FIELD_NUMBER = 5;
+    private Object toUserId_;
+    /**
+     * <code>optional string toUserId = 5;</code>
      *
      * <pre>
      *消息接受方
      * </pre>
      */
-    public int getToSessionId() {
-      return toSessionId_;
-    }
-
-    public static final int MSG_ID_FIELD_NUMBER = 3;
-    private int msgId_;
-    /**
-     * <code>required uint32 msg_id = 3;</code>
-     */
-    public boolean hasMsgId() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>required uint32 msg_id = 3;</code>
-     */
-    public int getMsgId() {
-      return msgId_;
-    }
-
-    public static final int CREATE_TIME_FIELD_NUMBER = 4;
-    private int createTime_;
-    /**
-     * <code>required uint32 create_time = 4;</code>
-     */
-    public boolean hasCreateTime() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>required uint32 create_time = 4;</code>
-     */
-    public int getCreateTime() {
-      return createTime_;
-    }
-
-    public static final int MSG_TYPE_FIELD_NUMBER = 5;
-    private IMBaseDefine.MsgType msgType_;
-    /**
-     * <code>required .IM.BaseDefine.MsgType msg_type = 5;</code>
-     */
-    public boolean hasMsgType() {
+    public boolean hasToUserId() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>required .IM.BaseDefine.MsgType msg_type = 5;</code>
+     * <code>optional string toUserId = 5;</code>
+     *
+     * <pre>
+     *消息接受方
+     * </pre>
      */
-    public IMBaseDefine.MsgType getMsgType() {
-      return msgType_;
+    public String getToUserId() {
+      Object ref = toUserId_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          toUserId_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string toUserId = 5;</code>
+     *
+     * <pre>
+     *消息接受方
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getToUserIdBytes() {
+      Object ref = toUserId_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        toUserId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
-    public static final int MSG_DATA_FIELD_NUMBER = 6;
-    private com.google.protobuf.ByteString msgData_;
+    public static final int GROUPID_FIELD_NUMBER = 6;
+    private Object groupId_;
     /**
-     * <code>required bytes msg_data = 6;</code>
+     * <code>optional string groupId = 6;</code>
      */
-    public boolean hasMsgData() {
+    public boolean hasGroupId() {
       return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
-     * <code>required bytes msg_data = 6;</code>
+     * <code>optional string groupId = 6;</code>
      */
-    public com.google.protobuf.ByteString getMsgData() {
-      return msgData_;
+    public String getGroupId() {
+      Object ref = groupId_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          groupId_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string groupId = 6;</code>
+     */
+    public com.google.protobuf.ByteString
+        getGroupIdBytes() {
+      Object ref = groupId_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        groupId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
-    public static final int ATTACH_DATA_FIELD_NUMBER = 20;
-    private com.google.protobuf.ByteString attachData_;
+    public static final int GROUPNAME_FIELD_NUMBER = 7;
+    private Object groupName_;
     /**
-     * <code>optional bytes attach_data = 20;</code>
+     * <code>optional string groupName = 7;</code>
      */
-    public boolean hasAttachData() {
+    public boolean hasGroupName() {
       return ((bitField0_ & 0x00000040) == 0x00000040);
     }
     /**
-     * <code>optional bytes attach_data = 20;</code>
+     * <code>optional string groupName = 7;</code>
      */
-    public com.google.protobuf.ByteString getAttachData() {
-      return attachData_;
+    public String getGroupName() {
+      Object ref = groupName_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          groupName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string groupName = 7;</code>
+     */
+    public com.google.protobuf.ByteString
+        getGroupNameBytes() {
+      Object ref = groupName_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        groupName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int GROUPLOGO_FIELD_NUMBER = 8;
+    private Object groupLogo_;
+    /**
+     * <code>optional string groupLogo = 8;</code>
+     */
+    public boolean hasGroupLogo() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional string groupLogo = 8;</code>
+     */
+    public String getGroupLogo() {
+      Object ref = groupLogo_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          groupLogo_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string groupLogo = 8;</code>
+     */
+    public com.google.protobuf.ByteString
+        getGroupLogoBytes() {
+      Object ref = groupLogo_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        groupLogo_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int GROUPCOUNT_FIELD_NUMBER = 9;
+    private int groupCount_;
+    /**
+     * <code>optional int32 groupCount = 9;</code>
+     */
+    public boolean hasGroupCount() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    /**
+     * <code>optional int32 groupCount = 9;</code>
+     */
+    public int getGroupCount() {
+      return groupCount_;
+    }
+
+    public static final int MSGID_FIELD_NUMBER = 10;
+    private Object msgId_;
+    /**
+     * <code>optional string msgId = 10;</code>
+     */
+    public boolean hasMsgId() {
+      return ((bitField0_ & 0x00000200) == 0x00000200);
+    }
+    /**
+     * <code>optional string msgId = 10;</code>
+     */
+    public String getMsgId() {
+      Object ref = msgId_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          msgId_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string msgId = 10;</code>
+     */
+    public com.google.protobuf.ByteString
+        getMsgIdBytes() {
+      Object ref = msgId_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        msgId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MSGCONTENT_FIELD_NUMBER = 11;
+    private Object msgContent_;
+    /**
+     * <code>optional string msgContent = 11;</code>
+     */
+    public boolean hasMsgContent() {
+      return ((bitField0_ & 0x00000400) == 0x00000400);
+    }
+    /**
+     * <code>optional string msgContent = 11;</code>
+     */
+    public String getMsgContent() {
+      Object ref = msgContent_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          msgContent_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string msgContent = 11;</code>
+     */
+    public com.google.protobuf.ByteString
+        getMsgContentBytes() {
+      Object ref = msgContent_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        msgContent_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MSGTYPE_FIELD_NUMBER = 12;
+    private int msgType_;
+    /**
+     * <code>optional int32 msgType = 12;</code>
+     *
+     * <pre>
+     *消息类型 1、私聊 2、群聊
+     * </pre>
+     */
+    public boolean hasMsgType() {
+      return ((bitField0_ & 0x00000800) == 0x00000800);
+    }
+    /**
+     * <code>optional int32 msgType = 12;</code>
+     *
+     * <pre>
+     *消息类型 1、私聊 2、群聊
+     * </pre>
+     */
+    public int getMsgType() {
+      return msgType_;
+    }
+
+    public static final int SENDTIME_FIELD_NUMBER = 13;
+    private Object sendTime_;
+    /**
+     * <code>optional string sendTime = 13;</code>
+     */
+    public boolean hasSendTime() {
+      return ((bitField0_ & 0x00001000) == 0x00001000);
+    }
+    /**
+     * <code>optional string sendTime = 13;</code>
+     */
+    public String getSendTime() {
+      Object ref = sendTime_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          sendTime_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string sendTime = 13;</code>
+     */
+    public com.google.protobuf.ByteString
+        getSendTimeBytes() {
+      Object ref = sendTime_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        sendTime_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MSGCONTENTTYPE_FIELD_NUMBER = 14;
+    private int msgContentType_;
+    /**
+     * <code>optional int32 msgContentType = 14;</code>
+     *
+     * <pre>
+     *消息内容类型，1：文字 2：图片 3：提示
+     * </pre>
+     */
+    public boolean hasMsgContentType() {
+      return ((bitField0_ & 0x00002000) == 0x00002000);
+    }
+    /**
+     * <code>optional int32 msgContentType = 14;</code>
+     *
+     * <pre>
+     *消息内容类型，1：文字 2：图片 3：提示
+     * </pre>
+     */
+    public int getMsgContentType() {
+      return msgContentType_;
+    }
+
+    public static final int TIMESTAMP_FIELD_NUMBER = 15;
+    private long timestamp_;
+    /**
+     * <code>optional int64 timestamp = 15;</code>
+     */
+    public boolean hasTimestamp() {
+      return ((bitField0_ & 0x00004000) == 0x00004000);
+    }
+    /**
+     * <code>optional int64 timestamp = 15;</code>
+     */
+    public long getTimestamp() {
+      return timestamp_;
     }
 
     private void initFields() {
-      fromUserId_ = 0;
-      toSessionId_ = 0;
-      msgId_ = 0;
-      createTime_ = 0;
-      msgType_ = IMBaseDefine.MsgType.MSG_TYPE_SINGLE_TEXT;
-      msgData_ = com.google.protobuf.ByteString.EMPTY;
-      attachData_ = com.google.protobuf.ByteString.EMPTY;
+      sessionId_ = "";
+      fromUserId_ = "";
+      fromUserNickName_ = "";
+      fromUserLogo_ = "";
+      toUserId_ = "";
+      groupId_ = "";
+      groupName_ = "";
+      groupLogo_ = "";
+      groupCount_ = 0;
+      msgId_ = "";
+      msgContent_ = "";
+      msgType_ = 0;
+      sendTime_ = "";
+      msgContentType_ = 0;
+      timestamp_ = 0L;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -357,30 +1001,6 @@ public final class IMMessage {
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
 
-      if (!hasFromUserId()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasToSessionId()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasMsgId()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasCreateTime()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasMsgType()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasMsgData()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -389,25 +1009,49 @@ public final class IMMessage {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeUInt32(1, fromUserId_);
+        output.writeBytes(1, getSessionIdBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeUInt32(2, toSessionId_);
+        output.writeBytes(2, getFromUserIdBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeUInt32(3, msgId_);
+        output.writeBytes(3, getFromUserNickNameBytes());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeUInt32(4, createTime_);
+        output.writeBytes(4, getFromUserLogoBytes());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeEnum(5, msgType_.getNumber());
+        output.writeBytes(5, getToUserIdBytes());
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeBytes(6, msgData_);
+        output.writeBytes(6, getGroupIdBytes());
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeBytes(20, attachData_);
+        output.writeBytes(7, getGroupNameBytes());
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeBytes(8, getGroupLogoBytes());
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeInt32(9, groupCount_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        output.writeBytes(10, getMsgIdBytes());
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        output.writeBytes(11, getMsgContentBytes());
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        output.writeInt32(12, msgType_);
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        output.writeBytes(13, getSendTimeBytes());
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        output.writeInt32(14, msgContentType_);
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        output.writeInt64(15, timestamp_);
       }
       output.writeRawBytes(unknownFields);
     }
@@ -420,31 +1064,63 @@ public final class IMMessage {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(1, fromUserId_);
+          .computeBytesSize(1, getSessionIdBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(2, toSessionId_);
+          .computeBytesSize(2, getFromUserIdBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(3, msgId_);
+          .computeBytesSize(3, getFromUserNickNameBytes());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(4, createTime_);
+          .computeBytesSize(4, getFromUserLogoBytes());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(5, msgType_.getNumber());
+          .computeBytesSize(5, getToUserIdBytes());
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(6, msgData_);
+          .computeBytesSize(6, getGroupIdBytes());
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(20, attachData_);
+          .computeBytesSize(7, getGroupNameBytes());
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(8, getGroupLogoBytes());
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(9, groupCount_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(10, getMsgIdBytes());
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(11, getMsgContentBytes());
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(12, msgType_);
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(13, getSendTimeBytes());
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(14, msgContentType_);
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(15, timestamp_);
       }
       size += unknownFields.size();
       memoizedSerializedSize = size;
@@ -544,20 +1220,36 @@ public final class IMMessage {
 
       public Builder clear() {
         super.clear();
-        fromUserId_ = 0;
+        sessionId_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
-        toSessionId_ = 0;
+        fromUserId_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
-        msgId_ = 0;
+        fromUserNickName_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
-        createTime_ = 0;
+        fromUserLogo_ = "";
         bitField0_ = (bitField0_ & ~0x00000008);
-        msgType_ = IMBaseDefine.MsgType.MSG_TYPE_SINGLE_TEXT;
+        toUserId_ = "";
         bitField0_ = (bitField0_ & ~0x00000010);
-        msgData_ = com.google.protobuf.ByteString.EMPTY;
+        groupId_ = "";
         bitField0_ = (bitField0_ & ~0x00000020);
-        attachData_ = com.google.protobuf.ByteString.EMPTY;
+        groupName_ = "";
         bitField0_ = (bitField0_ & ~0x00000040);
+        groupLogo_ = "";
+        bitField0_ = (bitField0_ & ~0x00000080);
+        groupCount_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000100);
+        msgId_ = "";
+        bitField0_ = (bitField0_ & ~0x00000200);
+        msgContent_ = "";
+        bitField0_ = (bitField0_ & ~0x00000400);
+        msgType_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000800);
+        sendTime_ = "";
+        bitField0_ = (bitField0_ & ~0x00001000);
+        msgContentType_ = 0;
+        bitField0_ = (bitField0_ & ~0x00002000);
+        timestamp_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00004000);
         return this;
       }
 
@@ -584,57 +1276,135 @@ public final class IMMessage {
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.fromUserId_ = fromUserId_;
+        result.sessionId_ = sessionId_;
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.toSessionId_ = toSessionId_;
+        result.fromUserId_ = fromUserId_;
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.msgId_ = msgId_;
+        result.fromUserNickName_ = fromUserNickName_;
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
         }
-        result.createTime_ = createTime_;
+        result.fromUserLogo_ = fromUserLogo_;
         if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
           to_bitField0_ |= 0x00000010;
         }
-        result.msgType_ = msgType_;
+        result.toUserId_ = toUserId_;
         if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
           to_bitField0_ |= 0x00000020;
         }
-        result.msgData_ = msgData_;
+        result.groupId_ = groupId_;
         if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
           to_bitField0_ |= 0x00000040;
         }
-        result.attachData_ = attachData_;
+        result.groupName_ = groupName_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.groupLogo_ = groupLogo_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        result.groupCount_ = groupCount_;
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000200;
+        }
+        result.msgId_ = msgId_;
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000400;
+        }
+        result.msgContent_ = msgContent_;
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000800;
+        }
+        result.msgType_ = msgType_;
+        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
+          to_bitField0_ |= 0x00001000;
+        }
+        result.sendTime_ = sendTime_;
+        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
+          to_bitField0_ |= 0x00002000;
+        }
+        result.msgContentType_ = msgContentType_;
+        if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
+          to_bitField0_ |= 0x00004000;
+        }
+        result.timestamp_ = timestamp_;
         result.bitField0_ = to_bitField0_;
         return result;
       }
 
       public Builder mergeFrom(IMMsgData other) {
         if (other == IMMsgData.getDefaultInstance()) return this;
-        if (other.hasFromUserId()) {
-          setFromUserId(other.getFromUserId());
+        if (other.hasSessionId()) {
+          bitField0_ |= 0x00000001;
+          sessionId_ = other.sessionId_;
+          
         }
-        if (other.hasToSessionId()) {
-          setToSessionId(other.getToSessionId());
+        if (other.hasFromUserId()) {
+          bitField0_ |= 0x00000002;
+          fromUserId_ = other.fromUserId_;
+          
+        }
+        if (other.hasFromUserNickName()) {
+          bitField0_ |= 0x00000004;
+          fromUserNickName_ = other.fromUserNickName_;
+          
+        }
+        if (other.hasFromUserLogo()) {
+          bitField0_ |= 0x00000008;
+          fromUserLogo_ = other.fromUserLogo_;
+          
+        }
+        if (other.hasToUserId()) {
+          bitField0_ |= 0x00000010;
+          toUserId_ = other.toUserId_;
+          
+        }
+        if (other.hasGroupId()) {
+          bitField0_ |= 0x00000020;
+          groupId_ = other.groupId_;
+          
+        }
+        if (other.hasGroupName()) {
+          bitField0_ |= 0x00000040;
+          groupName_ = other.groupName_;
+          
+        }
+        if (other.hasGroupLogo()) {
+          bitField0_ |= 0x00000080;
+          groupLogo_ = other.groupLogo_;
+          
+        }
+        if (other.hasGroupCount()) {
+          setGroupCount(other.getGroupCount());
         }
         if (other.hasMsgId()) {
-          setMsgId(other.getMsgId());
+          bitField0_ |= 0x00000200;
+          msgId_ = other.msgId_;
+          
         }
-        if (other.hasCreateTime()) {
-          setCreateTime(other.getCreateTime());
+        if (other.hasMsgContent()) {
+          bitField0_ |= 0x00000400;
+          msgContent_ = other.msgContent_;
+          
         }
         if (other.hasMsgType()) {
           setMsgType(other.getMsgType());
         }
-        if (other.hasMsgData()) {
-          setMsgData(other.getMsgData());
+        if (other.hasSendTime()) {
+          bitField0_ |= 0x00001000;
+          sendTime_ = other.sendTime_;
+          
         }
-        if (other.hasAttachData()) {
-          setAttachData(other.getAttachData());
+        if (other.hasMsgContentType()) {
+          setMsgContentType(other.getMsgContentType());
+        }
+        if (other.hasTimestamp()) {
+          setTimestamp(other.getTimestamp());
         }
         setUnknownFields(
             getUnknownFields().concat(other.unknownFields));
@@ -642,30 +1412,6 @@ public final class IMMessage {
       }
 
       public final boolean isInitialized() {
-        if (!hasFromUserId()) {
-          
-          return false;
-        }
-        if (!hasToSessionId()) {
-          
-          return false;
-        }
-        if (!hasMsgId()) {
-          
-          return false;
-        }
-        if (!hasCreateTime()) {
-          
-          return false;
-        }
-        if (!hasMsgType()) {
-          
-          return false;
-        }
-        if (!hasMsgData()) {
-          
-          return false;
-        }
         return true;
       }
 
@@ -688,267 +1434,1046 @@ public final class IMMessage {
       }
       private int bitField0_;
 
-      private int fromUserId_ ;
+      private Object sessionId_ = "";
       /**
-       * <code>required uint32 from_user_id = 1;</code>
-       *
-       * <pre>
-       *cmd id:		0x0301
-       * </pre>
+       * <code>optional string sessionId = 1;</code>
        */
-      public boolean hasFromUserId() {
+      public boolean hasSessionId() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required uint32 from_user_id = 1;</code>
-       *
-       * <pre>
-       *cmd id:		0x0301
-       * </pre>
+       * <code>optional string sessionId = 1;</code>
        */
-      public int getFromUserId() {
-        return fromUserId_;
+      public String getSessionId() {
+        Object ref = sessionId_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            sessionId_ = s;
+          }
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
       /**
-       * <code>required uint32 from_user_id = 1;</code>
+       * <code>optional string sessionId = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getSessionIdBytes() {
+        Object ref = sessionId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          sessionId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string sessionId = 1;</code>
+       */
+      public Builder setSessionId(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        sessionId_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>optional string sessionId = 1;</code>
+       */
+      public Builder clearSessionId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        sessionId_ = getDefaultInstance().getSessionId();
+        
+        return this;
+      }
+      /**
+       * <code>optional string sessionId = 1;</code>
+       */
+      public Builder setSessionIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        sessionId_ = value;
+        
+        return this;
+      }
+
+      private Object fromUserId_ = "";
+      /**
+       * <code>optional string fromUserId = 2;</code>
        *
        * <pre>
-       *cmd id:		0x0301
+       *消息发送方
        * </pre>
        */
-      public Builder setFromUserId(int value) {
-        bitField0_ |= 0x00000001;
+      public boolean hasFromUserId() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional string fromUserId = 2;</code>
+       *
+       * <pre>
+       *消息发送方
+       * </pre>
+       */
+      public String getFromUserId() {
+        Object ref = fromUserId_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            fromUserId_ = s;
+          }
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <code>optional string fromUserId = 2;</code>
+       *
+       * <pre>
+       *消息发送方
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getFromUserIdBytes() {
+        Object ref = fromUserId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          fromUserId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string fromUserId = 2;</code>
+       *
+       * <pre>
+       *消息发送方
+       * </pre>
+       */
+      public Builder setFromUserId(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
         fromUserId_ = value;
         
         return this;
       }
       /**
-       * <code>required uint32 from_user_id = 1;</code>
+       * <code>optional string fromUserId = 2;</code>
        *
        * <pre>
-       *cmd id:		0x0301
+       *消息发送方
        * </pre>
        */
       public Builder clearFromUserId() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        fromUserId_ = 0;
-        
-        return this;
-      }
-
-      private int toSessionId_ ;
-      /**
-       * <code>required uint32 to_session_id = 2;</code>
-       *
-       * <pre>
-       *消息接受方
-       * </pre>
-       */
-      public boolean hasToSessionId() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>required uint32 to_session_id = 2;</code>
-       *
-       * <pre>
-       *消息接受方
-       * </pre>
-       */
-      public int getToSessionId() {
-        return toSessionId_;
-      }
-      /**
-       * <code>required uint32 to_session_id = 2;</code>
-       *
-       * <pre>
-       *消息接受方
-       * </pre>
-       */
-      public Builder setToSessionId(int value) {
-        bitField0_ |= 0x00000002;
-        toSessionId_ = value;
-        
-        return this;
-      }
-      /**
-       * <code>required uint32 to_session_id = 2;</code>
-       *
-       * <pre>
-       *消息接受方
-       * </pre>
-       */
-      public Builder clearToSessionId() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        toSessionId_ = 0;
+        fromUserId_ = getDefaultInstance().getFromUserId();
+        
+        return this;
+      }
+      /**
+       * <code>optional string fromUserId = 2;</code>
+       *
+       * <pre>
+       *消息发送方
+       * </pre>
+       */
+      public Builder setFromUserIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        fromUserId_ = value;
         
         return this;
       }
 
-      private int msgId_ ;
+      private Object fromUserNickName_ = "";
       /**
-       * <code>required uint32 msg_id = 3;</code>
+       * <code>optional string fromUserNickName = 3;</code>
        */
-      public boolean hasMsgId() {
+      public boolean hasFromUserNickName() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>required uint32 msg_id = 3;</code>
+       * <code>optional string fromUserNickName = 3;</code>
        */
-      public int getMsgId() {
-        return msgId_;
+      public String getFromUserNickName() {
+        Object ref = fromUserNickName_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            fromUserNickName_ = s;
+          }
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
       /**
-       * <code>required uint32 msg_id = 3;</code>
+       * <code>optional string fromUserNickName = 3;</code>
        */
-      public Builder setMsgId(int value) {
-        bitField0_ |= 0x00000004;
+      public com.google.protobuf.ByteString
+          getFromUserNickNameBytes() {
+        Object ref = fromUserNickName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          fromUserNickName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string fromUserNickName = 3;</code>
+       */
+      public Builder setFromUserNickName(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        fromUserNickName_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>optional string fromUserNickName = 3;</code>
+       */
+      public Builder clearFromUserNickName() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        fromUserNickName_ = getDefaultInstance().getFromUserNickName();
+        
+        return this;
+      }
+      /**
+       * <code>optional string fromUserNickName = 3;</code>
+       */
+      public Builder setFromUserNickNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        fromUserNickName_ = value;
+        
+        return this;
+      }
+
+      private Object fromUserLogo_ = "";
+      /**
+       * <code>optional string fromUserLogo = 4;</code>
+       */
+      public boolean hasFromUserLogo() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional string fromUserLogo = 4;</code>
+       */
+      public String getFromUserLogo() {
+        Object ref = fromUserLogo_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            fromUserLogo_ = s;
+          }
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <code>optional string fromUserLogo = 4;</code>
+       */
+      public com.google.protobuf.ByteString
+          getFromUserLogoBytes() {
+        Object ref = fromUserLogo_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          fromUserLogo_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string fromUserLogo = 4;</code>
+       */
+      public Builder setFromUserLogo(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        fromUserLogo_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>optional string fromUserLogo = 4;</code>
+       */
+      public Builder clearFromUserLogo() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        fromUserLogo_ = getDefaultInstance().getFromUserLogo();
+        
+        return this;
+      }
+      /**
+       * <code>optional string fromUserLogo = 4;</code>
+       */
+      public Builder setFromUserLogoBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        fromUserLogo_ = value;
+        
+        return this;
+      }
+
+      private Object toUserId_ = "";
+      /**
+       * <code>optional string toUserId = 5;</code>
+       *
+       * <pre>
+       *消息接受方
+       * </pre>
+       */
+      public boolean hasToUserId() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>optional string toUserId = 5;</code>
+       *
+       * <pre>
+       *消息接受方
+       * </pre>
+       */
+      public String getToUserId() {
+        Object ref = toUserId_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            toUserId_ = s;
+          }
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <code>optional string toUserId = 5;</code>
+       *
+       * <pre>
+       *消息接受方
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getToUserIdBytes() {
+        Object ref = toUserId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          toUserId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string toUserId = 5;</code>
+       *
+       * <pre>
+       *消息接受方
+       * </pre>
+       */
+      public Builder setToUserId(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
+        toUserId_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>optional string toUserId = 5;</code>
+       *
+       * <pre>
+       *消息接受方
+       * </pre>
+       */
+      public Builder clearToUserId() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        toUserId_ = getDefaultInstance().getToUserId();
+        
+        return this;
+      }
+      /**
+       * <code>optional string toUserId = 5;</code>
+       *
+       * <pre>
+       *消息接受方
+       * </pre>
+       */
+      public Builder setToUserIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
+        toUserId_ = value;
+        
+        return this;
+      }
+
+      private Object groupId_ = "";
+      /**
+       * <code>optional string groupId = 6;</code>
+       */
+      public boolean hasGroupId() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional string groupId = 6;</code>
+       */
+      public String getGroupId() {
+        Object ref = groupId_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            groupId_ = s;
+          }
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <code>optional string groupId = 6;</code>
+       */
+      public com.google.protobuf.ByteString
+          getGroupIdBytes() {
+        Object ref = groupId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          groupId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string groupId = 6;</code>
+       */
+      public Builder setGroupId(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000020;
+        groupId_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>optional string groupId = 6;</code>
+       */
+      public Builder clearGroupId() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        groupId_ = getDefaultInstance().getGroupId();
+        
+        return this;
+      }
+      /**
+       * <code>optional string groupId = 6;</code>
+       */
+      public Builder setGroupIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000020;
+        groupId_ = value;
+        
+        return this;
+      }
+
+      private Object groupName_ = "";
+      /**
+       * <code>optional string groupName = 7;</code>
+       */
+      public boolean hasGroupName() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>optional string groupName = 7;</code>
+       */
+      public String getGroupName() {
+        Object ref = groupName_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            groupName_ = s;
+          }
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <code>optional string groupName = 7;</code>
+       */
+      public com.google.protobuf.ByteString
+          getGroupNameBytes() {
+        Object ref = groupName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          groupName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string groupName = 7;</code>
+       */
+      public Builder setGroupName(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000040;
+        groupName_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>optional string groupName = 7;</code>
+       */
+      public Builder clearGroupName() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        groupName_ = getDefaultInstance().getGroupName();
+        
+        return this;
+      }
+      /**
+       * <code>optional string groupName = 7;</code>
+       */
+      public Builder setGroupNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000040;
+        groupName_ = value;
+        
+        return this;
+      }
+
+      private Object groupLogo_ = "";
+      /**
+       * <code>optional string groupLogo = 8;</code>
+       */
+      public boolean hasGroupLogo() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>optional string groupLogo = 8;</code>
+       */
+      public String getGroupLogo() {
+        Object ref = groupLogo_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            groupLogo_ = s;
+          }
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <code>optional string groupLogo = 8;</code>
+       */
+      public com.google.protobuf.ByteString
+          getGroupLogoBytes() {
+        Object ref = groupLogo_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          groupLogo_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string groupLogo = 8;</code>
+       */
+      public Builder setGroupLogo(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000080;
+        groupLogo_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>optional string groupLogo = 8;</code>
+       */
+      public Builder clearGroupLogo() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        groupLogo_ = getDefaultInstance().getGroupLogo();
+        
+        return this;
+      }
+      /**
+       * <code>optional string groupLogo = 8;</code>
+       */
+      public Builder setGroupLogoBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000080;
+        groupLogo_ = value;
+        
+        return this;
+      }
+
+      private int groupCount_ ;
+      /**
+       * <code>optional int32 groupCount = 9;</code>
+       */
+      public boolean hasGroupCount() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      /**
+       * <code>optional int32 groupCount = 9;</code>
+       */
+      public int getGroupCount() {
+        return groupCount_;
+      }
+      /**
+       * <code>optional int32 groupCount = 9;</code>
+       */
+      public Builder setGroupCount(int value) {
+        bitField0_ |= 0x00000100;
+        groupCount_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>optional int32 groupCount = 9;</code>
+       */
+      public Builder clearGroupCount() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        groupCount_ = 0;
+        
+        return this;
+      }
+
+      private Object msgId_ = "";
+      /**
+       * <code>optional string msgId = 10;</code>
+       */
+      public boolean hasMsgId() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      /**
+       * <code>optional string msgId = 10;</code>
+       */
+      public String getMsgId() {
+        Object ref = msgId_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            msgId_ = s;
+          }
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <code>optional string msgId = 10;</code>
+       */
+      public com.google.protobuf.ByteString
+          getMsgIdBytes() {
+        Object ref = msgId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          msgId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string msgId = 10;</code>
+       */
+      public Builder setMsgId(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000200;
         msgId_ = value;
         
         return this;
       }
       /**
-       * <code>required uint32 msg_id = 3;</code>
+       * <code>optional string msgId = 10;</code>
        */
       public Builder clearMsgId() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        msgId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000200);
+        msgId_ = getDefaultInstance().getMsgId();
+        
+        return this;
+      }
+      /**
+       * <code>optional string msgId = 10;</code>
+       */
+      public Builder setMsgIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000200;
+        msgId_ = value;
         
         return this;
       }
 
-      private int createTime_ ;
+      private Object msgContent_ = "";
       /**
-       * <code>required uint32 create_time = 4;</code>
+       * <code>optional string msgContent = 11;</code>
        */
-      public boolean hasCreateTime() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+      public boolean hasMsgContent() {
+        return ((bitField0_ & 0x00000400) == 0x00000400);
       }
       /**
-       * <code>required uint32 create_time = 4;</code>
+       * <code>optional string msgContent = 11;</code>
        */
-      public int getCreateTime() {
-        return createTime_;
+      public String getMsgContent() {
+        Object ref = msgContent_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            msgContent_ = s;
+          }
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
       /**
-       * <code>required uint32 create_time = 4;</code>
+       * <code>optional string msgContent = 11;</code>
        */
-      public Builder setCreateTime(int value) {
-        bitField0_ |= 0x00000008;
-        createTime_ = value;
+      public com.google.protobuf.ByteString
+          getMsgContentBytes() {
+        Object ref = msgContent_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          msgContent_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string msgContent = 11;</code>
+       */
+      public Builder setMsgContent(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000400;
+        msgContent_ = value;
         
         return this;
       }
       /**
-       * <code>required uint32 create_time = 4;</code>
+       * <code>optional string msgContent = 11;</code>
        */
-      public Builder clearCreateTime() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        createTime_ = 0;
+      public Builder clearMsgContent() {
+        bitField0_ = (bitField0_ & ~0x00000400);
+        msgContent_ = getDefaultInstance().getMsgContent();
+        
+        return this;
+      }
+      /**
+       * <code>optional string msgContent = 11;</code>
+       */
+      public Builder setMsgContentBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000400;
+        msgContent_ = value;
         
         return this;
       }
 
-      private IMBaseDefine.MsgType msgType_ = IMBaseDefine.MsgType.MSG_TYPE_SINGLE_TEXT;
+      private int msgType_ ;
       /**
-       * <code>required .IM.BaseDefine.MsgType msg_type = 5;</code>
+       * <code>optional int32 msgType = 12;</code>
+       *
+       * <pre>
+       *消息类型 1、私聊 2、群聊
+       * </pre>
        */
       public boolean hasMsgType() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
+        return ((bitField0_ & 0x00000800) == 0x00000800);
       }
       /**
-       * <code>required .IM.BaseDefine.MsgType msg_type = 5;</code>
+       * <code>optional int32 msgType = 12;</code>
+       *
+       * <pre>
+       *消息类型 1、私聊 2、群聊
+       * </pre>
        */
-      public IMBaseDefine.MsgType getMsgType() {
+      public int getMsgType() {
         return msgType_;
       }
       /**
-       * <code>required .IM.BaseDefine.MsgType msg_type = 5;</code>
+       * <code>optional int32 msgType = 12;</code>
+       *
+       * <pre>
+       *消息类型 1、私聊 2、群聊
+       * </pre>
        */
-      public Builder setMsgType(IMBaseDefine.MsgType value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000010;
+      public Builder setMsgType(int value) {
+        bitField0_ |= 0x00000800;
         msgType_ = value;
         
         return this;
       }
       /**
-       * <code>required .IM.BaseDefine.MsgType msg_type = 5;</code>
+       * <code>optional int32 msgType = 12;</code>
+       *
+       * <pre>
+       *消息类型 1、私聊 2、群聊
+       * </pre>
        */
       public Builder clearMsgType() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        msgType_ = IMBaseDefine.MsgType.MSG_TYPE_SINGLE_TEXT;
+        bitField0_ = (bitField0_ & ~0x00000800);
+        msgType_ = 0;
         
         return this;
       }
 
-      private com.google.protobuf.ByteString msgData_ = com.google.protobuf.ByteString.EMPTY;
+      private Object sendTime_ = "";
       /**
-       * <code>required bytes msg_data = 6;</code>
+       * <code>optional string sendTime = 13;</code>
        */
-      public boolean hasMsgData() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
+      public boolean hasSendTime() {
+        return ((bitField0_ & 0x00001000) == 0x00001000);
       }
       /**
-       * <code>required bytes msg_data = 6;</code>
+       * <code>optional string sendTime = 13;</code>
        */
-      public com.google.protobuf.ByteString getMsgData() {
-        return msgData_;
+      public String getSendTime() {
+        Object ref = sendTime_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            sendTime_ = s;
+          }
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
       /**
-       * <code>required bytes msg_data = 6;</code>
+       * <code>optional string sendTime = 13;</code>
        */
-      public Builder setMsgData(com.google.protobuf.ByteString value) {
+      public com.google.protobuf.ByteString
+          getSendTimeBytes() {
+        Object ref = sendTime_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          sendTime_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string sendTime = 13;</code>
+       */
+      public Builder setSendTime(
+          String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000020;
-        msgData_ = value;
+  bitField0_ |= 0x00001000;
+        sendTime_ = value;
         
         return this;
       }
       /**
-       * <code>required bytes msg_data = 6;</code>
+       * <code>optional string sendTime = 13;</code>
        */
-      public Builder clearMsgData() {
-        bitField0_ = (bitField0_ & ~0x00000020);
-        msgData_ = getDefaultInstance().getMsgData();
+      public Builder clearSendTime() {
+        bitField0_ = (bitField0_ & ~0x00001000);
+        sendTime_ = getDefaultInstance().getSendTime();
+        
+        return this;
+      }
+      /**
+       * <code>optional string sendTime = 13;</code>
+       */
+      public Builder setSendTimeBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00001000;
+        sendTime_ = value;
         
         return this;
       }
 
-      private com.google.protobuf.ByteString attachData_ = com.google.protobuf.ByteString.EMPTY;
+      private int msgContentType_ ;
       /**
-       * <code>optional bytes attach_data = 20;</code>
+       * <code>optional int32 msgContentType = 14;</code>
+       *
+       * <pre>
+       *消息内容类型，1：文字 2：图片 3：提示
+       * </pre>
        */
-      public boolean hasAttachData() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
+      public boolean hasMsgContentType() {
+        return ((bitField0_ & 0x00002000) == 0x00002000);
       }
       /**
-       * <code>optional bytes attach_data = 20;</code>
+       * <code>optional int32 msgContentType = 14;</code>
+       *
+       * <pre>
+       *消息内容类型，1：文字 2：图片 3：提示
+       * </pre>
        */
-      public com.google.protobuf.ByteString getAttachData() {
-        return attachData_;
+      public int getMsgContentType() {
+        return msgContentType_;
       }
       /**
-       * <code>optional bytes attach_data = 20;</code>
+       * <code>optional int32 msgContentType = 14;</code>
+       *
+       * <pre>
+       *消息内容类型，1：文字 2：图片 3：提示
+       * </pre>
        */
-      public Builder setAttachData(com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000040;
-        attachData_ = value;
+      public Builder setMsgContentType(int value) {
+        bitField0_ |= 0x00002000;
+        msgContentType_ = value;
         
         return this;
       }
       /**
-       * <code>optional bytes attach_data = 20;</code>
+       * <code>optional int32 msgContentType = 14;</code>
+       *
+       * <pre>
+       *消息内容类型，1：文字 2：图片 3：提示
+       * </pre>
        */
-      public Builder clearAttachData() {
-        bitField0_ = (bitField0_ & ~0x00000040);
-        attachData_ = getDefaultInstance().getAttachData();
+      public Builder clearMsgContentType() {
+        bitField0_ = (bitField0_ & ~0x00002000);
+        msgContentType_ = 0;
+        
+        return this;
+      }
+
+      private long timestamp_ ;
+      /**
+       * <code>optional int64 timestamp = 15;</code>
+       */
+      public boolean hasTimestamp() {
+        return ((bitField0_ & 0x00004000) == 0x00004000);
+      }
+      /**
+       * <code>optional int64 timestamp = 15;</code>
+       */
+      public long getTimestamp() {
+        return timestamp_;
+      }
+      /**
+       * <code>optional int64 timestamp = 15;</code>
+       */
+      public Builder setTimestamp(long value) {
+        bitField0_ |= 0x00004000;
+        timestamp_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>optional int64 timestamp = 15;</code>
+       */
+      public Builder clearTimestamp() {
+        bitField0_ = (bitField0_ & ~0x00004000);
+        timestamp_ = 0L;
         
         return this;
       }
@@ -969,48 +2494,104 @@ public final class IMMessage {
       com.google.protobuf.MessageLiteOrBuilder {
 
     /**
-     * <code>required uint32 user_id = 1;</code>
+     * <code>required string sessionId = 1;</code>
      *
      * <pre>
      *cmd id:		0x0302
      * </pre>
-     */
-    boolean hasUserId();
-    /**
-     * <code>required uint32 user_id = 1;</code>
-     *
-     * <pre>
-     *cmd id:		0x0302
-     * </pre>
-     */
-    int getUserId();
-
-    /**
-     * <code>required uint32 session_id = 2;</code>
      */
     boolean hasSessionId();
     /**
-     * <code>required uint32 session_id = 2;</code>
+     * <code>required string sessionId = 1;</code>
+     *
+     * <pre>
+     *cmd id:		0x0302
+     * </pre>
      */
-    int getSessionId();
+    String getSessionId();
+    /**
+     * <code>required string sessionId = 1;</code>
+     *
+     * <pre>
+     *cmd id:		0x0302
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getSessionIdBytes();
 
     /**
-     * <code>required uint32 msg_id = 3;</code>
+     * <code>required string msgId = 2;</code>
      */
     boolean hasMsgId();
     /**
-     * <code>required uint32 msg_id = 3;</code>
+     * <code>required string msgId = 2;</code>
      */
-    int getMsgId();
+    String getMsgId();
+    /**
+     * <code>required string msgId = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getMsgIdBytes();
 
     /**
-     * <code>required .IM.BaseDefine.SessionType session_type = 4;</code>
+     * <code>required string fromUserId = 3;</code>
      */
-    boolean hasSessionType();
+    boolean hasFromUserId();
     /**
-     * <code>required .IM.BaseDefine.SessionType session_type = 4;</code>
+     * <code>required string fromUserId = 3;</code>
      */
-    IMBaseDefine.SessionType getSessionType();
+    String getFromUserId();
+    /**
+     * <code>required string fromUserId = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getFromUserIdBytes();
+
+    /**
+     * <code>required string toUserId = 4;</code>
+     */
+    boolean hasToUserId();
+    /**
+     * <code>required string toUserId = 4;</code>
+     */
+    String getToUserId();
+    /**
+     * <code>required string toUserId = 4;</code>
+     */
+    com.google.protobuf.ByteString
+        getToUserIdBytes();
+
+    /**
+     * <code>optional string groupId = 5;</code>
+     */
+    boolean hasGroupId();
+    /**
+     * <code>optional string groupId = 5;</code>
+     */
+    String getGroupId();
+    /**
+     * <code>optional string groupId = 5;</code>
+     */
+    com.google.protobuf.ByteString
+        getGroupIdBytes();
+
+    /**
+     * <code>required int64 timestamp = 6;</code>
+     */
+    boolean hasTimestamp();
+    /**
+     * <code>required int64 timestamp = 6;</code>
+     */
+    long getTimestamp();
+
+    /**
+     * <code>required int32 result = 7;</code>
+     */
+    boolean hasResult();
+    /**
+     * <code>required int32 result = 7;</code>
+     */
+    int getResult();
   }
   /**
    * Protobuf type {@code IM.Message.IMMsgDataAck}
@@ -1062,31 +2643,44 @@ public final class IMMessage {
               }
               break;
             }
-            case 8: {
+            case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              userId_ = input.readUInt32();
+              sessionId_ = bs;
               break;
             }
-            case 16: {
+            case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              sessionId_ = input.readUInt32();
+              msgId_ = bs;
               break;
             }
-            case 24: {
+            case 26: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000004;
-              msgId_ = input.readUInt32();
+              fromUserId_ = bs;
               break;
             }
-            case 32: {
-              int rawValue = input.readEnum();
-              IMBaseDefine.SessionType value = IMBaseDefine.SessionType.valueOf(rawValue);
-              if (value == null) {
-                unknownFieldsCodedOutput.writeRawVarint32(tag);
-                unknownFieldsCodedOutput.writeRawVarint32(rawValue);
-              } else {
-                bitField0_ |= 0x00000008;
-                sessionType_ = value;
-              }
+            case 34: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000008;
+              toUserId_ = bs;
+              break;
+            }
+            case 42: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000010;
+              groupId_ = bs;
+              break;
+            }
+            case 48: {
+              bitField0_ |= 0x00000020;
+              timestamp_ = input.readInt64();
+              break;
+            }
+            case 56: {
+              bitField0_ |= 0x00000040;
+              result_ = input.readInt32();
               break;
             }
           }
@@ -1123,79 +2717,266 @@ public final class IMMessage {
     }
 
     private int bitField0_;
-    public static final int USER_ID_FIELD_NUMBER = 1;
-    private int userId_;
+    public static final int SESSIONID_FIELD_NUMBER = 1;
+    private Object sessionId_;
     /**
-     * <code>required uint32 user_id = 1;</code>
+     * <code>required string sessionId = 1;</code>
      *
      * <pre>
      *cmd id:		0x0302
      * </pre>
      */
-    public boolean hasUserId() {
+    public boolean hasSessionId() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required uint32 user_id = 1;</code>
+     * <code>required string sessionId = 1;</code>
      *
      * <pre>
      *cmd id:		0x0302
      * </pre>
      */
-    public int getUserId() {
-      return userId_;
+    public String getSessionId() {
+      Object ref = sessionId_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          sessionId_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string sessionId = 1;</code>
+     *
+     * <pre>
+     *cmd id:		0x0302
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getSessionIdBytes() {
+      Object ref = sessionId_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        sessionId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
-    public static final int SESSION_ID_FIELD_NUMBER = 2;
-    private int sessionId_;
+    public static final int MSGID_FIELD_NUMBER = 2;
+    private Object msgId_;
     /**
-     * <code>required uint32 session_id = 2;</code>
+     * <code>required string msgId = 2;</code>
      */
-    public boolean hasSessionId() {
+    public boolean hasMsgId() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>required uint32 session_id = 2;</code>
+     * <code>required string msgId = 2;</code>
      */
-    public int getSessionId() {
-      return sessionId_;
+    public String getMsgId() {
+      Object ref = msgId_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          msgId_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string msgId = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getMsgIdBytes() {
+      Object ref = msgId_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        msgId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
-    public static final int MSG_ID_FIELD_NUMBER = 3;
-    private int msgId_;
+    public static final int FROMUSERID_FIELD_NUMBER = 3;
+    private Object fromUserId_;
     /**
-     * <code>required uint32 msg_id = 3;</code>
+     * <code>required string fromUserId = 3;</code>
      */
-    public boolean hasMsgId() {
+    public boolean hasFromUserId() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>required uint32 msg_id = 3;</code>
+     * <code>required string fromUserId = 3;</code>
      */
-    public int getMsgId() {
-      return msgId_;
+    public String getFromUserId() {
+      Object ref = fromUserId_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          fromUserId_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string fromUserId = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getFromUserIdBytes() {
+      Object ref = fromUserId_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        fromUserId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
-    public static final int SESSION_TYPE_FIELD_NUMBER = 4;
-    private IMBaseDefine.SessionType sessionType_;
+    public static final int TOUSERID_FIELD_NUMBER = 4;
+    private Object toUserId_;
     /**
-     * <code>required .IM.BaseDefine.SessionType session_type = 4;</code>
+     * <code>required string toUserId = 4;</code>
      */
-    public boolean hasSessionType() {
+    public boolean hasToUserId() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>required .IM.BaseDefine.SessionType session_type = 4;</code>
+     * <code>required string toUserId = 4;</code>
      */
-    public IMBaseDefine.SessionType getSessionType() {
-      return sessionType_;
+    public String getToUserId() {
+      Object ref = toUserId_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          toUserId_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string toUserId = 4;</code>
+     */
+    public com.google.protobuf.ByteString
+        getToUserIdBytes() {
+      Object ref = toUserId_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        toUserId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int GROUPID_FIELD_NUMBER = 5;
+    private Object groupId_;
+    /**
+     * <code>optional string groupId = 5;</code>
+     */
+    public boolean hasGroupId() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional string groupId = 5;</code>
+     */
+    public String getGroupId() {
+      Object ref = groupId_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          groupId_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string groupId = 5;</code>
+     */
+    public com.google.protobuf.ByteString
+        getGroupIdBytes() {
+      Object ref = groupId_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        groupId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int TIMESTAMP_FIELD_NUMBER = 6;
+    private long timestamp_;
+    /**
+     * <code>required int64 timestamp = 6;</code>
+     */
+    public boolean hasTimestamp() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>required int64 timestamp = 6;</code>
+     */
+    public long getTimestamp() {
+      return timestamp_;
+    }
+
+    public static final int RESULT_FIELD_NUMBER = 7;
+    private int result_;
+    /**
+     * <code>required int32 result = 7;</code>
+     */
+    public boolean hasResult() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>required int32 result = 7;</code>
+     */
+    public int getResult() {
+      return result_;
     }
 
     private void initFields() {
-      userId_ = 0;
-      sessionId_ = 0;
-      msgId_ = 0;
-      sessionType_ = IMBaseDefine.SessionType.SESSION_TYPE_SINGLE;
+      sessionId_ = "";
+      msgId_ = "";
+      fromUserId_ = "";
+      toUserId_ = "";
+      groupId_ = "";
+      timestamp_ = 0L;
+      result_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1203,10 +2984,6 @@ public final class IMMessage {
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
 
-      if (!hasUserId()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
       if (!hasSessionId()) {
         memoizedIsInitialized = 0;
         return false;
@@ -1215,7 +2992,19 @@ public final class IMMessage {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasSessionType()) {
+      if (!hasFromUserId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasToUserId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasTimestamp()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasResult()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -1227,16 +3016,25 @@ public final class IMMessage {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeUInt32(1, userId_);
+        output.writeBytes(1, getSessionIdBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeUInt32(2, sessionId_);
+        output.writeBytes(2, getMsgIdBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeUInt32(3, msgId_);
+        output.writeBytes(3, getFromUserIdBytes());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeEnum(4, sessionType_.getNumber());
+        output.writeBytes(4, getToUserIdBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeBytes(5, getGroupIdBytes());
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeInt64(6, timestamp_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeInt32(7, result_);
       }
       output.writeRawBytes(unknownFields);
     }
@@ -1249,19 +3047,31 @@ public final class IMMessage {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(1, userId_);
+          .computeBytesSize(1, getSessionIdBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(2, sessionId_);
+          .computeBytesSize(2, getMsgIdBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(3, msgId_);
+          .computeBytesSize(3, getFromUserIdBytes());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(4, sessionType_.getNumber());
+          .computeBytesSize(4, getToUserIdBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(5, getGroupIdBytes());
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(6, timestamp_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(7, result_);
       }
       size += unknownFields.size();
       memoizedSerializedSize = size;
@@ -1357,14 +3167,20 @@ public final class IMMessage {
 
       public Builder clear() {
         super.clear();
-        userId_ = 0;
+        sessionId_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
-        sessionId_ = 0;
+        msgId_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
-        msgId_ = 0;
+        fromUserId_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
-        sessionType_ = IMBaseDefine.SessionType.SESSION_TYPE_SINGLE;
+        toUserId_ = "";
         bitField0_ = (bitField0_ & ~0x00000008);
+        groupId_ = "";
+        bitField0_ = (bitField0_ & ~0x00000010);
+        timestamp_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000020);
+        result_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000040);
         return this;
       }
 
@@ -1391,36 +3207,67 @@ public final class IMMessage {
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.userId_ = userId_;
+        result.sessionId_ = sessionId_;
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.sessionId_ = sessionId_;
+        result.msgId_ = msgId_;
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.msgId_ = msgId_;
+        result.fromUserId_ = fromUserId_;
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
         }
-        result.sessionType_ = sessionType_;
+        result.toUserId_ = toUserId_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.groupId_ = groupId_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.timestamp_ = timestamp_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.result_ = result_;
         result.bitField0_ = to_bitField0_;
         return result;
       }
 
       public Builder mergeFrom(IMMsgDataAck other) {
         if (other == IMMsgDataAck.getDefaultInstance()) return this;
-        if (other.hasUserId()) {
-          setUserId(other.getUserId());
-        }
         if (other.hasSessionId()) {
-          setSessionId(other.getSessionId());
+          bitField0_ |= 0x00000001;
+          sessionId_ = other.sessionId_;
+          
         }
         if (other.hasMsgId()) {
-          setMsgId(other.getMsgId());
+          bitField0_ |= 0x00000002;
+          msgId_ = other.msgId_;
+          
         }
-        if (other.hasSessionType()) {
-          setSessionType(other.getSessionType());
+        if (other.hasFromUserId()) {
+          bitField0_ |= 0x00000004;
+          fromUserId_ = other.fromUserId_;
+          
+        }
+        if (other.hasToUserId()) {
+          bitField0_ |= 0x00000008;
+          toUserId_ = other.toUserId_;
+          
+        }
+        if (other.hasGroupId()) {
+          bitField0_ |= 0x00000010;
+          groupId_ = other.groupId_;
+          
+        }
+        if (other.hasTimestamp()) {
+          setTimestamp(other.getTimestamp());
+        }
+        if (other.hasResult()) {
+          setResult(other.getResult());
         }
         setUnknownFields(
             getUnknownFields().concat(other.unknownFields));
@@ -1428,10 +3275,6 @@ public final class IMMessage {
       }
 
       public final boolean isInitialized() {
-        if (!hasUserId()) {
-          
-          return false;
-        }
         if (!hasSessionId()) {
           
           return false;
@@ -1440,7 +3283,19 @@ public final class IMMessage {
           
           return false;
         }
-        if (!hasSessionType()) {
+        if (!hasFromUserId()) {
+          
+          return false;
+        }
+        if (!hasToUserId()) {
+          
+          return false;
+        }
+        if (!hasTimestamp()) {
+          
+          return false;
+        }
+        if (!hasResult()) {
           
           return false;
         }
@@ -1466,149 +3321,470 @@ public final class IMMessage {
       }
       private int bitField0_;
 
-      private int userId_ ;
+      private Object sessionId_ = "";
       /**
-       * <code>required uint32 user_id = 1;</code>
+       * <code>required string sessionId = 1;</code>
        *
        * <pre>
        *cmd id:		0x0302
        * </pre>
        */
-      public boolean hasUserId() {
+      public boolean hasSessionId() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required uint32 user_id = 1;</code>
+       * <code>required string sessionId = 1;</code>
        *
        * <pre>
        *cmd id:		0x0302
        * </pre>
        */
-      public int getUserId() {
-        return userId_;
+      public String getSessionId() {
+        Object ref = sessionId_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            sessionId_ = s;
+          }
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
       /**
-       * <code>required uint32 user_id = 1;</code>
+       * <code>required string sessionId = 1;</code>
        *
        * <pre>
        *cmd id:		0x0302
        * </pre>
        */
-      public Builder setUserId(int value) {
-        bitField0_ |= 0x00000001;
-        userId_ = value;
-        
-        return this;
+      public com.google.protobuf.ByteString
+          getSessionIdBytes() {
+        Object ref = sessionId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          sessionId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
       }
       /**
-       * <code>required uint32 user_id = 1;</code>
+       * <code>required string sessionId = 1;</code>
        *
        * <pre>
        *cmd id:		0x0302
        * </pre>
        */
-      public Builder clearUserId() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        userId_ = 0;
-        
-        return this;
-      }
-
-      private int sessionId_ ;
-      /**
-       * <code>required uint32 session_id = 2;</code>
-       */
-      public boolean hasSessionId() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>required uint32 session_id = 2;</code>
-       */
-      public int getSessionId() {
-        return sessionId_;
-      }
-      /**
-       * <code>required uint32 session_id = 2;</code>
-       */
-      public Builder setSessionId(int value) {
-        bitField0_ |= 0x00000002;
+      public Builder setSessionId(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
         sessionId_ = value;
         
         return this;
       }
       /**
-       * <code>required uint32 session_id = 2;</code>
+       * <code>required string sessionId = 1;</code>
+       *
+       * <pre>
+       *cmd id:		0x0302
+       * </pre>
        */
       public Builder clearSessionId() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        sessionId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        sessionId_ = getDefaultInstance().getSessionId();
+        
+        return this;
+      }
+      /**
+       * <code>required string sessionId = 1;</code>
+       *
+       * <pre>
+       *cmd id:		0x0302
+       * </pre>
+       */
+      public Builder setSessionIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        sessionId_ = value;
         
         return this;
       }
 
-      private int msgId_ ;
+      private Object msgId_ = "";
       /**
-       * <code>required uint32 msg_id = 3;</code>
+       * <code>required string msgId = 2;</code>
        */
       public boolean hasMsgId() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+        return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>required uint32 msg_id = 3;</code>
+       * <code>required string msgId = 2;</code>
        */
-      public int getMsgId() {
-        return msgId_;
+      public String getMsgId() {
+        Object ref = msgId_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            msgId_ = s;
+          }
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
       /**
-       * <code>required uint32 msg_id = 3;</code>
+       * <code>required string msgId = 2;</code>
        */
-      public Builder setMsgId(int value) {
-        bitField0_ |= 0x00000004;
+      public com.google.protobuf.ByteString
+          getMsgIdBytes() {
+        Object ref = msgId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          msgId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string msgId = 2;</code>
+       */
+      public Builder setMsgId(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
         msgId_ = value;
         
         return this;
       }
       /**
-       * <code>required uint32 msg_id = 3;</code>
+       * <code>required string msgId = 2;</code>
        */
       public Builder clearMsgId() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        msgId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        msgId_ = getDefaultInstance().getMsgId();
+        
+        return this;
+      }
+      /**
+       * <code>required string msgId = 2;</code>
+       */
+      public Builder setMsgIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        msgId_ = value;
         
         return this;
       }
 
-      private IMBaseDefine.SessionType sessionType_ = IMBaseDefine.SessionType.SESSION_TYPE_SINGLE;
+      private Object fromUserId_ = "";
       /**
-       * <code>required .IM.BaseDefine.SessionType session_type = 4;</code>
+       * <code>required string fromUserId = 3;</code>
        */
-      public boolean hasSessionType() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+      public boolean hasFromUserId() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>required .IM.BaseDefine.SessionType session_type = 4;</code>
+       * <code>required string fromUserId = 3;</code>
        */
-      public IMBaseDefine.SessionType getSessionType() {
-        return sessionType_;
-      }
-      /**
-       * <code>required .IM.BaseDefine.SessionType session_type = 4;</code>
-       */
-      public Builder setSessionType(IMBaseDefine.SessionType value) {
-        if (value == null) {
-          throw new NullPointerException();
+      public String getFromUserId() {
+        Object ref = fromUserId_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            fromUserId_ = s;
+          }
+          return s;
+        } else {
+          return (String) ref;
         }
-        bitField0_ |= 0x00000008;
-        sessionType_ = value;
+      }
+      /**
+       * <code>required string fromUserId = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getFromUserIdBytes() {
+        Object ref = fromUserId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          fromUserId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string fromUserId = 3;</code>
+       */
+      public Builder setFromUserId(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        fromUserId_ = value;
         
         return this;
       }
       /**
-       * <code>required .IM.BaseDefine.SessionType session_type = 4;</code>
+       * <code>required string fromUserId = 3;</code>
        */
-      public Builder clearSessionType() {
+      public Builder clearFromUserId() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        fromUserId_ = getDefaultInstance().getFromUserId();
+        
+        return this;
+      }
+      /**
+       * <code>required string fromUserId = 3;</code>
+       */
+      public Builder setFromUserIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        fromUserId_ = value;
+        
+        return this;
+      }
+
+      private Object toUserId_ = "";
+      /**
+       * <code>required string toUserId = 4;</code>
+       */
+      public boolean hasToUserId() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>required string toUserId = 4;</code>
+       */
+      public String getToUserId() {
+        Object ref = toUserId_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            toUserId_ = s;
+          }
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <code>required string toUserId = 4;</code>
+       */
+      public com.google.protobuf.ByteString
+          getToUserIdBytes() {
+        Object ref = toUserId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          toUserId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string toUserId = 4;</code>
+       */
+      public Builder setToUserId(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        toUserId_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>required string toUserId = 4;</code>
+       */
+      public Builder clearToUserId() {
         bitField0_ = (bitField0_ & ~0x00000008);
-        sessionType_ = IMBaseDefine.SessionType.SESSION_TYPE_SINGLE;
+        toUserId_ = getDefaultInstance().getToUserId();
+        
+        return this;
+      }
+      /**
+       * <code>required string toUserId = 4;</code>
+       */
+      public Builder setToUserIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        toUserId_ = value;
+        
+        return this;
+      }
+
+      private Object groupId_ = "";
+      /**
+       * <code>optional string groupId = 5;</code>
+       */
+      public boolean hasGroupId() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>optional string groupId = 5;</code>
+       */
+      public String getGroupId() {
+        Object ref = groupId_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            groupId_ = s;
+          }
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <code>optional string groupId = 5;</code>
+       */
+      public com.google.protobuf.ByteString
+          getGroupIdBytes() {
+        Object ref = groupId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          groupId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string groupId = 5;</code>
+       */
+      public Builder setGroupId(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
+        groupId_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>optional string groupId = 5;</code>
+       */
+      public Builder clearGroupId() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        groupId_ = getDefaultInstance().getGroupId();
+        
+        return this;
+      }
+      /**
+       * <code>optional string groupId = 5;</code>
+       */
+      public Builder setGroupIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
+        groupId_ = value;
+        
+        return this;
+      }
+
+      private long timestamp_ ;
+      /**
+       * <code>required int64 timestamp = 6;</code>
+       */
+      public boolean hasTimestamp() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>required int64 timestamp = 6;</code>
+       */
+      public long getTimestamp() {
+        return timestamp_;
+      }
+      /**
+       * <code>required int64 timestamp = 6;</code>
+       */
+      public Builder setTimestamp(long value) {
+        bitField0_ |= 0x00000020;
+        timestamp_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>required int64 timestamp = 6;</code>
+       */
+      public Builder clearTimestamp() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        timestamp_ = 0L;
+        
+        return this;
+      }
+
+      private int result_ ;
+      /**
+       * <code>required int32 result = 7;</code>
+       */
+      public boolean hasResult() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>required int32 result = 7;</code>
+       */
+      public int getResult() {
+        return result_;
+      }
+      /**
+       * <code>required int32 result = 7;</code>
+       */
+      public Builder setResult(int value) {
+        bitField0_ |= 0x00000040;
+        result_ = value;
+        
+        return this;
+      }
+      /**
+       * <code>required int32 result = 7;</code>
+       */
+      public Builder clearResult() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        result_ = 0;
         
         return this;
       }

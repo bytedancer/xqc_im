@@ -5,6 +5,9 @@ import com.bonade.xxp.xqc_android_im.DB.entity.MessageEntity;
 import com.bonade.xxp.xqc_android_im.DB.entity.SessionEntity;
 import com.bonade.xxp.xqc_android_im.DB.entity.UserEntity;
 import com.bonade.xxp.xqc_android_im.config.DBConstant;
+import com.bonade.xxp.xqc_android_im.config.MessageConstant;
+import com.bonade.xxp.xqc_android_im.config.SysConstant;
+import com.bonade.xxp.xqc_android_im.http.entity.UnreadMessage;
 import com.bonade.xxp.xqc_android_im.imservice.entity.MsgAnalyzeEngine;
 import com.bonade.xxp.xqc_android_im.imservice.entity.UnreadEntity;
 import com.bonade.xxp.xqc_android_im.protobuf.IMBaseDefine;
@@ -14,9 +17,9 @@ import com.bonade.xxp.xqc_android_im.util.pinyin.PinYin;
 
 public class ProtoBuf2JavaBean {
 
-    public static GroupEntity getGroupEntity(IMBaseDefine.GroupInfo groupInfo){
+    public static GroupEntity getGroupEntity(IMBaseDefine.GroupInfo groupInfo) {
         GroupEntity groupEntity = new GroupEntity();
-        int timeNow = (int) (System.currentTimeMillis()/1000);
+        int timeNow = (int) (System.currentTimeMillis() / 1000);
         groupEntity.setUpdated(timeNow);
         groupEntity.setCreated(timeNow);
         groupEntity.setMainName(groupInfo.getGroupName());
@@ -37,12 +40,13 @@ public class ProtoBuf2JavaBean {
 
     /**
      * 创建群时候的转化
+     *
      * @param groupCreateRsp
      * @return
      */
-    public static GroupEntity getGroupEntity(IMGroup.IMGroupCreateRsp groupCreateRsp){
+    public static GroupEntity getGroupEntity(IMGroup.IMGroupCreateRsp groupCreateRsp) {
         GroupEntity groupEntity = new GroupEntity();
-        int timeNow = (int) (System.currentTimeMillis()/1000);
+        int timeNow = (int) (System.currentTimeMillis() / 1000);
         groupEntity.setMainName(groupCreateRsp.getGroupName());
         groupEntity.setGroupMemberIds(groupCreateRsp.getUserIdListList());
         groupEntity.setCreatorId(groupCreateRsp.getUserId());
@@ -52,7 +56,7 @@ public class ProtoBuf2JavaBean {
         groupEntity.setCreated(timeNow);
         groupEntity.setAvatar("");
         groupEntity.setGroupType(DBConstant.GROUP_TYPE_TEMP);
-        groupEntity.setStatus(DBConstant.GROUP_STATUS_ONLINE);
+        groupEntity.setStatus(DBConstant.STATUS_ONLINE);
         groupEntity.setUserCount(groupCreateRsp.getUserIdListCount());
         groupEntity.setVersion(1);
 
@@ -60,7 +64,7 @@ public class ProtoBuf2JavaBean {
         return groupEntity;
     }
 
-    public static UserEntity getUserEntity(IMBaseDefine.UserInfo userInfo){
+    public static UserEntity getUserEntity(IMBaseDefine.UserInfo userInfo) {
         UserEntity userEntity = new UserEntity();
 //        int timeNow = (int) (System.currentTimeMillis()/1000);
 //
@@ -81,11 +85,11 @@ public class ProtoBuf2JavaBean {
         return userEntity;
     }
 
-    public static SessionEntity getSessionEntity(IMBaseDefine.ContactSessionInfo sessionInfo){
+    public static SessionEntity getSessionEntity(IMBaseDefine.ContactSessionInfo sessionInfo) {
         SessionEntity sessionEntity = new SessionEntity();
 
-        int msgType = getJavaMsgType(sessionInfo.getLatestMsgType());
-        sessionEntity.setLatestMsgType(msgType);
+//        int msgType = getJavaMsgType(sessionInfo.getLatestMsgType());
+//        sessionEntity.setLatestMsgType(msgType);
         sessionEntity.setPeerType(getJavaSessionType(sessionInfo.getSessionType()));
         sessionEntity.setPeerId(sessionInfo.getSessionId());
         sessionEntity.buildSessionKey();
@@ -93,7 +97,7 @@ public class ProtoBuf2JavaBean {
         sessionEntity.setLatestMsgId(sessionInfo.getLatestMsgId());
         sessionEntity.setCreated(sessionInfo.getUpdatedTime());
 
-//        String content  = sessionInfo.getLatestMsgData().toStringUtf8();
+        String content = sessionInfo.getLatestMsgData().toStringUtf8();
 //        String desMessage = new String(com.mogujie.tt.Security.getInstance().DecryptMsg(content));
 //        // 判断具体的类型是什么
 //        if(msgType == DBConstant.MSG_TYPE_GROUP_TEXT ||
@@ -103,7 +107,6 @@ public class ProtoBuf2JavaBean {
 
         sessionEntity.setLatestMsgData(sessionInfo.getLatestMsgData().toString());
         sessionEntity.setUpdated(sessionInfo.getUpdatedTime());
-
         return sessionEntity;
     }
 
@@ -111,10 +114,10 @@ public class ProtoBuf2JavaBean {
      * 拆分消息在上层做掉 图文混排
      * 在这判断
      */
-    public static MessageEntity getMessageEntity(IMBaseDefine.MsgInfo msgInfo) {
-        MessageEntity messageEntity = null;
-        IMBaseDefine.MsgType msgType = msgInfo.getMsgType();
-        switch (msgType) {
+//    public static MessageEntity getMessageEntity(IMBaseDefine.MsgInfo msgInfo) {
+//        MessageEntity messageEntity = null;
+//        IMBaseDefine.MsgType msgType = msgInfo.getMsgType();
+//        switch (msgType) {
 //            case MSG_TYPE_SINGLE_AUDIO:
 //            case MSG_TYPE_GROUP_AUDIO:
 //                try {
@@ -127,18 +130,17 @@ public class ProtoBuf2JavaBean {
 //                }
 //                break;
 
-            case MSG_TYPE_GROUP_TEXT:
-            case MSG_TYPE_SINGLE_TEXT:
-                messageEntity = analyzeText(msgInfo);
-                break;
-            default:
-                throw new RuntimeException("ProtoBuf2JavaBean#getMessageEntity wrong type!");
-        }
-        return messageEntity;
-    }
-
-    public static MessageEntity analyzeText(IMBaseDefine.MsgInfo msgInfo){
-        return MsgAnalyzeEngine.analyzeMessage(msgInfo);
+//            case MSG_TYPE_GROUP_TEXT:
+//            case MSG_TYPE_SINGLE_TEXT:
+//                messageEntity = analyzeText(msgInfo);
+//                break;
+//            default:
+//                throw new RuntimeException("ProtoBuf2JavaBean#getMessageEntity wrong type!");
+//        }
+//        return messageEntity;
+//    }
+    public static MessageEntity analyzeText(IMMessage.IMMsgData msgData) {
+        return MsgAnalyzeEngine.analyzeMessage(msgData);
     }
 
 //    public static AudioMessage analyzeAudio(IMBaseDefine.MsgInfo msgInfo) throws JSONException, UnsupportedEncodingException {
@@ -183,38 +185,25 @@ public class ProtoBuf2JavaBean {
 //        return audioMessage;
 //    }
 
-    public static MessageEntity getMessageEntity(IMMessage.IMMsgData msgData){
+    public static MessageEntity getMessageEntity(IMMessage.IMMsgData msgData) {
 
         MessageEntity messageEntity = null;
-        IMBaseDefine.MsgType msgType = msgData.getMsgType();
-        IMBaseDefine.MsgInfo msgInfo = IMBaseDefine.MsgInfo.newBuilder()
-                .setMsgData(msgData.getMsgData())
-                .setMsgId(msgData.getMsgId())
-                .setMsgType(msgType)
-                .setCreateTime(msgData.getCreateTime())
-                .setFromSessionId(msgData.getFromUserId())
-                .build();
+        int msgType = msgData.getMsgType();
+        int msgContentType = msgData.getMsgContentType();
 
-        switch (msgType) {
-//            case MSG_TYPE_SINGLE_AUDIO:
-//            case MSG_TYPE_GROUP_AUDIO:
-//                try {
-//                    messageEntity = analyzeAudio(msgInfo);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                } catch (UnsupportedEncodingException e) {
-//                    e.printStackTrace();
-//                }
-//                break;
-            case MSG_TYPE_GROUP_TEXT:
-            case MSG_TYPE_SINGLE_TEXT:
-                messageEntity = analyzeText(msgInfo);
+        switch (msgContentType) {
+            case SysConstant.MSG_CONTENT_TYPE_TEXT:
+                messageEntity = analyzeText(msgData);
                 break;
             default:
                 throw new RuntimeException("ProtoBuf2JavaBean#getMessageEntity wrong type!");
         }
-        if(messageEntity != null){
-            messageEntity.setToId(msgData.getToSessionId());
+        if (messageEntity != null) {
+            if (msgType == DBConstant.SESSION_TYPE_SINGLE) {
+                messageEntity.setToId(Integer.parseInt(msgData.getToUserId()));
+            } else {
+                messageEntity.setToId(Integer.parseInt(msgData.getGroupId()));
+            }
         }
 
         /**
@@ -225,7 +214,7 @@ public class ProtoBuf2JavaBean {
         return messageEntity;
     }
 
-    public static UnreadEntity getUnreadEntity(IMBaseDefine.UnreadInfo pbInfo){
+    public static UnreadEntity getUnreadEntity(IMBaseDefine.UnreadInfo pbInfo) {
         UnreadEntity unreadEntity = new UnreadEntity();
         unreadEntity.setSessionType(getJavaSessionType(pbInfo.getSessionType()));
         unreadEntity.setLatestMsgData(pbInfo.getLatestMsgData().toString());
@@ -236,56 +225,59 @@ public class ProtoBuf2JavaBean {
         return unreadEntity;
     }
 
-    /**
-     * enum 转化接口
-     * @param msgType
-     * @return
-     */
-    public static int getJavaMsgType(IMBaseDefine.MsgType msgType){
-        switch (msgType){
-            case MSG_TYPE_GROUP_TEXT:
-                return DBConstant.MSG_TYPE_GROUP_TEXT;
-            case MSG_TYPE_GROUP_AUDIO:
-                return DBConstant.MSG_TYPE_GROUP_AUDIO;
-            case MSG_TYPE_SINGLE_AUDIO:
-                return DBConstant.MSG_TYPE_SINGLE_AUDIO;
-            case MSG_TYPE_SINGLE_TEXT:
-                return DBConstant.MSG_TYPE_SINGLE_TEXT;
+    public static int getJavaMsgType(int msgType, int msgContentType) {
+        switch (msgType) {
+            case DBConstant.SESSION_TYPE_SINGLE:
+                if (msgContentType == SysConstant.MSG_CONTENT_TYPE_TEXT) {
+                    return DBConstant.MSG_TYPE_SINGLE_TEXT;
+                } else if (msgContentType == SysConstant.MSG_CONTENT_TYPE_IMAGE) {
+                    return DBConstant.MSG_TYPE_SINGLE_IMAGE;
+                } else {
+                    throw new IllegalArgumentException("cause by #msgContentType#" + msgContentType);
+                }
+            case DBConstant.SESSION_TYPE_GROUP:
+                if (msgContentType == SysConstant.MSG_CONTENT_TYPE_TEXT) {
+                    return DBConstant.MSG_TYPE_GROUP_TEXT;
+                } else if (msgContentType == SysConstant.MSG_CONTENT_TYPE_IMAGE) {
+                    return DBConstant.MSG_TYPE_GROUP_IMAGE;
+                } else {
+                    throw new IllegalArgumentException("cause by #msgContentType#" + msgContentType);
+                }
             default:
-                throw new IllegalArgumentException("msgType is illegal,cause by #getProtoMsgType#" +msgType);
+                throw new IllegalArgumentException("sessionType is illegal,cause by #msgType#" + msgType);
         }
     }
 
-    public static int getJavaSessionType(IMBaseDefine.SessionType sessionType){
-        switch (sessionType){
+    public static int getJavaSessionType(IMBaseDefine.SessionType sessionType) {
+        switch (sessionType) {
             case SESSION_TYPE_SINGLE:
                 return DBConstant.SESSION_TYPE_SINGLE;
             case SESSION_TYPE_GROUP:
                 return DBConstant.SESSION_TYPE_GROUP;
             default:
-                throw new IllegalArgumentException("sessionType is illegal,cause by #getProtoSessionType#" +sessionType);
+                throw new IllegalArgumentException("sessionType is illegal,cause by #getProtoSessionType#" + sessionType);
         }
     }
 
-    public static int getJavaGroupType(IMBaseDefine.GroupType groupType){
-        switch (groupType){
+    public static int getJavaGroupType(IMBaseDefine.GroupType groupType) {
+        switch (groupType) {
             case GROUP_TYPE_NORMAL:
                 return DBConstant.GROUP_TYPE_NORMAL;
             case GROUP_TYPE_TMP:
                 return DBConstant.GROUP_TYPE_TEMP;
             default:
-                throw new IllegalArgumentException("sessionType is illegal,cause by #getProtoSessionType#" +groupType);
+                throw new IllegalArgumentException("sessionType is illegal,cause by #getProtoSessionType#" + groupType);
         }
     }
 
-    public static int getGroupChangeType(IMBaseDefine.GroupModifyType modifyType){
-        switch (modifyType){
+    public static int getGroupChangeType(IMBaseDefine.GroupModifyType modifyType) {
+        switch (modifyType) {
             case GROUP_MODIFY_TYPE_ADD:
                 return DBConstant.GROUP_MODIFY_TYPE_ADD;
             case GROUP_MODIFY_TYPE_DEL:
                 return DBConstant.GROUP_MODIFY_TYPE_DEL;
             default:
-                throw new IllegalArgumentException("GroupModifyType is illegal,cause by " +modifyType);
+                throw new IllegalArgumentException("GroupModifyType is illegal,cause by " + modifyType);
         }
     }
 }

@@ -20,13 +20,16 @@
             android:layout_height="match_parent"
             android:background="@color/transparent">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_msg"
+            <ListView
+                android:id="@+id/lv_msg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="1dp"
+                android:background="@color/white"
+                android:cacheColorHint="@android:color/transparent"
                 android:clipToPadding="false"
-                android:background="@color/white" />
+                android:divider="@null"
+                android:paddingBottom="1dp"
+                android:transcriptMode="normal" />
         </android.support.v4.widget.SwipeRefreshLayout>
 
         <TextView
@@ -166,10 +169,8 @@
                 android:id="@+id/gv_emo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:layout_alignParentLeft="true"
-                android:gravity="center_vertical"
-                android:visibility="gone" />
+                android:gravity="center_vertical" />
         </LinearLayout>
 
         <LinearLayout

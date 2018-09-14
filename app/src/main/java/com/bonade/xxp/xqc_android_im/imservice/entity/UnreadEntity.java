@@ -1,6 +1,7 @@
 package com.bonade.xxp.xqc_android_im.imservice.entity;
 
 import com.bonade.xxp.xqc_android_im.protobuf.helper.EntityChangeEngine;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * 未读session，并未保存在DB中
@@ -9,6 +10,8 @@ public class UnreadEntity {
 
     private String sessionKey;
     private int peerId;
+    private String mainName;
+    private String avatar;
     private int sessionType;
     private int unReadCount;
     private int latestMsgId;
@@ -29,6 +32,22 @@ public class UnreadEntity {
 
     public void setPeerId(int peerId) {
         this.peerId = peerId;
+    }
+
+    public String getMainName() {
+        return mainName;
+    }
+
+    public void setMainName(String mainName) {
+        this.mainName = mainName;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public int getSessionType() {
@@ -89,7 +108,7 @@ public class UnreadEntity {
             throw new IllegalArgumentException(
                     "SessionEntity buildSessionKey error,cause by some params <=0");
         }
-        sessionKey = EntityChangeEngine.getSessionKey(peerId,sessionType);
+        sessionKey = EntityChangeEngine.getSessionKey(peerId, sessionType);
         return sessionKey;
     }
 }

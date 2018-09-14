@@ -37,4 +37,12 @@ public interface ContactApi {
     @FormUrlEncoded
     @POST("/im/imFriend/listFriend")
     Observable<BaseResponse<List<UserEntity>>> getListFriend(@Field("userId") int userId);
+
+    /**
+     * 获取和我正在聊天的所有用户信息（包括我所在群的所有人）
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/im/imUserInfo/synchronizeUserGroupInfo")
+    Observable<BaseResponse<List<UserEntity>>> getAllUsers(@Field("userIds") String userIds, @Field("groupIds") String groupIds);
 }

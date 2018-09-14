@@ -75,8 +75,8 @@ public interface DBConstant {
      * group status
      * 1: shield  0: not shield
      */
-    int GROUP_STATUS_ONLINE    = 0;
-    int GROUP_STATUS_SHIELD    = 1;
+    int STATUS_ONLINE    = 0;
+    int STATUS_SHIELD    = 1;
 
     /**
      * group change Type

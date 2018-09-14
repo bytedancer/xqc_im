@@ -173,56 +173,74 @@ public class IMMessageManager extends IMManager {
             throw new RuntimeException("#sendMessage# msgId is wrong,cause by 0!");
         }
 
-        IMBaseDefine.MsgType msgType = Java2ProtoBuf.getProtoMsgType(msg.getMsgType());
-        byte[] sendContent = msg.getSendContent();
-//
-//        IMMessage.IMMsgData msgData = IMMessage.IMMsgData.newBuilder()
-//                .setFromUserId(msg.getFromId())
-//                .setToSessionId(msg.getToId())
-//                .setMsgId(0)
-//                .setCreateTime(msg.getCreated())
-//                .setMsgType(msgType)
-//                .setMsgData(ByteString.copyFrom(sendContent))  // 这个点要特别注意 todo ByteString.copyFrom
-//                .build();
-//        int sid = IMBaseDefine.ServiceID.SID_MSG_VALUE;
-//        int cid = IMBaseDefine.MessageCmdID.CID_MSG_DATA_VALUE;
-//
-//        final MessageEntity messageEntity = msg;
-//        imSocketManager.sendRequest(msgData, sid, cid, new Packetlistener(getTimeoutTolerance(messageEntity)) {
-//            @Override
-//            public void onSuccess(Object response) {
-//                try {
-//                    IMMessage.IMMsgDataAck imMsgDataAck = IMMessage.IMMsgDataAck.parseFrom((CodedInputStream) response);
-//                    logger.i("chat#onAckSendedMsg");
-//                    if (imMsgDataAck.getMsgId() <= 0) {
-//                        throw new RuntimeException("Msg ack error,cause by msgId <=0");
-//                    }
-//                    messageEntity.setStatus(MessageConstant.MSG_SUCCESS);
-//                    messageEntity.setMsgId(imMsgDataAck.getMsgId());
-//                    // 主键ID已经存在，直接替换
-//                    dbInterface.insertOrUpdateMessage(messageEntity);
-//                    // 更新sessionEntity lastMsgId问题
-//                    imSessionManager.updateSession(messageEntity);
-//                    triggerEvent(new MessageEvent(messageEntity, MessageEvent.Event.ACK_SEND_MESSAGE_OK));
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void onFaild() {
-//                messageEntity.setStatus(MessageConstant.MSG_FAILURE);
-//                dbInterface.insertOrUpdateMessage(messageEntity);
-//                triggerEvent(new MessageEvent(messageEntity, MessageEvent.Event.ACK_SEND_MESSAGE_FAILURE));
-//            }
-//
-//            @Override
-//            public void onTimeout() {
-//                messageEntity.setStatus(MessageConstant.MSG_FAILURE);
-//                dbInterface.insertOrUpdateMessage(messageEntity);
-//                triggerEvent(new MessageEvent(messageEntity, MessageEvent.Event.ACK_SEND_MESSAGE_TIME_OUT));
-//            }
-//        });
+        String sessionId = msg.getSessionKey();
+        String fromUserId = String.valueOf(msg.getFromId());
+        String toUserId = String.valueOf(msg.getToId());
+        String msgId = String.valueOf(msg.getMsgId());
+        String msgContent = msg.getContent();
+        long time = msg.getCreated() * 1000;
+        int msgType = msg.getSessionType();
+        int msgContentType = 0;
+        switch (msg.getMsgType()) {
+            case DBConstant.MSG_TYPE_SINGLE_TEXT:
+            case DBConstant.MSG_TYPE_GROUP_TEXT:
+                msgContentType = 1;
+                break;
+            case DBConstant.MSG_TYPE_SINGLE_IMAGE:
+            case DBConstant.MSG_TYPE_GROUP_IMAGE:
+                msgContentType = 2;
+                break;
+        }
+
+        IMMessage.IMMsgData msgData = IMMessage.IMMsgData.newBuilder()
+                .setSessionId(sessionId)
+                .setFromUserId(fromUserId)
+                .setToUserId(msgType == DBConstant.SESSION_TYPE_SINGLE ? toUserId : "")
+                .setGroupId(msgType == DBConstant.SESSION_TYPE_GROUP ? toUserId : "")
+                .setMsgId(msgId)
+                .setMsgContent(msgContent)
+                .setMsgType(msgType)
+                .setMsgContentType(msgContentType)
+                .setTimestamp(time)
+                .build();
+        int sid = IMBaseDefine.ServiceID.SID_MSG_VALUE;
+        int cid = IMBaseDefine.MessageCmdID.CID_MSG_DATA_VALUE;
+
+        final MessageEntity messageEntity = msg;
+        short flag = SysConstant.PROTOCOL_FLAG_MESSAGE;
+        imSocketManager.sendRequest(msgData, flag, sid, cid, new Packetlistener(getTimeoutTolerance(messageEntity)) {
+            @Override
+            public void onSuccess(Object response) {
+                try {
+                    IMMessage.IMMsgDataAck imMsgDataAck = IMMessage.IMMsgDataAck.parseFrom((CodedInputStream) response);
+                    logger.i("chat#onAckSendedMsg");
+                    int msgId = Integer.parseInt(imMsgDataAck.getMsgId());
+                    messageEntity.setStatus(MessageConstant.MSG_SUCCESS);
+                    messageEntity.setMsgId(msgId);
+                    // 主键ID已经存在，直接替换
+                    dbInterface.insertOrUpdateMessage(messageEntity);
+                    // 更新sessionEntity lastMsgId问题
+                    imSessionManager.updateSession(messageEntity);
+                    triggerEvent(new MessageEvent(messageEntity, MessageEvent.Event.ACK_SEND_MESSAGE_OK));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFaild() {
+                messageEntity.setStatus(MessageConstant.MSG_FAILURE);
+                dbInterface.insertOrUpdateMessage(messageEntity);
+                triggerEvent(new MessageEvent(messageEntity, MessageEvent.Event.ACK_SEND_MESSAGE_FAILURE));
+            }
+
+            @Override
+            public void onTimeout() {
+                messageEntity.setStatus(MessageConstant.MSG_FAILURE);
+                dbInterface.insertOrUpdateMessage(messageEntity);
+                triggerEvent(new MessageEvent(messageEntity, MessageEvent.Event.ACK_SEND_MESSAGE_TIME_OUT));
+            }
+        });
     }
 
     /**
@@ -317,9 +335,7 @@ public class IMMessageManager extends IMManager {
                 case MessageConstant.IMAGE_UNLOAD:
                 case MessageConstant.IMAGE_LOADING:
                     msg.setLoadStatus(MessageConstant.IMAGE_LOADING);
-                    Intent loadImageIntent = new Intent(context, LoadImageService.class);
-                    loadImageIntent.putExtra(SysConstant.UPLOAD_IMAGE_INTENT_PARAMS, msg);
-                    context.startService(loadImageIntent);
+                    LoadImageService.launch(context, msg);
                     break;
                 case MessageConstant.IMAGE_LOADED_SUCCESS:
                     sendMessage(msg);
@@ -389,7 +405,7 @@ public class IMMessageManager extends IMManager {
      */
     public List<MessageEntity> loadHistoryMsg(int pullTimes, String sessionKey, PeerEntity peerEntity) {
         int lastMsgId = 99999999;
-        int lastCreateTime = 1455379200;
+        int lastCreateTime = (int) (System.currentTimeMillis() / 1000);
         int count = SysConstant.MSG_CNT_PER_PAGE;
         SessionEntity sessionEntity = IMSessionManager.getInstance().findSession(sessionKey);
         if (sessionEntity != null) {
@@ -583,46 +599,46 @@ public class IMMessageManager extends IMManager {
     }
 
     public void onReqMsgById(IMMessage.IMGetMsgByIdRsp rsp) {
-        int userId = rsp.getUserId();
-        int peerId = rsp.getSessionId();
-        int sessionType = ProtoBuf2JavaBean.getJavaSessionType(rsp.getSessionType());
-        String sessionKey = EntityChangeEngine.getSessionKey(peerId, sessionType);
-
-        List<IMBaseDefine.MsgInfo> msgList = rsp.getMsgListList();
-        if (msgList.size() <= 0) {
-            logger.i("onReqMsgById# have no msgList");
-            return;
-        }
-        List<MessageEntity> dbEntity = new ArrayList<>();
-        for (IMBaseDefine.MsgInfo msg : msgList) {
-            MessageEntity entity = ProtoBuf2JavaBean.getMessageEntity(msg);
-            if (entity == null) {
-                logger.d("#IMMessageManager# onReqHistoryMsg#analyzeMsg is null,%s", entity);
-                continue;
-            }
-
-            entity.setSessionKey(sessionKey);
-            switch (sessionType) {
-                case DBConstant.SESSION_TYPE_GROUP:
-                    entity.setToId(peerId);
-                    break;
-                case DBConstant.SESSION_TYPE_SINGLE:
-                    if (entity.getFromId() == userId) {
-                        entity.setToId(peerId);
-                    } else {
-                        entity.setToId(userId);
-                    }
-                    break;
-            }
-
-            dbEntity.add(entity);
-        }
-
-        dbInterface.batchInsertOrUpdateMessage(dbEntity);
-        // 事件驱动通知
-        MessageEvent event = new MessageEvent();
-        event.setEvent(MessageEvent.Event.HISTORY_MSG_OBTAIN);
-        triggerEvent(event);
+//        int userId = rsp.getUserId();
+//        int peerId = rsp.getSessionId();
+//        int sessionType = ProtoBuf2JavaBean.getJavaSessionType(rsp.getSessionType());
+//        String sessionKey = EntityChangeEngine.getSessionKey(peerId, sessionType);
+//
+//        List<IMBaseDefine.MsgInfo> msgList = rsp.getMsgListList();
+//        if (msgList.size() <= 0) {
+//            logger.i("onReqMsgById# have no msgList");
+//            return;
+//        }
+//        List<MessageEntity> dbEntity = new ArrayList<>();
+//        for (IMBaseDefine.MsgInfo msg : msgList) {
+//            MessageEntity entity = ProtoBuf2JavaBean.getMessageEntity(msg);
+//            if (entity == null) {
+//                logger.d("#IMMessageManager# onReqHistoryMsg#analyzeMsg is null,%s", entity);
+//                continue;
+//            }
+//
+//            entity.setSessionKey(sessionKey);
+//            switch (sessionType) {
+//                case DBConstant.SESSION_TYPE_GROUP:
+//                    entity.setToId(peerId);
+//                    break;
+//                case DBConstant.SESSION_TYPE_SINGLE:
+//                    if (entity.getFromId() == userId) {
+//                        entity.setToId(peerId);
+//                    } else {
+//                        entity.setToId(userId);
+//                    }
+//                    break;
+//            }
+//
+//            dbEntity.add(entity);
+//        }
+//
+//        dbInterface.batchInsertOrUpdateMessage(dbEntity);
+//        // 事件驱动通知
+//        MessageEvent event = new MessageEvent();
+//        event.setEvent(MessageEvent.Event.HISTORY_MSG_OBTAIN);
+//        triggerEvent(event);
     }
 
     /**
@@ -662,46 +678,46 @@ public class IMMessageManager extends IMManager {
      */
     public void onReqHistoryMsg(IMMessage.IMGetMsgListRsp rsp) {
         // 判断loginId 判断sessionId
-        int userId = rsp.getUserId();
-        int sessionType = ProtoBuf2JavaBean.getJavaSessionType(rsp.getSessionType());
-        int peerId = rsp.getSessionId();
-        String sessionKey = EntityChangeEngine.getSessionKey(peerId, sessionType);
-        int msgBegin = rsp.getMsgIdBegin();
-
-        List<IMBaseDefine.MsgInfo> msgList = rsp.getMsgListList();
-
-        ArrayList<MessageEntity> result = new ArrayList<>();
-        for (IMBaseDefine.MsgInfo msgInfo : msgList) {
-            MessageEntity messageEntity = ProtoBuf2JavaBean.getMessageEntity(msgInfo);
-            if (messageEntity == null) {
-                logger.d("#IMMessageManager# onReqHistoryMsg#analyzeMsg is null,%s", messageEntity);
-                continue;
-            }
-            messageEntity.setSessionKey(sessionKey);
-            switch (sessionType) {
-                case DBConstant.SESSION_TYPE_GROUP: {
-                    messageEntity.setToId(peerId);
-                }
-                break;
-                case DBConstant.SESSION_TYPE_SINGLE: {
-                    if (messageEntity.getFromId() == userId) {
-                        messageEntity.setToId(peerId);
-                    } else {
-                        messageEntity.setToId(userId);
-                    }
-                }
-                break;
-            }
-            result.add(messageEntity);
-        }
-
-        // 事件的通知 check
-        if (result.size() > 0) {
-            dbInterface.batchInsertOrUpdateMessage(result);
-            MessageEvent event = new MessageEvent();
-            event.setEvent(MessageEvent.Event.HISTORY_MSG_OBTAIN);
-            triggerEvent(event);
-        }
+//        int userId = rsp.getUserId();
+//        int sessionType = ProtoBuf2JavaBean.getJavaSessionType(rsp.getSessionType());
+//        int peerId = rsp.getSessionId();
+//        String sessionKey = EntityChangeEngine.getSessionKey(peerId, sessionType);
+//        int msgBegin = rsp.getMsgIdBegin();
+//
+//        List<IMBaseDefine.MsgInfo> msgList = rsp.getMsgListList();
+//
+//        ArrayList<MessageEntity> result = new ArrayList<>();
+//        for (IMBaseDefine.MsgInfo msgInfo : msgList) {
+//            MessageEntity messageEntity = ProtoBuf2JavaBean.getMessageEntity(msgInfo);
+//            if (messageEntity == null) {
+//                logger.d("#IMMessageManager# onReqHistoryMsg#analyzeMsg is null,%s", messageEntity);
+//                continue;
+//            }
+//            messageEntity.setSessionKey(sessionKey);
+//            switch (sessionType) {
+//                case DBConstant.SESSION_TYPE_GROUP: {
+//                    messageEntity.setToId(peerId);
+//                }
+//                break;
+//                case DBConstant.SESSION_TYPE_SINGLE: {
+//                    if (messageEntity.getFromId() == userId) {
+//                        messageEntity.setToId(peerId);
+//                    } else {
+//                        messageEntity.setToId(userId);
+//                    }
+//                }
+//                break;
+//            }
+//            result.add(messageEntity);
+//        }
+//
+//        // 事件的通知 check
+//        if (result.size() > 0) {
+//            dbInterface.batchInsertOrUpdateMessage(result);
+//            MessageEvent event = new MessageEvent();
+//            event.setEvent(MessageEvent.Event.HISTORY_MSG_OBTAIN);
+//            triggerEvent(event);
+//        }
     }
 
     /**

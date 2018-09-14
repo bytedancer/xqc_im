@@ -1,7 +1,10 @@
 package com.bonade.xxp.xqc_android_im.imservice.manager;
 
+import com.bonade.xxp.xqc_android_im.config.SysConstant;
 import com.bonade.xxp.xqc_android_im.protobuf.IMBaseDefine;
 import com.bonade.xxp.xqc_android_im.protobuf.IMLogin;
+import com.bonade.xxp.xqc_android_im.protobuf.IMMessage;
+import com.bonade.xxp.xqc_android_im.util.Logger;
 import com.google.protobuf.CodedInputStream;
 
 import java.io.IOException;
@@ -13,36 +16,19 @@ import java.io.IOException;
  */
 public class IMPacketDispatcher {
 
-    public static void loginPacketDispatcher(int commandId, CodedInputStream buffer) {
-//        try {
-            switch (commandId) {
-//            case IMBaseDefine.LoginCmdID.CID_LOGIN_RES_USERLOGIN_VALUE :
-//                IMLogin.IMLoginRes  imLoginRes = IMLogin.IMLoginRes.parseFrom(buffer);
-//                IMLoginManager.instance().onRepMsgServerLogin(imLoginRes);
-//                return;
+    private static Logger logger = Logger.getLogger(IMPacketDispatcher.class);
 
-                case IMBaseDefine.LoginCmdID.CID_LOGIN_RES_LOGINOUT_VALUE:
-//                    IMLogin.IMLogoutRsp imLogoutRsp = IMLogin.IMLogoutRsp.parseFrom(buffer);
-//                    IMLoginManager.getInstance().onRepLoginOut(imLogoutRsp);
-                    return;
-
-                case IMBaseDefine.LoginCmdID.CID_LOGIN_KICK_USER_VALUE:
-//                    IMLogin.IMKickUser imKickUser = IMLogin.IMKickUser.parseFrom(buffer);
-//                    IMLoginManager.getInstance().onKickout(imKickUser);
+    public static void packetDispatcher(short flag, CodedInputStream buffer) {
+        try {
+            switch (flag) {
+                case SysConstant.PROTOCOL_FLAG_MESSAGE:
+                    IMMessage.IMMsgData imMsgData = IMMessage.IMMsgData.parseFrom(buffer);
+                    IMMessageManager.getInstance().onRecvMessage(imMsgData);
+                    break;
             }
-//        } catch (IOException e) {
-//        }
-    }
-
-    public static void buddyPacketDispatcher(int commandId, CodedInputStream buffer) {
-
-    }
-
-    public static void msgPacketDispatcher(int commandId, CodedInputStream buffer) {
-
-    }
-
-    public static void groupPacketDispatcher(int commandId,CodedInputStream buffer) {
+        } catch (IOException e) {
+            logger.e("packetDispatcher# error,flag:%d", flag);
+        }
 
     }
 }
