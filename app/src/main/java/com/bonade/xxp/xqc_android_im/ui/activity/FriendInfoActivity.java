@@ -102,7 +102,10 @@ public class FriendInfoActivity extends BaseActivity {
 
     @OnClick(R.id.fl_send_msg)
     void sendMsgClick() {
-        ChatActivity.launch(this, mUserEntity.getSessionKey());
+        if (mUserEntity == null)
+            return;
+        IMContactManager.getInstance().addContact(mUserEntity);
+        ChatActivity.launch(this, IMLoginManager.getInstance().getLoginInfo().getSessionKey());
     }
 
     @OnClick(R.id.ll_remark)

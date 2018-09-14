@@ -30,14 +30,17 @@ public class BubbleImageView extends AppCompatImageView {
 
     public BubbleImageView(Context context) {
         super(context);
+        init(context);
     }
 
     public BubbleImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init(context);
     }
 
     public BubbleImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        init(context);
     }
 
     public void init(Context context) {
@@ -84,7 +87,10 @@ public class BubbleImageView extends AppCompatImageView {
                             @Override
                             public void onStop() {
                                 super.onStop();
-                                imageLoadingCallback.onLoadingCanceled(url);
+                                if (imageLoadingCallback != null) {
+                                    imageLoadingCallback.onLoadingCanceled(url);
+                                }
+
                             }
                         });
 
