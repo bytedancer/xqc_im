@@ -1,35 +1,20 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/rl_select_group"
+    <TextView
+        android:id="@+id/tv_select_group"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginTop="16dp"
         android:background="@color/white"
+        android:drawableRight="@mipmap/ic_arrow_right"
+        android:gravity="center_vertical"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="选择一个群"
-            android:textSize="18sp"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:id="@+id/tv_group_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableRight="@mipmap/ic_arrow_right"
-            android:drawablePadding="6dp"
-            android:textSize="16sp"
-            android:layout_alignParentRight="true" />
-    </RelativeLayout>
+        android:text="选择一个群"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
 
     <RelativeLayout
         android:layout_width="match_parent"

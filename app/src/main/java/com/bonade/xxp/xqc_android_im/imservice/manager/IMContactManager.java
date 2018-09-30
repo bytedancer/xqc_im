@@ -62,8 +62,6 @@ public class IMContactManager extends IMManager {
         logger.d("contact#loadAllUserInfo dbsuccess");
 
         for (UserEntity userInfo : userList) {
-            // todo DB的状态不包含拼音的，这个样每次都要加载啊
-            PinYin.getPinYin(userInfo.getMainName(), userInfo.getPinyinElement());
             userMap.put(userInfo.getPeerId(), userInfo);
         }
 

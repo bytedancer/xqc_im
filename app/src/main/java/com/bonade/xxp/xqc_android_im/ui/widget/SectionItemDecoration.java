@@ -12,6 +12,7 @@ import android.text.TextPaint;
 import android.util.TypedValue;
 import android.view.View;
 
+import com.bonade.xxp.xqc_android_im.DB.entity.UserEntity;
 import com.bonade.xxp.xqc_android_im.R;
 import com.bonade.xxp.xqc_android_im.model.Person;
 import com.bonade.xxp.xqc_android_im.ui.fragment.ContactsFragment;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class SectionItemDecoration extends RecyclerView.ItemDecoration {
 
-    private List<Person> mData;
+    private List<UserEntity> mData;
     private int mStartDrawIndex;
     private Paint mBgPaint;
     private TextPaint mTextPaint;
@@ -31,7 +32,7 @@ public class SectionItemDecoration extends RecyclerView.ItemDecoration {
     private int mTextColor;
     private int mTextSize;
 
-    public SectionItemDecoration(Context context, List<Person> data, int startDrawIndex) {
+    public SectionItemDecoration(Context context, List<UserEntity> data, int startDrawIndex) {
         this.mData = data;
         this.mStartDrawIndex = startDrawIndex;
 
@@ -50,7 +51,7 @@ public class SectionItemDecoration extends RecyclerView.ItemDecoration {
         mBounds = new Rect();
     }
 
-    public void setData(List<Person> data) {
+    public void setData(List<UserEntity> data) {
         this.mData = data;
     }
 

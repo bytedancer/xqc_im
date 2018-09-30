@@ -17,6 +17,8 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
 
+import java.io.File;
+
 public class BubbleImageView extends AppCompatImageView {
 
     /**
@@ -54,49 +56,56 @@ public class BubbleImageView extends AppCompatImageView {
     public void setImageUrl(final String url) {
         imageUrl = url;
         if (isAttachedOnWindow) {
-            final BubbleImageView view = this;
-            if (!TextUtils.isEmpty(this.imageUrl)) {
-                requestManager
-                        .load(imageUrl)
-                        .error(R.mipmap.im_message_image_default)
-                        .placeholder(R.mipmap.im_message_image_default)
-                        .into(new SimpleTarget<GlideDrawable>() {
-                            @Override
-                            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                                if (imageLoadingCallback != null) {
-                                    imageLoadingCallback.onLoadingComplete(url, resource);
-                                }
-                            }
-
-                            @Override
-                            public void onLoadStarted(Drawable placeholder) {
-                                super.onLoadStarted(placeholder);
-                                if (imageLoadingCallback != null) {
-                                    imageLoadingCallback.onLoadingStarted(url);
-                                }
-                            }
-
-                            @Override
-                            public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                                super.onLoadFailed(e, errorDrawable);
-                                if (imageLoadingCallback != null) {
-                                    imageLoadingCallback.onLoadingFailed(url);
-                                }
-                            }
-
-                            @Override
-                            public void onStop() {
-                                super.onStop();
-                                if (imageLoadingCallback != null) {
-                                    imageLoadingCallback.onLoadingCanceled(url);
-                                }
-
-                            }
-                        });
-
+            if (TextUtils.isEmpty(imageUrl)) {
+                setImageResource(R.mipmap.im_message_image_default);
+                return;
             }
-        } else {
-            setImageResource(R.mipmap.im_message_image_default);
+
+            if (imageUrl.startsWith("/")) {
+                File file = new File(imageUrl);
+                if (!file.exists()) {
+                    setImageResource(R.mipmap.im_message_image_default);
+                    return;
+                }
+            }
+            requestManager
+                    .load(imageUrl.startsWith("/") ? new File(imageUrl) : imageUrl)
+                    .error(R.mipmap.im_message_image_default)
+                    .placeholder(R.mipmap.im_message_image_default)
+                    .into(new SimpleTarget<GlideDrawable>() {
+                        @Override
+                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                            setImageDrawable(resource);
+                            if (imageLoadingCallback != null) {
+                                imageLoadingCallback.onLoadingComplete(url, resource);
+                            }
+                        }
+
+                        @Override
+                        public void onLoadStarted(Drawable placeholder) {
+                            super.onLoadStarted(placeholder);
+                            if (imageLoadingCallback != null) {
+                                imageLoadingCallback.onLoadingStarted(url);
+                            }
+                        }
+
+                        @Override
+                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                            super.onLoadFailed(e, errorDrawable);
+                            if (imageLoadingCallback != null) {
+                                imageLoadingCallback.onLoadingFailed(url);
+                            }
+                        }
+
+                        @Override
+                        public void onStop() {
+                            super.onStop();
+                            if (imageLoadingCallback != null) {
+                                imageLoadingCallback.onLoadingCanceled(url);
+                            }
+
+                        }
+                    });
         }
     }
 

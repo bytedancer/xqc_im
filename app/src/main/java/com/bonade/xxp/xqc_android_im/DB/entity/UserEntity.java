@@ -37,7 +37,6 @@ public class UserEntity extends PeerEntity {
     private SearchElement searchElement = new SearchElement();
     // KEEP FIELDS END
 
-    @Generated
     public UserEntity() {
     }
 
@@ -45,7 +44,6 @@ public class UserEntity extends PeerEntity {
         this.cid = cid;
     }
 
-    @Generated
     public UserEntity(Long cid, int peerId, String mainName, String avatar, Integer companyId, String companyName, String jobName, String deptName, String mobile, Integer isFriend, String email, String userName, Integer status, Integer created, Integer updated) {
         this.cid = cid;
         this.peerId = peerId;
@@ -196,6 +194,13 @@ public class UserEntity extends PeerEntity {
 
     public SearchElement getSearchElement() {
         return searchElement;
+    }
+
+    public String getSection() {
+        if (TextUtils.isEmpty(pinyinElement.pinyin)) {
+            return "";
+        }
+        return pinyinElement.pinyin.substring(0, 1);
     }
 
     @Override

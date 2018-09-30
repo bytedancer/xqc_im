@@ -7,8 +7,6 @@ import org.greenrobot.greendao.generator.Index;
 import org.greenrobot.greendao.generator.Property;
 import org.greenrobot.greendao.generator.Schema;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 
 /**
  * 其中UserEntity、 GroupEntity 继承PeerEntity

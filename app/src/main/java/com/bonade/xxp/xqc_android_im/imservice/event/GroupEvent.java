@@ -64,6 +64,11 @@ public class GroupEvent {
         GROUP_INFO_SUCCESS,
         GROUP_INFO_UPDATED,
 
+        // 改变群名称
+        CHANGE_GROUP_NAME_SUCCESS,
+        CHANGE_GROUP_NAME_FAIL,
+        CHANGE_GROUP_NAME_TIMEOUT,
+
         // 改变群成员
         CHANGE_GROUP_MEMBER_SUCCESS,
         CHANGE_GROUP_MEMBER_FAIL,

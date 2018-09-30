@@ -177,7 +177,7 @@ public class IMMessageManager extends IMManager {
         String fromUserId = String.valueOf(msg.getFromId());
         String toUserId = String.valueOf(msg.getToId());
         String msgId = String.valueOf(msg.getMsgId());
-        String msgContent = msg.getContent();
+        String msgContent = msg.getSendContent();
         long time = msg.getCreated() * 1000;
         int msgType = msg.getSessionType();
         int msgContentType = 0;
@@ -287,7 +287,7 @@ public class IMMessageManager extends IMManager {
     public void sendText(TextMessage textMessage) {
         logger.i("chat#text#textMessage");
         textMessage.setStatus(MessageConstant.MSG_SENDING);
-        long pkId =  DBInterface.getInstance().insertOrUpdateMessage(textMessage);
+        long pkId = DBInterface.getInstance().insertOrUpdateMessage(textMessage);
         imSessionManager.updateSession(textMessage);
         sendMessage(textMessage);
     }
@@ -564,7 +564,7 @@ public class IMMessageManager extends IMManager {
         }
 
         // 返回的结果是升序
-        List<Integer> msgIdList =  dbInterface.refreshHistoryMsgId(chatKey, beginMsgId, lastMsgId);
+        List<Integer> msgIdList = dbInterface.refreshHistoryMsgId(chatKey, beginMsgId, lastMsgId);
         if (msgIdList.size() == (lastMsgId - beginMsgId + 1)) {
             logger.d("refreshDBMsg#do need refresh Message!,cause sizeOfList is right");
             return;
@@ -722,11 +722,12 @@ public class IMMessageManager extends IMManager {
 
     /**
      * 下载图片的整体迁移出来
+     *
      * @param imageEvent
      */
     private void onImageLoadSuccess(MessageEvent imageEvent) {
 
-        ImageMessage imageMessage = (ImageMessage)imageEvent.getMessageEntity();
+        ImageMessage imageMessage = (ImageMessage) imageEvent.getMessageEntity();
         logger.d("pic#onImageUploadFinish");
         String imageUrl = imageMessage.getUrl();
         logger.d("pic#imageUrl:%s", imageUrl);

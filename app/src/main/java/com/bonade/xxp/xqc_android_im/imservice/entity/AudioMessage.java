@@ -109,25 +109,29 @@ public class AudioMessage extends MessageEntity implements Serializable {
         return null;
     }
 
-
     @Override
-    public byte[] getSendContent() {
-        byte[] result = new byte[4];
-        result = CommonUtil.intToBytes(audiolength);
-        if (TextUtils.isEmpty(audioPath)) {
-            return result;
-        }
-
-        byte[] bytes = FileUtil.getFileContent(audioPath);
-        if (bytes == null) {
-            return bytes;
-        }
-        int contentLength = bytes.length;
-        byte[] byteAduioContent = new byte[4 + contentLength];
-        System.arraycopy(result, 0, byteAduioContent, 0, 4);
-        System.arraycopy(bytes, 0, byteAduioContent, 4, contentLength);
-        return byteAduioContent;
+    public String getSendContent() {
+        return super.getSendContent();
     }
+
+    //    @Override
+//    public byte[] getSendContent() {
+//        byte[] result = new byte[4];
+//        result = CommonUtil.intToBytes(audiolength);
+//        if (TextUtils.isEmpty(audioPath)) {
+//            return result;
+//        }
+//
+//        byte[] bytes = FileUtil.getFileContent(audioPath);
+//        if (bytes == null) {
+//            return bytes;
+//        }
+//        int contentLength = bytes.length;
+//        byte[] byteAduioContent = new byte[4 + contentLength];
+//        System.arraycopy(result, 0, byteAduioContent, 0, 4);
+//        System.arraycopy(bytes, 0, byteAduioContent, 4, contentLength);
+//        return byteAduioContent;
+//    }
 
     public String getAudioPath() {
         return audioPath;

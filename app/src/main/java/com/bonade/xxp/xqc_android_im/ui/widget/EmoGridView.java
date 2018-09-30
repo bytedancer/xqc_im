@@ -202,10 +202,10 @@ public class EmoGridView extends LinearLayout {
         gridView.setNumColumns(7);
         gridView.setVerticalScrollBarEnabled(false);
         gridView.setHorizontalScrollBarEnabled(false);
-        gridView.setPadding(8, 8, 8, 0);
+        gridView.setPadding(6, 6, 6, 0);
         gridView.setVerticalSpacing(CommonUtil.getElementSzie(_context) / 2
                 + CommonUtil.getElementSzie(_context) / 3);
-        // gridView.setVerticalSpacing(30);
+//        gridView.setVerticalSpacing(30);
         gridView.setBackgroundColor(Color.TRANSPARENT);
         gridView.setAdapter(new EmoGridViewAdapter(_context,
                 getGridViewData(index)));
@@ -353,6 +353,7 @@ public class EmoGridView extends LinearLayout {
                             AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.MATCH_PARENT);
                     layoutView = new LinearLayout(context);
                     faceView = new ImageView(context);
+                    faceView.setScaleType(ImageView.ScaleType.FIT_XY);
                     layoutView.setLayoutParams(layoutParams);
                     layoutView.setOrientation(LinearLayout.VERTICAL);
                     layoutView.setGravity(Gravity.CENTER);

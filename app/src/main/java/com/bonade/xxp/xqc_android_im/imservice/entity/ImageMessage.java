@@ -212,21 +212,10 @@ public class ImageMessage extends MessageEntity implements Serializable {
     }
 
     @Override
-    public byte[] getSendContent() {
+    public String getSendContent() {
         // 发送的时候非常关键
-        String sendContent = MessageConstant.IMAGE_MSG_START
+        return MessageConstant.IMAGE_MSG_START
                 + url + MessageConstant.IMAGE_MSG_END;
-        /**
-         * 加密
-         */
-//        String  encrySendContent =new String(Security.getInstance().EncryptMsg(sendContent));
-
-        try {
-            return sendContent.getBytes("utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     public String getPath() {

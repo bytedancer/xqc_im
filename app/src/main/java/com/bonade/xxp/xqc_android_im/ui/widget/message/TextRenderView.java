@@ -53,7 +53,8 @@ public class TextRenderView extends BaseMsgRenderView {
         // url 路径可以设定 跳转哦哦
         String content = textMessage.getContent();
         // 所以上层还是处理好之后再给我 Emoparser 处理之后的
-        msgContentView.setText(Emoparser.getInstance(getContext()).emoCharsequence(content));
+        CharSequence charSequence = Emoparser.getInstance(getContext()).emoCharsequence(content);
+        msgContentView.setText(charSequence);
         extractUrl2Link(msgContentView);
     }
 

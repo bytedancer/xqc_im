@@ -1,14 +1,13 @@
 package com.bonade.xxp.xqc_android_im.ui.widget;
 
 import android.content.Context;
-import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
 import com.bonade.xxp.xqc_android_im.ui.helper.Emoparser;
 
-public class CustomEditView extends AppCompatEditText {
+public class CustomEditView extends EditText {
 
     private static final int ID_PASTE = android.R.id.paste;
 

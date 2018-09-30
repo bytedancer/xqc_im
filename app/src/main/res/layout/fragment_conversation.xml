@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="47dp"
             android:layout_gravity="center_vertical"
-            android:background="#ffeeee"
+            android:background="#FFECCA"
             android:gravity="center_vertical">
 
             <ImageView
@@ -27,29 +27,16 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="25dp"
                 android:layout_alignParentLeft="true"
-                android:src="@mipmap/warning" />
+                android:src="@mipmap/im_warning" />
 
             <TextView
                 android:id="@+id/tv_disconnect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:layout_marginLeft="23dp"
                 android:layout_toRightOf="@id/iv_notify"
                 android:text="@string/no_network"
-                android:textColor="#ABABAB" />
-
-            <!--android:src="@drawable/tt_msg_tip"-->
-            <ProgressBar
-                android:id="@+id/pb_reconnect"
-                style="?android:attr/progressBarStyleSmall"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_gravity="center_vertical"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="20dp"
-                android:adjustViewBounds="true" />
-
+                android:textColor="@color/colorAccent" />
         </RelativeLayout>
 
         <!--<TextView-->
@@ -92,5 +79,4 @@
         android:indeterminateDrawable="@drawable/im_progressbar"
         android:indeterminateDuration="4000"
         android:visibility="visible" />
-
 </RelativeLayout>

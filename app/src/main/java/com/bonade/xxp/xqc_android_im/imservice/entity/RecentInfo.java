@@ -5,6 +5,7 @@ import com.bonade.xxp.xqc_android_im.DB.entity.PeerEntity;
 import com.bonade.xxp.xqc_android_im.DB.entity.SessionEntity;
 import com.bonade.xxp.xqc_android_im.DB.entity.UserEntity;
 import com.bonade.xxp.xqc_android_im.config.DBConstant;
+import com.bonade.xxp.xqc_android_im.imservice.manager.IMContactManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class RecentInfo {
      * Group/UserEntity
      */
     private String name;
-    private String avatar;
+    private List<UserEntity> userEntities;
 
     /**
      * 是否置顶
@@ -65,7 +66,9 @@ public class RecentInfo {
                 isForbidden = true;
             }
 
-            avatar = userEntity.getAvatar();
+            ArrayList<UserEntity> list = new ArrayList<>(1);
+            list.add(userEntity);
+            userEntities = list;
         }
     }
 
@@ -91,7 +94,20 @@ public class RecentInfo {
                 isForbidden = true;
             }
 
-            avatar = groupEntity.getAvatar();
+            ArrayList<UserEntity> userList = new ArrayList<>();
+            ArrayList<Integer> list = new ArrayList<>();
+            list.addAll(groupEntity.getGroupMemberIds());
+            for (Integer userId : list) {
+                UserEntity entity = IMContactManager.getInstance().findContact(userId);
+
+                if (entity != null) {
+                    userList.add(entity);
+                }
+                if (userList.size() >= 9) {
+                    break;
+                }
+            }
+            userEntities = userList;
         }
     }
 
@@ -167,12 +183,12 @@ public class RecentInfo {
         this.name = name;
     }
 
-    public String getAvatar() {
-        return avatar;
+    public List<UserEntity> getUserEntities() {
+        return userEntities;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public void setUserEntities(List<UserEntity> userEntities) {
+        this.userEntities = userEntities;
     }
 
     public boolean isTop() {

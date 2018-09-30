@@ -21,7 +21,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="#1A1C1D" />
+        android:background="#1A1C1D"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_add_friend"
@@ -34,12 +35,14 @@
         android:drawableLeft="@mipmap/ic_group_chat"
         android:drawablePadding="16dp"
         android:paddingLeft="16dp"
-        android:paddingRight="50dp" />
+        android:paddingRight="50dp"
+        android:visibility="gone" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="#1A1C1D" />
+        android:background="#1A1C1D"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_scanner"
@@ -52,5 +55,7 @@
         android:drawableLeft="@mipmap/ic_group_chat"
         android:drawablePadding="16dp"
         android:paddingLeft="16dp"
-        android:paddingRight="50dp"/>
+        android:paddingRight="50dp"
+        android:visibility="gone"
+        />
 </LinearLayout>

@@ -77,14 +77,7 @@ public class TextMessage extends MessageEntity implements Serializable {
     }
 
     @Override
-    public byte[] getSendContent() {
-        try {
-            /** 加密*/
-//            String sendContent = new String(Security.getInstance().EncryptMsg(content));
-            return content.getBytes("utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public String getSendContent() {
+        return content;
     }
 }

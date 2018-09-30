@@ -11,7 +11,7 @@ import java.io.Serializable;
 public abstract class PeerEntity implements Serializable{
 
     protected Long cid;
-    @SerializedName(value = "id", alternate = {"groupId"})
+    @SerializedName(value = "userId", alternate = {"groupId", "id"})
     protected int peerId;
     /** Not-null value.
      * userEntity --> nickName

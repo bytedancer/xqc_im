@@ -1,6 +1,7 @@
 package com.bonade.xxp.xqc_android_im.ui.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,13 +12,22 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.bonade.xxp.xqc_android_im.DB.entity.GroupEntity;
+import com.bonade.xxp.xqc_android_im.DB.entity.UserEntity;
 import com.bonade.xxp.xqc_android_im.R;
+import com.bonade.xxp.xqc_android_im.imservice.manager.IMContactManager;
+import com.bonade.xxp.xqc_android_im.imservice.manager.IMGroupManager;
 import com.bonade.xxp.xqc_android_im.model.Group;
+import com.bonade.xxp.xqc_android_im.ui.activity.ChatActivity;
 import com.bonade.xxp.xqc_android_im.ui.base.BaseFragment;
 import com.bonade.xxp.xqc_android_im.ui.base.FragmentArgs;
 import com.bonade.xxp.xqc_android_im.ui.base.FragmentContainerActivity;
 import com.bonade.xxp.xqc_android_im.ui.widget.DividerItemDecoration;
+import com.bonade.xxp.xqc_android_im.ui.widget.groupimageview.NineGridImageView;
+import com.bonade.xxp.xqc_android_im.ui.widget.groupimageview.NineGridImageViewAdapter;
 import com.bonade.xxp.xqc_android_im.util.ViewUtil;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -57,52 +67,64 @@ public class GroupChatFragment extends BaseFragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(_mActivity));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(_mActivity));
-        GroupChatAdapter adapter = new GroupChatAdapter(R.layout.item_group_chat, getDatas());
-        adapter.setOnItemClickListener(new GroupChatAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                ViewUtil.showMessage("进去群聊界面");
-            }
-        });
-        mRecyclerView.setAdapter(adapter);
+        List<GroupEntity> groupEntities = IMGroupManager.getInstance().getNormalGroupList();
+        mRecyclerView.setAdapter(new GroupChatAdapter(_mActivity, R.layout.item_group_chat, groupEntities));
     }
 
-    private List<Group> getDatas() {
-        List<Group> groups = new ArrayList<>();
-        groups.add(new Group("伯仲技术中心交流群", 41));
-        groups.add(new Group("产品沟通群", 20));
-        groups.add(new Group("安徽伯仲原生交流群", 8));
-        return groups;
-    }
+    private static class GroupChatAdapter extends BaseQuickAdapter<GroupEntity, BaseViewHolder> {
 
-    private static class GroupChatAdapter extends BaseQuickAdapter<Group, BaseViewHolder> {
+        private RequestManager mRequestManager;
 
-        public interface OnItemClickListener {
-            void onItemClick(BaseQuickAdapter adapter, View view, int position);
-        }
-
-        private OnItemClickListener mOnItemClickListener;
-
-
-        public GroupChatAdapter(int layoutResId, @Nullable final List<Group> data) {
+        public GroupChatAdapter(final Context context, int layoutResId, @Nullable final List<GroupEntity> data) {
             super(layoutResId, data);
+            mRequestManager = Glide.with(context);
             GroupChatAdapter.this.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                    if (null != mOnItemClickListener) {
-                        mOnItemClickListener.onItemClick(adapter, view, position);
-                    }
+                    ChatActivity.launch(context, getItem(position).getSessionKey());
+                    ((Activity) context).finish();
                 }
             });
         }
 
         @Override
-        protected void convert(BaseViewHolder helper, Group item) {
-            helper.setText(R.id.tv_name, item.getName());
+        protected void convert(BaseViewHolder helper, GroupEntity item) {
+            helper.setText(R.id.tv_group_name, item.getMainName());
+
+            List<String> avatarList = new ArrayList<>();
+            for (Integer userId : item.getGroupMemberIds()) {
+                UserEntity entity = IMContactManager.getInstance().findContact(userId);
+
+                if (entity != null) {
+                    avatarList.add(entity.getAvatar());
+                }
+                if (avatarList.size() >= 9) {
+                    break;
+                }
+            }
+
+            NineGridImageViewAdapter<String> adapter = new NineGridImageViewAdapter<String>() {
+                @Override
+                protected void onDisplayImage(Context context, ImageView imageView, String url) {
+                    mRequestManager
+                            .load(url)
+                            .error(R.mipmap.im_default_user_avatar)
+                            .placeholder(R.mipmap.im_default_user_avatar)
+                            .into(imageView);
+                }
+
+                @Override
+                protected ImageView generateImageView(Context context) {
+                    return super.generateImageView(context);
+                }
+            };
+
+            NineGridImageView avatarView = helper.getView(R.id.iv_group_avatar);
+            avatarView.setAdapter(adapter);
+            avatarView.setImagesData(avatarList);
+
+            helper.setText(R.id.tv_group_count, "(" + item.getUserCount() + ")");
         }
 
-        private void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-            mOnItemClickListener = onItemClickListener;
-        }
     }
 }

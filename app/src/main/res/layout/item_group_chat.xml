@@ -1,27 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical"
     android:background="@color/white"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingBottom="10dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp">
+    android:paddingTop="10dp">
 
-    <ImageView
-        android:id="@+id/iv_avatar"
+    <com.bonade.xxp.xqc_android_im.ui.widget.groupimageview.NineGridImageView
+        android:id="@+id/iv_group_avatar"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@mipmap/logo"
-        android:layout_marginRight="16dp"/>
+        android:layout_marginRight="16dp"
+        android:background="#eeeeee" />
 
     <TextView
-        android:id="@+id/tv_name"
+        android:id="@+id/tv_group_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:text="姓名"
         android:textColor="@color/black"
-        android:text="姓名"/>
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tv_group_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(23)" />
 </LinearLayout>

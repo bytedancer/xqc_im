@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="6dp"
-                android:background="@mipmap/im_other_item_bg_normal"
+                android:background="@drawable/im_other_message_bg"
                 android:gravity="left"
                 android:orientation="vertical"
                 android:paddingBottom="13dp"
@@ -91,7 +91,7 @@
                 android:layout_toRightOf="@id/tv_audio_duration"
                 android:adjustViewBounds="true"
                 android:src="@mipmap/im_msg_tip"
-                android:visibility="gone" />
+                android:visibility="invisible" />
 
             <ProgressBar
                 android:id="@+id/pb_loading"

@@ -32,8 +32,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginTop="0dp"
-            android:background="@mipmap/im_my_message_bg"
-            android:gravity="right"
+            android:background="@drawable/im_mine_message_bg"
+            android:gravity="right|center_vertical"
             android:orientation="vertical"
             android:paddingBottom="13dp"
             android:paddingLeft="13dp"
@@ -74,7 +74,7 @@
             android:layout_marginRight="16dp"
             android:adjustViewBounds="true"
             android:src="@mipmap/im_msg_tip"
-            android:visibility="visible" />
+            android:visibility="invisible" />
 
         <ProgressBar
             android:id="@+id/pb_loading"
@@ -86,7 +86,7 @@
             android:layout_marginRight="10dp"
             android:adjustViewBounds="true"
             android:src="@mipmap/im_msg_tip"
-            android:visibility="visible" />
+            android:visibility="gone" />
     </RelativeLayout>
 
 </com.bonade.xxp.xqc_android_im.ui.widget.message.AudioRenderView>

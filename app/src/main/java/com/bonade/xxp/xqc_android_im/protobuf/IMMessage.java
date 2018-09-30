@@ -2548,15 +2548,15 @@ public final class IMMessage {
         getFromUserIdBytes();
 
     /**
-     * <code>required string toUserId = 4;</code>
+     * <code>optional string toUserId = 4;</code>
      */
     boolean hasToUserId();
     /**
-     * <code>required string toUserId = 4;</code>
+     * <code>optional string toUserId = 4;</code>
      */
     String getToUserId();
     /**
-     * <code>required string toUserId = 4;</code>
+     * <code>optional string toUserId = 4;</code>
      */
     com.google.protobuf.ByteString
         getToUserIdBytes();
@@ -2858,13 +2858,13 @@ public final class IMMessage {
     public static final int TOUSERID_FIELD_NUMBER = 4;
     private Object toUserId_;
     /**
-     * <code>required string toUserId = 4;</code>
+     * <code>optional string toUserId = 4;</code>
      */
     public boolean hasToUserId() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>required string toUserId = 4;</code>
+     * <code>optional string toUserId = 4;</code>
      */
     public String getToUserId() {
       Object ref = toUserId_;
@@ -2881,7 +2881,7 @@ public final class IMMessage {
       }
     }
     /**
-     * <code>required string toUserId = 4;</code>
+     * <code>optional string toUserId = 4;</code>
      */
     public com.google.protobuf.ByteString
         getToUserIdBytes() {
@@ -2993,10 +2993,6 @@ public final class IMMessage {
         return false;
       }
       if (!hasFromUserId()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasToUserId()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -3287,10 +3283,6 @@ public final class IMMessage {
           
           return false;
         }
-        if (!hasToUserId()) {
-          
-          return false;
-        }
         if (!hasTimestamp()) {
           
           return false;
@@ -3575,13 +3567,13 @@ public final class IMMessage {
 
       private Object toUserId_ = "";
       /**
-       * <code>required string toUserId = 4;</code>
+       * <code>optional string toUserId = 4;</code>
        */
       public boolean hasToUserId() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>required string toUserId = 4;</code>
+       * <code>optional string toUserId = 4;</code>
        */
       public String getToUserId() {
         Object ref = toUserId_;
@@ -3598,7 +3590,7 @@ public final class IMMessage {
         }
       }
       /**
-       * <code>required string toUserId = 4;</code>
+       * <code>optional string toUserId = 4;</code>
        */
       public com.google.protobuf.ByteString
           getToUserIdBytes() {
@@ -3614,7 +3606,7 @@ public final class IMMessage {
         }
       }
       /**
-       * <code>required string toUserId = 4;</code>
+       * <code>optional string toUserId = 4;</code>
        */
       public Builder setToUserId(
           String value) {
@@ -3627,7 +3619,7 @@ public final class IMMessage {
         return this;
       }
       /**
-       * <code>required string toUserId = 4;</code>
+       * <code>optional string toUserId = 4;</code>
        */
       public Builder clearToUserId() {
         bitField0_ = (bitField0_ & ~0x00000008);
@@ -3636,7 +3628,7 @@ public final class IMMessage {
         return this;
       }
       /**
-       * <code>required string toUserId = 4;</code>
+       * <code>optional string toUserId = 4;</code>
        */
       public Builder setToUserIdBytes(
           com.google.protobuf.ByteString value) {

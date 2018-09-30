@@ -193,6 +193,7 @@ public class ProtoBuf2JavaBean {
 
         switch (msgContentType) {
             case SysConstant.MSG_CONTENT_TYPE_TEXT:
+            case SysConstant.MSG_CONTENT_TYPE_IMAGE:
                 messageEntity = analyzeText(msgData);
                 break;
             default:

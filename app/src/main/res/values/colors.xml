@@ -22,7 +22,7 @@
     <color name="message_body_text_color">#999999</color>
     <color name="message_time_color">#a0a0a0</color>
 
-    <color name="list_item_top_color">#F3F3F7</color>
+    <color name="list_item_top_color">#e0e4e4</color>
     <color name="list_item_select_color">#D9D9D9</color>
 
     <!-- 分割线颜色 -->

@@ -24,7 +24,7 @@ public interface ContactApi {
      * @return
      */
     @FormUrlEncoded
-    @POST("/im/imContacts/listEmployee")
+    @POST("im/imContacts/listEmployee")
     Observable<BaseResponse<GetListEmployeeResp>> getListEmployee(@Field("userId") int userId,
                                                                   @Field("companyId") int companyId,
                                                                   @Field("pageNum") int pageNum,
@@ -36,7 +36,7 @@ public interface ContactApi {
      * @return
      */
     @FormUrlEncoded
-    @POST("/im/imFriend/listFriend")
+    @POST("im/imFriend/listFriend")
     Observable<BaseResponse<List<UserEntity>>> getListFriend(@Field("userId") int userId);
 
     /**
@@ -44,7 +44,7 @@ public interface ContactApi {
      * @return
      */
     @FormUrlEncoded
-    @POST("/im/imUserInfo/synchronizeUserGroupInfo")
+    @POST("im/imUserInfo/synchronizeUserGroupInfo")
     Observable<BaseResponse<List<UserEntity>>> getAllUsers(@Field("userIds") String userIds, @Field("groupIds") String groupIds);
 
     /**
@@ -54,7 +54,7 @@ public interface ContactApi {
      */
     // @Field parameters can only be used with form encoding
     @FormUrlEncoded
-    @POST("/im/imFriendRequest/listFriendRequest")
+    @POST("im/imFriendRequest/listFriendRequest")
     Observable<BaseResponse<List<DataFriendsRequest>>> getFriendsRequestList(@Field("userId") int userId);
 
     /**
@@ -64,7 +64,7 @@ public interface ContactApi {
      * @return
      */
     @FormUrlEncoded
-    @POST("/im/imFriend/addFriend")
+    @POST("im/imFriend/addFriend")
     Observable<BaseResponse<String>> acceptFriends(@Field("userId") int userId,
                                                    @Field("friendUserId") int friendUserId);
 
@@ -75,7 +75,7 @@ public interface ContactApi {
      * @return
      */
     @FormUrlEncoded
-    @POST("/im/imFriendRequest/hideFriend")
+    @POST("im/imFriendRequest/hideFriend")
     Observable<BaseResponse<String>> rejectFriends(@Field("userId") int userId,
                                                    @Field("friendRequestId") int friendRequestId);
 
@@ -86,7 +86,7 @@ public interface ContactApi {
      * @return
      */
     @FormUrlEncoded
-    @POST("/im/imFriendRequest/applyFriend")
+    @POST("im/imFriendRequest/applyFriend")
     Observable<BaseResponse<String>> addFriends(@Field("userId") int userId,
                                                 @Field("friendRequestId") int friendRequestId);
 }

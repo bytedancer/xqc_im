@@ -2,10 +2,16 @@ package com.bonade.xxp.xqc_android_im.http.api;
 
 import com.bonade.xxp.xqc_android_im.DB.entity.UserEntity;
 import com.bonade.xxp.xqc_android_im.http.base.BaseResponse;
+import com.bonade.xxp.xqc_android_im.http.response.UploadAvatarResp;
+import com.bonade.xxp.xqc_android_im.imservice.service.LoadImageService;
 import com.bonade.xxp.xqc_android_im.model.DataBindUserToken;
 import com.bonade.xxp.xqc_android_im.model.DataUserInfo;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
+import retrofit2.http.Part;
 import rx.Observable;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -47,8 +53,11 @@ public interface UserApi {
      * @return
      */
     @FormUrlEncoded
-    @POST("/im/imUserInfo/getUserInfo")
+    @POST("im/imUserInfo/getUserInfo")
     Observable<BaseResponse<UserEntity>> getUserInfo(@Field("userId")int userId, @Field("targetId")int targetId);
 
+    @Multipart
+    @POST("im/imUserInfo/editUserLogo")
+    Observable<BaseResponse<UploadAvatarResp>> uploadAvatar(@Part("userId") RequestBody userId, @Part MultipartBody.Part part);
 
 }

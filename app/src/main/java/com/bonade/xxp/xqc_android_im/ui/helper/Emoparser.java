@@ -38,7 +38,9 @@ public class Emoparser {
             R.mipmap.im_e32, R.mipmap.im_e33, R.mipmap.im_e34, R.mipmap.im_e35,
             R.mipmap.im_e36, R.mipmap.im_e37, R.mipmap.im_e38, R.mipmap.im_e39,
             R.mipmap.im_e40, R.mipmap.im_e41, R.mipmap.im_e42, R.mipmap.im_e43,
-            R.mipmap.im_e44, R.mipmap.im_e45
+            R.mipmap.im_e44, R.mipmap.im_e45, R.mipmap.im_e46, R.mipmap.im_e47,
+            R.mipmap.im_e48, R.mipmap.im_e49, R.mipmap.im_e50, R.mipmap.im_e51,
+            R.mipmap.im_e52, R.mipmap.im_e53, R.mipmap.im_e54
     };
 
     private Emoparser(Context context) {

@@ -29,7 +29,7 @@ public class RetrofitManager {
     private static String cookie = "";
     // 茆家龙
     public static final String BASE_URL = "https://gs.bndxqc.com/api/";
-//    private static final String BASE_URL = "http://192.168.12.245:9080/im-web";
+//    public static final String BASE_URL = "http://192.168.12.31:8130";
     private JSONArray mRequestRoute;
 
     private RetrofitManager() {

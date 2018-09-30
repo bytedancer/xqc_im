@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class MsgAnalyzeEngine {
 
-    public static String analyzeMessageDisplay(String content){
+    public static String analyzeMessageDisplay(String content) {
         String finalRes = content;
         String originContent = content;
         while (!originContent.isEmpty()) {
@@ -39,9 +39,9 @@ public class MsgAnalyzeEngine {
                     originContent = subContentString.substring(nEnd
                             + MessageConstant.IMAGE_MSG_END.length());
 
-                    if(!TextUtils.isEmpty(pre) || !TextUtils.isEmpty(originContent)){
+                    if (!TextUtils.isEmpty(pre) || !TextUtils.isEmpty(originContent)) {
                         finalRes = DBConstant.DISPLAY_FOR_MIX;
-                    }else{
+                    } else {
                         finalRes = DBConstant.DISPLAY_FOR_IMAGE;
                     }
                 }
@@ -65,20 +65,20 @@ public class MsgAnalyzeEngine {
         messageEntity.setContent(message);
 
         // 文本信息不为空
-        if(!TextUtils.isEmpty(message)){
-            List<MessageEntity> msgList =  textDecode(messageEntity);
-            if(msgList.size()>1){
+        if (!TextUtils.isEmpty(message)) {
+            List<MessageEntity> msgList = textDecode(messageEntity);
+            if (msgList.size() > 1) {
                 // 混合消息
                 MixMessage mixMessage = new MixMessage(msgList);
                 return mixMessage;
-            }else if(msgList.size() == 0){
+            } else if (msgList.size() == 0) {
                 // 可能解析失败 默认返回文本消息
                 return TextMessage.parseFromNet(messageEntity);
-            }else{
+            } else {
                 //简单消息，返回第一个
                 return msgList.get(0);
             }
-        }else{
+        } else {
             // 如果为空
             return TextMessage.parseFromNet(messageEntity);
         }
@@ -87,10 +87,11 @@ public class MsgAnalyzeEngine {
 
     /**
      * todo 优化字符串分析
+     *
      * @param msg
      * @return
      */
-    private static List<MessageEntity> textDecode(MessageEntity msg){
+    private static List<MessageEntity> textDecode(MessageEntity msg) {
         List<MessageEntity> msgList = new ArrayList<>();
 
         String originContent = msg.getContent();
@@ -100,7 +101,7 @@ public class MsgAnalyzeEngine {
                 String strSplitString = originContent;
 
                 MessageEntity entity = addMessage(msg, strSplitString);
-                if(entity!=null){
+                if (entity != null) {
                     msgList.add(entity);
                 }
 
@@ -112,24 +113,24 @@ public class MsgAnalyzeEngine {
                     String strSplitString = originContent;
 
 
-                    MessageEntity entity = addMessage(msg,strSplitString);
-                    if(entity!=null){
+                    MessageEntity entity = addMessage(msg, strSplitString);
+                    if (entity != null) {
                         msgList.add(entity);
                     }
 
                     originContent = "";
                 } else {// 匹配到
                     String pre = originContent.substring(0, nStart);
-                    MessageEntity entity1 = addMessage(msg,pre);
-                    if(entity1!=null){
+                    MessageEntity entity1 = addMessage(msg, pre);
+                    if (entity1 != null) {
                         msgList.add(entity1);
                     }
 
                     String matchString = subContentString.substring(0, nEnd
                             + MessageConstant.IMAGE_MSG_END.length());
 
-                    MessageEntity entity2 = addMessage(msg,matchString);
-                    if(entity2!=null){
+                    MessageEntity entity2 = addMessage(msg, matchString);
+                    if (entity2 != null) {
                         msgList.add(entity2);
                     }
 
@@ -143,8 +144,8 @@ public class MsgAnalyzeEngine {
     }
 
 
-    public static MessageEntity addMessage(MessageEntity msg,String strContent) {
-        if (TextUtils.isEmpty(strContent.trim())){
+    public static MessageEntity addMessage(MessageEntity msg, String strContent) {
+        if (TextUtils.isEmpty(strContent.trim())) {
             return null;
         }
         msg.setContent(strContent);
@@ -152,7 +153,7 @@ public class MsgAnalyzeEngine {
         if (strContent.startsWith(MessageConstant.IMAGE_MSG_START)
                 && strContent.endsWith(MessageConstant.IMAGE_MSG_END)) {
             try {
-                ImageMessage imageMessage =  ImageMessage.parseFromNet(msg);
+                ImageMessage imageMessage = ImageMessage.parseFromNet(msg);
                 return imageMessage;
             } catch (JSONException e) {
                 // e.printStackTrace();

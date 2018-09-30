@@ -46,7 +46,7 @@
                 android:id="@+id/tv_message_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@mipmap/im_other_item_bg_normal"
+                android:background="@drawable/im_other_message_bg"
                 android:gravity="left"
                 android:paddingBottom="8dp"
                 android:paddingLeft="18dp"
@@ -64,7 +64,7 @@
                 android:layout_gravity="center_vertical"
                 android:adjustViewBounds="true"
                 android:src="@mipmap/im_msg_tip"
-                android:visibility="gone" />
+                android:visibility="invisible" />
 
             <ProgressBar
                 android:id="@+id/pb_loading"

@@ -34,7 +34,7 @@
             android:adjustViewBounds="true"
             android:layout_marginRight="8dp"
             android:src="@mipmap/im_msg_tip"
-            android:visibility="gone" />
+            android:visibility="invisible" />
 
         <ProgressBar
             android:id="@+id/pb_loading"
@@ -43,13 +43,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="8dp"
-            android:visibility="gone" />
+            android:visibility="gone"
+             />
 
         <TextView
             android:id="@+id/tv_message_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@mipmap/im_my_message_bg"
+            android:background="@drawable/im_mine_message_bg"
             android:layout_marginTop="2dp"
             android:gravity="left|center_vertical"
             android:paddingBottom="8dp"

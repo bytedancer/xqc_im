@@ -7,19 +7,23 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,6 +31,8 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,10 +67,12 @@ import com.bonade.xxp.xqc_android_im.imservice.entity.TextMessage;
 import com.bonade.xxp.xqc_android_im.imservice.entity.UnreadEntity;
 import com.bonade.xxp.xqc_android_im.imservice.event.MessageEvent;
 import com.bonade.xxp.xqc_android_im.imservice.event.PriorityEvent;
+import com.bonade.xxp.xqc_android_im.imservice.event.UserInfoEvent;
 import com.bonade.xxp.xqc_android_im.imservice.manager.IMLoginManager;
 import com.bonade.xxp.xqc_android_im.imservice.service.IMService;
 import com.bonade.xxp.xqc_android_im.imservice.support.IMServiceConnector;
 import com.bonade.xxp.xqc_android_im.ui.base.BaseActivity;
+import com.bonade.xxp.xqc_android_im.ui.fragment.chat.ChatGroupSettingFragment;
 import com.bonade.xxp.xqc_android_im.ui.helper.AudioPlayerHandler;
 import com.bonade.xxp.xqc_android_im.ui.helper.AudioRecordHandler;
 import com.bonade.xxp.xqc_android_im.ui.helper.Emoparser;
@@ -93,6 +101,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -186,7 +195,7 @@ public class ChatActivity extends BaseActivity {
     private SensorManager mSensorManager;
     private Sensor mSensor;
 
-    private String takePhotoSavePath = "";
+    private String mTakePhotoSavePath = "";
     private IMService imService;
     private UserEntity mLoginUser;
     private PeerEntity mPeerEntity;
@@ -276,7 +285,8 @@ public class ChatActivity extends BaseActivity {
         mRecordAudioView.setVisibility(View.GONE);
         mShowKeyboardView.setVisibility(View.GONE);
         mEditMsgView.setVisibility(View.VISIBLE);
-        mVoiceView.setVisibility(View.VISIBLE);
+        // TODO: 2018/9/21 没有语音功能暂时隐藏
+        mVoiceView.setVisibility(View.GONE);
         mShowEmoView.setVisibility(View.VISIBLE);
 
         if (mKeyboardHeight != 0) {
@@ -308,7 +318,8 @@ public class ChatActivity extends BaseActivity {
         mRecordAudioView.setVisibility(View.GONE);
         mShowKeyboardView.setVisibility(View.GONE);
         mEditMsgView.setVisibility(View.VISIBLE);
-        mVoiceView.setVisibility(View.VISIBLE);
+        // TODO: 2018/9/21 没有语音功能暂时隐藏
+        mVoiceView.setVisibility(View.GONE);
         mShowEmoView.setVisibility(View.VISIBLE);
 
         if (mKeyboardHeight != 0) {
@@ -339,7 +350,8 @@ public class ChatActivity extends BaseActivity {
         mRecordAudioView.setVisibility(View.GONE);
         mShowKeyboardView.setVisibility(View.GONE);
         mEditMsgView.setVisibility(View.VISIBLE);
-        mVoiceView.setVisibility(View.VISIBLE);
+        // TODO: 2018/9/21 没有语音功能暂时隐藏
+        mVoiceView.setVisibility(View.GONE);
         mShowEmoView.setVisibility(View.VISIBLE);
 
         if (mKeyboardHeight != 0) {
@@ -468,7 +480,7 @@ public class ChatActivity extends BaseActivity {
                     public void call(Permission permission) {
                         if (permission.granted) {
                             // 用户已经同意该权限
-                            ImageSelectorActivity.start(ChatActivity.this, SysConstant.MAX_SELECT_IMAGE_COUNT, MODE_MULTIPLE, false, true, false);
+                            ImageSelectorActivity.start(ChatActivity.this, SysConstant.MAX_SELECT_IMAGE_COUNT, MODE_MULTIPLE, true, true, false);
                             mEditMsgView.clearFocus();//切记清除焦点
                             scrollToBottomListItem();
                         } else if (permission.shouldShowRequestPermissionRationale) {
@@ -484,7 +496,25 @@ public class ChatActivity extends BaseActivity {
 
     @OnClick(R.id.v_take_camera)
     void takeCameraClick() {
-        ViewUtil.showMessage("拍照");
+        new RxPermissions(this).request(
+                Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe(new Action1<Boolean>() {
+                    @Override
+                    public void call(Boolean aBoolean) {
+                        if (aBoolean) {
+                            // 用户已经同意该权限
+                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            mTakePhotoSavePath = CommonUtil.getImageSavePath(String.valueOf(System
+                                    .currentTimeMillis())
+                                    + ".jpg");
+                            intent.putExtra(MediaStore.EXTRA_OUTPUT, CommonUtil.getUriForFile(ChatActivity.this, new File(mTakePhotoSavePath)));
+                            startActivityForResult(intent, SysConstant.CAMERA_WITH_DATA);
+                            mEditMsgView.clearFocus();//切记清除焦点
+                            scrollToBottomListItem();
+                        }
+                    }
+                });
     }
 
     @Override
@@ -503,6 +533,25 @@ public class ChatActivity extends BaseActivity {
         imServiceConnector.connect(this);
         EventBus.getDefault().register(this);
         logger.d("chat_activity#register im service and eventBus");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.comm_one, menu);
+        menu.findItem(R.id.action).setIcon(R.mipmap.ic_more_horiz_white_36dp);
+        menu.findItem(R.id.action).setVisible((mPeerEntity instanceof GroupEntity) ? true : false);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action:
+                ChatGroupSettingFragment.launch(this, mPeerEntity.getSessionKey());
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -621,6 +670,15 @@ public class ChatActivity extends BaseActivity {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(UserInfoEvent event) {
+        switch (event) {
+            case USER_INFO_UPDATE:
+                mAdapter.notifyDataSetChanged();
+                break;
+        }
+    }
+
     /**
      * 触发条件，imService连接成功，或者newIntent
      */
@@ -730,6 +788,7 @@ public class ChatActivity extends BaseActivity {
     private void initView() {
         mAdapter = new ChatAdapter(this);
         mListView.setAdapter(mAdapter);
+        mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent));
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -747,7 +806,12 @@ public class ChatActivity extends BaseActivity {
                         }
 
                         int afterSum = mListView.getCount();
-                        mListView.setSelection(afterSum - preSum);
+                        if (afterSum > preSum) {
+                            mListView.setSelection(afterSum - preSum - 1);
+                        } else {
+                            mListView.setSelection(afterSum - preSum);
+                        }
+
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
                 }, 200);
@@ -803,16 +867,18 @@ public class ChatActivity extends BaseActivity {
                         return;
                     if (msgContent.contains("["))
                         msgContent = msgContent.substring(0, msgContent.lastIndexOf("["));
-                    mEditMsgView.setText(msgContent);
+                    CharSequence charSequence = Emoparser.getInstance(ChatActivity.this).emoCharsequence(msgContent);
+                    mEditMsgView.setText(charSequence);
                 } else {
                     int resId = Emoparser.getInstance(ChatActivity.this).getResIdList()[facesPos];
                     String pharse = Emoparser.getInstance(ChatActivity.this).getIdPhraseMap()
                             .get(resId);
+                    CharSequence charSequence = Emoparser.getInstance(ChatActivity.this).emoCharsequence(pharse);
                     int startIndex = mEditMsgView.getSelectionStart();
                     Editable edit = mEditMsgView.getEditableText();
                     if (startIndex < 0 || startIndex >= edit.length()) {
                         if (null != pharse) {
-                            edit.append(pharse);
+                            edit.append(charSequence);
                         }
                     } else {
                         if (null != pharse) {
@@ -1068,13 +1134,37 @@ public class ChatActivity extends BaseActivity {
         imService.getMessageManager().sendImages(listMsg);
     }
 
+    /**
+     * @param data
+     * @Description 处理拍照后的数据
+     * 应该是从某个 activity回来的
+     */
+    private void handleTakePhotoData(Intent data) {
+        ImageMessage imageMessage = ImageMessage.buildForSend(mTakePhotoSavePath, mLoginUser, mPeerEntity);
+        List<ImageMessage> sendList = new ArrayList<>(1);
+        sendList.add(imageMessage);
+        imService.getMessageManager().sendImages(sendList);
+        // 格式有些问题
+        pushList(imageMessage);
+        mEditMsgView.clearFocus();//消除焦点
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == ImageSelectorActivity.REQUEST_IMAGE) {
-            ArrayList<String> images = (ArrayList<String>) data.getSerializableExtra(ImageSelectorActivity.REQUEST_OUTPUT);
-            if (images != null && !images.isEmpty()) {
-                handleImagePickData(images);
-            }
+        if (RESULT_OK != resultCode) {
+            return;
+        }
+
+        switch (requestCode) {
+            case SysConstant.CAMERA_WITH_DATA:
+                handleTakePhotoData(data);
+                break;
+            case ImageSelectorActivity.REQUEST_IMAGE:
+                ArrayList<String> images = (ArrayList<String>) data.getSerializableExtra(ImageSelectorActivity.REQUEST_OUTPUT);
+                if (images != null && !images.isEmpty()) {
+                    handleImagePickData(images);
+                }
+                break;
         }
     }
 
@@ -1153,7 +1243,7 @@ public class ChatActivity extends BaseActivity {
             int nextTime = 0;
             for (MessageEntity msg : historyList) {
                 nextTime = msg.getCreated();
-                boolean needTime = DateUtil.needDisplayTime(preTime, nextTime);
+                boolean needTime = preTime == 0 || DateUtil.needDisplayTime(preTime, nextTime);
                 if (needTime) {
                     Integer in = nextTime;
                     chatList.add(in);
@@ -1257,7 +1347,8 @@ public class ChatActivity extends BaseActivity {
                 } else if (obj instanceof MessageEntity) {
                     MessageEntity info = (MessageEntity) obj;
                     boolean isMine = info.getFromId() == loginUser.getPeerId();
-                    switch (info.getDisplayType()) {
+                    int displayType = info.getDisplayType();
+                    switch (displayType) {
                         case DBConstant.SHOW_AUDIO_TYPE:
                             type = isMine ? RenderType.MESSAGE_TYPE_MINE_AUDIO
                                     : RenderType.MESSAGE_TYPE_OTHER_AUDIO;
@@ -1378,6 +1469,12 @@ public class ChatActivity extends BaseActivity {
                 public void onClick(View v) {
 //                    MessageOperatePopup popup = getPopMenu(viewGroup, new OperateItemClickListener(textMessage, position));
 //                    popup.show(textView, DBConstant.SHOW_ORIGIN_TEXT_TYPE, true, isMine);
+                    textMessage.setStatus(MessageConstant.MSG_SENDING);
+                    mMsgObjectList.remove(position);
+                    addItem(textMessage);
+                    if (imService != null) {
+                        imService.getMessageManager().resendMessage(textMessage);
+                    }
                 }
             });
 
@@ -1446,6 +1543,7 @@ public class ChatActivity extends BaseActivity {
                     // 重发或者重新加载
 //                    MessageOperatePopup popup = getPopMenu(parent, new OperateItemClickListener(imageMessage, position));
 //                    popup.show(messageLayout, DBConstant.SHOW_IMAGE_TYPE, true, isMine);
+
                 }
             });
 

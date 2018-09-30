@@ -1,5 +1,7 @@
 package com.bonade.xxp.xqc_android_im.imservice.manager;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 
 import com.bonade.xxp.xqc_android_im.DB.DBInterface;
@@ -13,12 +15,14 @@ import com.bonade.xxp.xqc_android_im.imservice.event.LoginEvent;
 import com.bonade.xxp.xqc_android_im.model.DataUserInfo;
 import com.bonade.xxp.xqc_android_im.protobuf.IMBaseDefine;
 import com.bonade.xxp.xqc_android_im.protobuf.IMLogin;
+import com.bonade.xxp.xqc_android_im.util.CommonUtil;
 import com.bonade.xxp.xqc_android_im.util.Logger;
 import com.bonade.xxp.xqc_android_im.util.ViewUtil;
 import com.google.protobuf.CodedInputStream;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
 import java.io.IOException;
 
 import rx.Observer;

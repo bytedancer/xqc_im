@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.view.menu.MenuView;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
@@ -13,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bonade.xxp.xqc_android_im.DB.entity.UserEntity;
@@ -28,7 +32,6 @@ import com.bonade.xxp.xqc_android_im.ui.activity.FriendInfoActivity;
 import com.bonade.xxp.xqc_android_im.ui.base.BaseFragment;
 import com.bonade.xxp.xqc_android_im.ui.base.FragmentContainerActivity;
 import com.bonade.xxp.xqc_android_im.ui.fragment.chat.ChatGroupSettingFragment;
-import com.bonade.xxp.xqc_android_im.ui.widget.DividerItemDecoration;
 import com.bonade.xxp.xqc_android_im.ui.widget.SectionItemDecoration;
 import com.bonade.xxp.xqc_android_im.ui.widget.SideIndexBar;
 import com.bonade.xxp.xqc_android_im.ui.widget.VerticalItemDecoration;
@@ -64,7 +67,7 @@ public class ContactsFragment extends BaseFragment {
     RecyclerView mRecyclerView;
 
     private ContactsAdapter mAdapter;
-
+    private UserEntity mCurUser;
 
     @Override
     protected int getLayoutId() {
@@ -74,6 +77,7 @@ public class ContactsFragment extends BaseFragment {
     @Override
     protected void setupViews(View view, Bundle savedInstanceState) {
         setupToolbar();
+        mCurUser = IMLoginManager.getInstance().getLoginInfo();
         setupRecyclerView();
         loadData();
     }
@@ -88,15 +92,19 @@ public class ContactsFragment extends BaseFragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.addItemDecoration(new VerticalItemDecoration(CommonUtil.dip2px(_mActivity, 1)));
-        mAdapter = new ContactsAdapter(_mActivity, R.layout.item_contacts, new ArrayList<>());
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(_mActivity, DividerItemDecoration.VERTICAL));
+        mAdapter = new ContactsAdapter(_mActivity, R.layout.item_contacts, new ArrayList<UserEntity>());
+        mAdapter.addHeaderView(getContactsHeader());
         mRecyclerView.setAdapter(mAdapter);
     }
 
     private void loadData() {
-        int userId = IMLoginManager.getInstance().getLoginId();
-        int companyId = IMLoginManager.getInstance().getLoginInfo().getCompanyId();
-        ApiFactory.getContactApi().getListEmployee(userId, companyId, 1, 20)
+        if (mCurUser == null || mCurUser.getCompanyId() < 0) {
+            return;
+        }
+        int userId = mCurUser.getPeerId();
+        int companyId = mCurUser.getCompanyId();
+        ApiFactory.getContactApi().getListEmployee(userId, companyId, 1, Integer.MAX_VALUE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<BaseResponse<GetListEmployeeResp>>() {
@@ -113,18 +121,52 @@ public class ContactsFragment extends BaseFragment {
                     @Override
                     public void onNext(BaseResponse<GetListEmployeeResp> response) {
                         List<UserEntity> userEntities = response.getData().getRecords();
-                        mAdapter.addData(CommContact.getCommContacts());
                         mAdapter.addData(userEntities);
                     }
                 });
     }
 
-    public class ContactsAdapter extends BaseQuickAdapter<Object, BaseViewHolder> {
+    private View getContactsHeader() {
+        View headerView = LayoutInflater.from(_mActivity).inflate(R.layout.header_contacts, null);
+        ButterKnife.findById(headerView, R.id.ll_new_friend).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NewFriendFragment.launch(_mActivity);
+            }
+        });
+
+        ButterKnife.findById(headerView, R.id.ll_group_chat).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GroupChatFragment.launch(_mActivity);
+            }
+        });
+
+        ButterKnife.findById(headerView, R.id.ll_xqc_friend).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        View companyView = ButterKnife.findById(headerView, R.id.ll_company);
+        if (mCurUser == null || mCurUser.getCompanyId() < 0) {
+            companyView.setVisibility(View.GONE);
+        } else {
+            companyView.setVisibility(View.VISIBLE);
+            if (!TextUtils.isEmpty(mCurUser.getCompanyName())) {
+                ((TextView) ButterKnife.findById(headerView, R.id.tv_company_name)).setText(mCurUser.getCompanyName());
+            }
+        }
+        return headerView;
+    }
+
+    public class ContactsAdapter extends BaseQuickAdapter<UserEntity, BaseViewHolder> {
 
         private RequestManager mRequestManager;
         private Transformation mTransformation;
 
-        public ContactsAdapter(Context context, int layoutResId, @Nullable List<Object> data) {
+        public ContactsAdapter(Context context, int layoutResId, @Nullable List<UserEntity> data) {
             super(layoutResId, data);
 
             mRequestManager = Glide.with(context);
@@ -133,102 +175,73 @@ public class ContactsFragment extends BaseFragment {
             ContactsAdapter.this.setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                    Object object = adapter.getItem(position);
-                    if (object instanceof CommContact) {
-                        CommContact commContact = (CommContact) object;
-                        int action = commContact.getAction();
-                        switch (action) {
-                            case CommContact.ACTION_NEW_FRIEND:
-                                NewFriendFragment.launch(_mActivity);
-                                break;
-                            case CommContact.ACTION_GROUP_CHAT:
-                                GroupChatFragment.launch(_mActivity);
-                                break;
-                            case CommContact.ACTION_XQC_FRIEND:
-                                break;
-                            default:
-                                break;
-                        }
-                    } else if (object instanceof UserEntity){
-                        UserEntity userEntity = (UserEntity) object;
-                        FriendInfoActivity.launch(_mActivity, userEntity.getPeerId());
-                    }
+                    UserEntity userEntity = getItem(position);
+                    FriendInfoActivity.launch(_mActivity, userEntity.getPeerId());
                 }
             });
         }
 
         @Override
-        protected void convert(BaseViewHolder helper, Object item) {
-            String name;
-            Object object;
-            if (item instanceof CommContact) {
-                CommContact commContact = (CommContact) item;
-                name = commContact.getName();
-                object = commContact.getDrawableRes();
-            } else {
-                UserEntity userEntity = (UserEntity) item;
-                name = userEntity.getUserName();
-                object = userEntity.getAvatar();
-            }
-            helper.setText(R.id.tv_name, name);
+        protected void convert(BaseViewHolder helper, UserEntity item) {
+            helper.setText(R.id.tv_name, item.getMainName());
+
             mRequestManager
-                    .load(object)
+                    .load(item.getAvatar())
                     .error(R.mipmap.im_default_user_avatar)
                     .placeholder(R.mipmap.im_default_user_avatar)
                     .bitmapTransform(mTransformation)
-                    .crossFade()
                     .into((ImageView) helper.getView(R.id.iv_avatar));
         }
     }
 
-    private static class CommContact {
-
-        public static final int ACTION_NONE           = 0;
-        public static final int ACTION_NEW_FRIEND     = 1;
-        public static final int ACTION_GROUP_CHAT     = 2;
-        public static final int ACTION_XQC_FRIEND     = 3;
-
-        private int drawableRes;
-        private String name;
-        private int action;
-
-        public CommContact(int drawableRes, String name, int action) {
-            this.drawableRes = drawableRes;
-            this.name = name;
-            this.action = action;
-        }
-
-        public static List<CommContact> getCommContacts() {
-            List<CommContact> commContacts = new ArrayList<>();
-            commContacts.add(new CommContact(R.mipmap.im_default_user_avatar, "新的好友", ACTION_NEW_FRIEND));
-            commContacts.add(new CommContact(R.mipmap.im_default_user_avatar, "群聊", ACTION_GROUP_CHAT));
-            commContacts.add(new CommContact(R.mipmap.im_default_user_avatar, "新的好友", ACTION_XQC_FRIEND));
-            commContacts.add(new CommContact(R.mipmap.im_default_user_avatar, IMLoginManager.getInstance().getLoginInfo().getCompanyName(), ACTION_NONE));
-            return commContacts;
-        }
-
-        public int getDrawableRes() {
-            return drawableRes;
-        }
-
-        public void setDrawableRes(int drawableRes) {
-            this.drawableRes = drawableRes;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public int getAction() {
-            return action;
-        }
-
-        public void setAction(int action) {
-            this.action = action;
-        }
-    }
+//    private static class CommContact {
+//
+//        public static final int ACTION_NONE           = 0;
+//        public static final int ACTION_NEW_FRIEND     = 1;
+//        public static final int ACTION_GROUP_CHAT     = 2;
+//        public static final int ACTION_XQC_FRIEND     = 3;
+//
+//        private int drawableRes;
+//        private String name;
+//        private int action;
+//
+//        public CommContact(int drawableRes, String name, int action) {
+//            this.drawableRes = drawableRes;
+//            this.name = name;
+//            this.action = action;
+//        }
+//
+//        public static List<CommContact> getCommContacts() {
+//            List<CommContact> commContacts = new ArrayList<>();
+//            commContacts.add(new CommContact(R.mipmap.im_new_contact_avatar, "新的好友", ACTION_NEW_FRIEND));
+//            commContacts.add(new CommContact(R.mipmap.im_default_group_avatar, "群聊", ACTION_GROUP_CHAT));
+//            commContacts.add(new CommContact(R.mipmap.im_xqc_contact_avatar, "薪起程好友", ACTION_XQC_FRIEND));
+//            commContacts.add(new CommContact(R.mipmap.im_default_company_avatar, IMLoginManager.getInstance().getLoginInfo().getCompanyName(), ACTION_NONE));
+//            return commContacts;
+//        }
+//
+//        public int getDrawableRes() {
+//            return drawableRes;
+//        }
+//
+//        public void setDrawableRes(int drawableRes) {
+//            this.drawableRes = drawableRes;
+//        }
+//
+//        public String getName() {
+//            return name;
+//        }
+//
+//        public void setName(String name) {
+//            this.name = name;
+//        }
+//
+//        public int getAction() {
+//            return action;
+//        }
+//
+//        public void setAction(int action) {
+//            this.action = action;
+//        }
+//    }
 }

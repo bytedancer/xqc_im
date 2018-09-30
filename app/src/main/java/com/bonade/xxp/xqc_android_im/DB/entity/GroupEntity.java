@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.bonade.xxp.xqc_android_im.config.DBConstant;
 import com.bonade.xxp.xqc_android_im.imservice.entity.SearchElement;
 import com.bonade.xxp.xqc_android_im.util.pinyin.PinYin;
+import com.google.gson.annotations.SerializedName;
 
 import org.greenrobot.greendao.annotation.*;
 
@@ -24,8 +25,11 @@ import java.util.TreeSet;
 public class GroupEntity extends PeerEntity {
 
     private Integer groupType;
+    @SerializedName("groupOwnerId")
     private Integer creatorId;
+    @SerializedName("groupCounts")
     private Integer userCount;
+    @SerializedName("groupUserIds")
     private String userIds;
     private Integer version;
 
@@ -34,7 +38,6 @@ public class GroupEntity extends PeerEntity {
     private SearchElement searchElement = new SearchElement();
     // KEEP FIELDS END
 
-    @Generated
     public GroupEntity() {
     }
 
@@ -42,7 +45,6 @@ public class GroupEntity extends PeerEntity {
         this.cid = cid;
     }
 
-    @Generated
     public GroupEntity(Long cid, int peerId, Integer groupType, String mainName, String avatar, Integer creatorId, Integer userCount, String userIds, Integer version, Integer status, Integer created, Integer updated) {
         this.cid = cid;
         this.peerId = peerId;
@@ -175,7 +177,7 @@ public class GroupEntity extends PeerEntity {
         Set<Integer> result = new TreeSet<>();
         for (int i = 0; i < arrayUserIds.length; i++) {
             int userId = Integer.parseInt(arrayUserIds[i]);
-            result.add(i);
+            result.add(userId);
         }
         return result;
     }

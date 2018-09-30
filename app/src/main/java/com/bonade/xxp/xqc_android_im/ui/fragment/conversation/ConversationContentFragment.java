@@ -2,6 +2,8 @@ package com.bonade.xxp.xqc_android_im.ui.fragment.conversation;
 
 import android.Manifest;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -21,7 +23,9 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bonade.xxp.xqc_android_im.DB.entity.GroupEntity;
+import com.bonade.xxp.xqc_android_im.DB.entity.UserEntity;
 import com.bonade.xxp.xqc_android_im.R;
 import com.bonade.xxp.xqc_android_im.config.DBConstant;
 import com.bonade.xxp.xqc_android_im.imservice.entity.RecentInfo;
@@ -43,8 +47,11 @@ import com.bonade.xxp.xqc_android_im.ui.base.BaseFragment;
 import com.bonade.xxp.xqc_android_im.ui.fragment.AddFriendFragment;
 import com.bonade.xxp.xqc_android_im.ui.fragment.ContactsFragment;
 import com.bonade.xxp.xqc_android_im.ui.fragment.ContactsSelectFragment;
+import com.bonade.xxp.xqc_android_im.ui.helper.Emoparser;
 import com.bonade.xxp.xqc_android_im.ui.widget.FloatMenu;
 import com.bonade.xxp.xqc_android_im.ui.widget.PopIMMore;
+import com.bonade.xxp.xqc_android_im.ui.widget.groupimageview.NineGridImageView;
+import com.bonade.xxp.xqc_android_im.ui.widget.groupimageview.NineGridImageViewAdapter;
 import com.bonade.xxp.xqc_android_im.util.CommonUtil;
 import com.bonade.xxp.xqc_android_im.util.DateUtil;
 import com.bonade.xxp.xqc_android_im.util.Logger;
@@ -53,6 +60,7 @@ import com.bonade.xxp.xqc_android_im.util.ViewUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.Transformation;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -65,6 +73,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -160,7 +169,7 @@ public class ConversationContentFragment extends BaseFragment {
                             public void onItemClick(View view) {
                                 switch (view.getId()) {
                                     case R.id.tv_chatroom:
-                                        ContactsSelectFragment.launch(_mActivity);
+                                        ContactsSelectFragment.launch(_mActivity, IMLoginManager.getInstance().getLoginInfo().getSessionKey());
                                         break;
                                     case R.id.tv_add_friend:
                                         AddFriendFragment.launch(_mActivity);
@@ -231,22 +240,21 @@ public class ConversationContentFragment extends BaseFragment {
                 final boolean isTop = imService.getConfigSp().isTopSession(recentInfo.getSessionKey());
                 String topMessage = isTop ? getString(R.string.cancel_top_message) : getString(R.string.top_message);
 
-                FloatMenu floatMenu = new FloatMenu(_mActivity, view);
-                floatMenu.items(topMessage, getString(R.string.delete_session));
-                floatMenu.setOnItemClickListener(new FloatMenu.OnItemClickListener() {
-                    @Override
-                    public void onClick(View v, int position) {
-                        switch (position) {
-                            case 0:
-                                imService.getConfigSp().setSessionTop(recentInfo.getSessionKey(),!isTop);
-                                break;
-                            case 1:
-                                imService.getSessionManager().reqRemoveSession(recentInfo);
-                                break;
-                        }
-                    }
-                });
-                floatMenu.show();
+                new MaterialDialog.Builder(_mActivity)
+                        .items(topMessage, getString(R.string.delete_session))
+                        .itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
+                                switch (position) {
+                                    case 0:
+                                        imService.getConfigSp().setSessionTop(recentInfo.getSessionKey(), !isTop);
+                                        break;
+                                    case 1:
+                                        imService.getSessionManager().reqRemoveSession(recentInfo);
+                                        break;
+                                }
+                            }
+                        }).show();
                 return true;
             }
         });
@@ -563,21 +571,46 @@ public class ConversationContentFragment extends BaseFragment {
         }
 
         private void setBaseView(BaseViewHolder helper, RecentInfo item) {
-            String avatarUrl = null;
-            if (item.getAvatar() != null) {
-                avatarUrl = item.getAvatar();
+            List<UserEntity> avatar = new ArrayList<>();
+            if (item.getUserEntities() != null) {
+                avatar = item.getUserEntities();
             }
 
-            mRequestManager
-                    .load(avatarUrl)
-                    .error(R.mipmap.im_default_user_avatar)
-                    .placeholder(R.mipmap.im_default_user_avatar)
-                    .bitmapTransform(mTransformation)
-                    .crossFade()
-                    .into((ImageView) helper.getView(R.id.iv_avatar));
+            NineGridImageViewAdapter adapter = new NineGridImageViewAdapter<UserEntity>() {
+                @Override
+                protected void onDisplayImage(Context context, ImageView imageView, UserEntity userEntity) {
+                    int loginId = IMLoginManager.getInstance().getLoginId();
+                    if (userEntity.getPeerId() == loginId) {
+                        mRequestManager
+                                .load(CommonUtil.getUserAvatarSavePath(loginId))
+                                .error(R.mipmap.im_default_user_avatar)
+                                .placeholder(R.mipmap.im_default_user_avatar)
+                                .skipMemoryCache(true)
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .into(imageView);
+                    } else {
+                        mRequestManager
+                                .load(userEntity.getAvatar())
+                                .error(R.mipmap.im_default_user_avatar)
+                                .placeholder(R.mipmap.im_default_user_avatar)
+                                .into(imageView);
+                    }
+                }
+
+                @Override
+                protected ImageView generateImageView(Context context) {
+                    return super.generateImageView(context);
+                }
+            };
+
+            NineGridImageView avatarView = helper.getView(R.id.iv_avatar);
+            avatarView.setAdapter(adapter);
+            avatarView.setImagesData(avatar);
+            avatarView.setBackgroundColor(avatar.size() > 1 ? Color.parseColor("#eeeeee") : Color.TRANSPARENT);
 
             helper.setText(R.id.tv_name, item.getName());
-            helper.setText(R.id.tv_message_body, item.getLatestMsgData());
+            CharSequence latestMsgData = Emoparser.getInstance(mContext).emoCharsequence(item.getLatestMsgData());
+            helper.setText(R.id.tv_message_body, latestMsgData);
             helper.setText(R.id.tv_message_time, DateUtil.getSessionTime(item.getUpdateTime()));
 
             TextView unReadCountView = helper.getView(R.id.tv_message_count_notify);

@@ -272,7 +272,7 @@ public class MessageEntity implements java.io.Serializable {
         }
     }
 
-    public byte[] getSendContent() {
+    public String getSendContent() {
         return null;
     }
 

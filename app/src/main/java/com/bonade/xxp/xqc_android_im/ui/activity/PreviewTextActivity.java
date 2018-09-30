@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bonade.xxp.xqc_android_im.R;
 import com.bonade.xxp.xqc_android_im.ui.base.BaseActivity;
+import com.bonade.xxp.xqc_android_im.ui.helper.Emoparser;
 
 import butterknife.ButterKnife;
 
@@ -33,7 +34,7 @@ public class PreviewTextActivity extends BaseActivity {
         String displayText = getIntent().getStringExtra(FRAGMENT_ARGS_PREVIEW_TEXT_CONTENT);
         TextView contentView = ButterKnife.findById(this, R.id.tv_content);
         if (!TextUtils.isEmpty(displayText)) {
-            contentView.setText(displayText);
+            contentView.setText(Emoparser.getInstance(this).emoCharsequence(displayText));
         }
 
         ((View) contentView.getParent()).setOnClickListener(new View.OnClickListener() {

@@ -42,7 +42,7 @@ message IMMsgDataAck{
 	required string sessionId = 1;	
 	required string msgId = 2;
 	required string fromUserId = 3;
-	required string toUserId = 4;
+	optional string toUserId = 4;
 	optional string groupId = 5; 
 	required int64 timestamp = 6;
 	required int32 result = 7;	

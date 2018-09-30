@@ -1,6 +1,7 @@
 package com.bonade.xxp.xqc_android_im.ui.widget.message;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
@@ -14,9 +15,13 @@ import com.bonade.xxp.xqc_android_im.DB.entity.MessageEntity;
 import com.bonade.xxp.xqc_android_im.DB.entity.UserEntity;
 import com.bonade.xxp.xqc_android_im.R;
 import com.bonade.xxp.xqc_android_im.config.MessageConstant;
+import com.bonade.xxp.xqc_android_im.imservice.manager.IMLoginManager;
+import com.bonade.xxp.xqc_android_im.ui.activity.FriendInfoActivity;
+import com.bonade.xxp.xqc_android_im.util.CommonUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.Transformation;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
@@ -42,11 +47,9 @@ public class BaseMsgRenderView extends RelativeLayout {
 
     private RequestManager mRequestManager;
     private Transformation mTransformation;
-    private Context mContext;
 
     public BaseMsgRenderView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mContext = context;
         mRequestManager = Glide.with(context);
         mTransformation = new CropCircleTransformation(Glide.get(context).getBitmapPool());
     }
@@ -72,7 +75,7 @@ public class BaseMsgRenderView extends RelativeLayout {
      * 发送中
      */
     public void msgSendinging(MessageEntity entity) {
-        messageFailedView.setVisibility(View.GONE);
+        messageFailedView.setVisibility(View.INVISIBLE);
         loadingView.setVisibility(View.VISIBLE);
     }
 
@@ -88,7 +91,7 @@ public class BaseMsgRenderView extends RelativeLayout {
      * 发送成功
      */
     public void msgSuccess(MessageEntity entity){
-        messageFailedView.setVisibility(View.GONE);
+        messageFailedView.setVisibility(View.INVISIBLE);
         loadingView.setVisibility(View.GONE);
     }
 
@@ -96,7 +99,7 @@ public class BaseMsgRenderView extends RelativeLayout {
      * 发送发生错误
      */
     public void msgStatusError(MessageEntity entity){
-        messageFailedView.setVisibility(View.GONE);
+        messageFailedView.setVisibility(View.INVISIBLE);
         loadingView.setVisibility(View.GONE);
     }
 
@@ -107,16 +110,26 @@ public class BaseMsgRenderView extends RelativeLayout {
      */
     public void render(@NonNull MessageEntity messageEntity, UserEntity userEntity, Context context) {
         this.messageEntity = messageEntity;
-        String avatar = userEntity.getAvatar();
-        int msgStatus = messageEntity.getStatus();
 
-        mRequestManager
-                .load(avatar)
-                .error(R.mipmap.im_default_user_avatar)
-                .placeholder(R.mipmap.im_default_user_avatar)
-                .bitmapTransform(mTransformation)
-                .crossFade()
-                .into(avatarView);
+        int msgStatus = messageEntity.getStatus();
+        int loginId = IMLoginManager.getInstance().getLoginId();
+        if (userEntity.getPeerId() == loginId) {
+            mRequestManager
+                    .load(CommonUtil.getUserAvatarSavePath(loginId))
+                    .error(R.mipmap.im_default_user_avatar)
+                    .placeholder(R.mipmap.im_default_user_avatar)
+                    .skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .bitmapTransform(mTransformation)
+                    .into(avatarView);
+        } else {
+            mRequestManager
+                    .load(userEntity.getAvatar())
+                    .error(R.mipmap.im_default_user_avatar)
+                    .placeholder(R.mipmap.im_default_user_avatar)
+                    .bitmapTransform(mTransformation)
+                    .into(avatarView);
+        }
 
         // 设定姓名 应该消息都是有的
         if(!isMine){
@@ -127,10 +140,11 @@ public class BaseMsgRenderView extends RelativeLayout {
         }
 
         // 头像的跳转暂时放在这里 todo 业务结合紧密，但是应该不会改了
+        final int userId = userEntity.getPeerId();
         avatarView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 2018/8/31 跳转到个人详情界面
+                FriendInfoActivity.launch(getContext(), userId);
             }
         });
 

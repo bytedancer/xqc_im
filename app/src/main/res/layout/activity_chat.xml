@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_root"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ebebeb">
+    android:background="#ebebeb"
+    android:orientation="vertical">
 
-    <include layout="@layout/comm_toolbar_title_center"/>
+    <include layout="@layout/comm_toolbar_title_center" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -36,14 +35,14 @@
             android:id="@+id/tv_new_msg_tip"
             android:layout_width="58dp"
             android:layout_height="wrap_content"
-            android:text="新消息"
+            android:layout_gravity="right|bottom"
+            android:background="@mipmap/im_new_msg_bg"
+            android:gravity="center_vertical|left"
+            android:paddingBottom="8dp"
             android:paddingLeft="15dp"
             android:paddingTop="5dp"
-            android:paddingBottom="8dp"
-            android:layout_gravity="right|bottom"
-            android:gravity="center_vertical|left"
+            android:text="新消息"
             android:textColor="#01aff4"
-            android:background="@mipmap/im_new_msg_bg"
             android:visibility="gone" />
     </FrameLayout>
 
@@ -78,17 +77,18 @@
                 android:minHeight="30dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="0dp"
+                android:scrollbarStyle="outsideInset"
                 android:scrollbars="vertical"
                 android:textColor="@color/default_light_black_color"
-                android:textSize="16sp"
-                android:scrollbarStyle="outsideInset" />
+                android:textSize="16sp" />
 
             <ImageView
                 android:id="@+id/iv_voice"
                 android:layout_width="31dp"
                 android:layout_height="31dp"
                 android:layout_centerVertical="true"
-                android:src="@mipmap/im_voice_btn" />
+                android:src="@mipmap/im_voice_btn"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/iv_show_keyboard"
@@ -103,19 +103,19 @@
                 android:layout_width="53dp"
                 android:layout_height="31dp"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
-                android:src="@mipmap/im_show_add_photo_btn" />
+                android:layout_centerVertical="true"
+                android:src="@drawable/im_show_add_photo_btn" />
 
             <ImageView
                 android:id="@+id/iv_show_emo"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:layout_centerVertical="true"
+                android:layout_width="31dp"
+                android:layout_height="31dp"
                 android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:layout_marginRight="60dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/im_show_emo_btn" />
+                android:src="@drawable/im_chatting_emo_btn_normal" />
 
             <TextView
                 android:id="@+id/tv_send_msg"
@@ -146,24 +146,25 @@
                 android:text="@string/tip_for_voice_forward"
                 android:textColor="@color/default_light_black_color"
                 android:textSize="15sp"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
         </RelativeLayout>
+
+        <View
+            android:id="@+id/v_bottom_line"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@id/rl_pannel_container"
+            android:background="@color/default_line_color" />
 
         <LinearLayout
             android:id="@+id/ll_emo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/rl_pannel_container"
-            android:orientation="vertical"
+            android:layout_below="@id/v_bottom_line"
             android:background="@color/white"
-            android:visibility="gone"
-            android:gravity="bottom">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/default_line_color" />
+            android:gravity="bottom"
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <com.bonade.xxp.xqc_android_im.ui.widget.EmoGridView
                 android:id="@+id/gv_emo"
@@ -177,9 +178,9 @@
             android:id="@+id/ll_add_others_panel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/v_bottom_line"
+            android:background="@color/white"
             android:orientation="horizontal"
-            android:layout_below="@id/rl_pannel_container"
-            android:background="#ffe6e6e6"
             android:padding="22dp"
             android:visibility="gone">
 
@@ -208,7 +209,7 @@
                 android:layout_width="55dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <View
                     android:id="@+id/v_take_photo"
@@ -227,5 +228,4 @@
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
-
 </LinearLayout>

@@ -19,6 +19,7 @@ import com.bonade.xxp.xqc_android_im.protobuf.helper.ProtoBuf2JavaBean;
 import com.bonade.xxp.xqc_android_im.util.IMUIHelper;
 import com.bonade.xxp.xqc_android_im.util.Logger;
 import com.bonade.xxp.xqc_android_im.util.pinyin.PinYin;
+import com.google.gson.Gson;
 import com.google.protobuf.CodedInputStream;
 
 import org.greenrobot.eventbus.EventBus;
@@ -227,6 +228,10 @@ public class IMGroupManager extends IMManager {
         }
     }
 
+    /**
+     * 请求群组的详细信息
+     * @param groupId
+     */
     public void reqGroupDetailInfo(int groupId) {
         IMBaseDefine.GroupVersionInfo groupVersionInfo = IMBaseDefine.GroupVersionInfo.newBuilder()
                 .setGroupId(groupId)
@@ -287,13 +292,34 @@ public class IMGroupManager extends IMManager {
      * 创建群
      * 默认是创建临时群，且客户端只能创建临时群
      *
-     * @param groupName
-     * @param memberList
+     * @param userEntities
      */
-    public void reqCreateTempGroup(String groupName, Set<Integer> memberList) {
-//        logger.i("group#reqCreateTempGroup, tempGroupName = %s", groupName);
-//
-//        int loginId = imLoginManager.getLoginId();
+    public void reqCreateTempGroup(final List<UserEntity> userEntities) {
+
+        int loginId = imLoginManager.getLoginId();
+        String groupUsers = new Gson().toJson(userEntities);
+        ApiFactory.getGroupApi().launchGroupChat(loginId, groupUsers)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<BaseResponse<GroupEntity>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        triggerEvent(new GroupEvent(GroupEvent.Event.CREATE_GROUP_FAIL));
+                    }
+
+                    @Override
+                    public void onNext(BaseResponse<GroupEntity> response) {
+                        if (response == null || response.getData() == null) {
+                            triggerEvent(new GroupEvent(GroupEvent.Event.CREATE_GROUP_FAIL));
+                            return;
+                        }
+                        onReqCreateTempGroup(response.getData(), userEntities);
+                    }
+                });
 //
 //        IMGroup.IMGroupCreateReq groupCreateReq = IMGroup.IMGroupCreateReq.newBuilder()
 //                .setUserId(loginId)
@@ -329,21 +355,29 @@ public class IMGroupManager extends IMManager {
 //        });
     }
 
-    public void onReqCreateTempGroup(IMGroup.IMGroupCreateRsp groupCreateRsp) {
-        logger.d("group#onReqCreateTempGroup");
+    public void onReqCreateTempGroup(GroupEntity groupEntity, List<UserEntity> userEntities) {
 
-        int resultCode = groupCreateRsp.getResultCode();
-        if (0 != resultCode) {
+        if (null == groupEntity) {
             logger.e("group#createGroup failed");
             triggerEvent(new GroupEvent(GroupEvent.Event.CREATE_GROUP_FAIL));
             return;
         }
-        GroupEntity groupEntity = ProtoBuf2JavaBean.getGroupEntity(groupCreateRsp);
+
+        int timeNow = (int) (System.currentTimeMillis() / 1000);
+        groupEntity.setUpdated(timeNow);
+        groupEntity.setCreated(timeNow);
+        groupEntity.setGroupType(DBConstant.GROUP_TYPE_TEMP);
+        groupEntity.setAvatar("");
+        groupEntity.setStatus(DBConstant.STATUS_ONLINE);
+        groupEntity.setVersion(1);
+        PinYin.getPinYin(groupEntity.getMainName(), groupEntity.getPinyinElement());
+
         // 更新DB 更新map
         groupMap.put(groupEntity.getPeerId(), groupEntity);
 
         IMSessionManager.getInstance().updateSession(groupEntity);
-//        dbInterface.insertOrUpdateGroup(groupEntity);
+        dbInterface.insertOrUpdateGroup(groupEntity);
+        dbInterface.batchInsertOrUpdateUser(userEntities);
         // 接收到之后修改UI
         triggerEvent(new GroupEvent(groupEntity, GroupEvent.Event.CREATE_GROUP_SUCCESS));
     }
@@ -357,7 +391,7 @@ public class IMGroupManager extends IMManager {
      * @param removeMemberList
      */
     public void reqRemoveGroupMember(int groupId, Set<Integer> removeMemberList) {
-        reqChangeGroupMember(groupId, IMBaseDefine.GroupModifyType.GROUP_MODIFY_TYPE_DEL, removeMemberList);
+//        reqChangeGroupMember(groupId, IMBaseDefine.GroupModifyType.GROUP_MODIFY_TYPE_DEL, removeMemberList);
     }
 
     /**
@@ -368,66 +402,54 @@ public class IMGroupManager extends IMManager {
      * @param groupId
      * @param addMemberList
      */
-    public void reqAddGroupMember(int groupId, Set<Integer> addMemberList) {
-        reqChangeGroupMember(groupId, IMBaseDefine.GroupModifyType.GROUP_MODIFY_TYPE_ADD, addMemberList);
+    public void reqAddGroupMember(final int groupId, final List<UserEntity> addMemberList) {
+        final int loginId = imLoginManager.getLoginId();
+        String groupUsers = new Gson().toJson(addMemberList);
+        ApiFactory.getGroupApi().addGroupUser(loginId, groupId, groupUsers)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<BaseResponse>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        triggerEvent(new GroupEvent(GroupEvent.Event.CHANGE_GROUP_MEMBER_FAIL));
+                    }
+
+                    @Override
+                    public void onNext(BaseResponse response) {
+                        if (response == null) {
+                            triggerEvent(new GroupEvent(GroupEvent.Event.CHANGE_GROUP_MEMBER_FAIL));
+                            return;
+                        }
+                        onReqAddGroupMember(groupId, addMemberList);
+                    }
+                });
     }
 
-    public void reqChangeGroupMember(int groupId, IMBaseDefine.GroupModifyType groupModifyType, Set<Integer> changeMemberList) {
-//        logger.i("group#reqChangeGroupMember, changeGroupMemberType = %s", groupModifyType.toString());
-//
-//        final int loginId = imLoginManager.getLoginId();
-//        IMGroup.IMGroupChangeMemberReq groupChangeMemberReq = IMGroup.IMGroupChangeMemberReq.newBuilder()
-//                .setUserId(loginId)
-//                .setChangeType(groupModifyType)
-//                .addAllMemberIdList(changeMemberList)
-//                .setGroupId(groupId)
-//                .build();
-//
-//        int sid = IMBaseDefine.ServiceID.SID_GROUP_VALUE;
-//        int cid = IMBaseDefine.GroupCmdID.CID_GROUP_CHANGE_MEMBER_REQUEST_VALUE;
-//        imSocketManager.sendRequest(groupChangeMemberReq, sid, cid,new Packetlistener() {
-//            @Override
-//            public void onSuccess(Object response) {
-//                try {
-//                    IMGroup.IMGroupChangeMemberRsp groupChangeMemberRsp = IMGroup.IMGroupChangeMemberRsp.parseFrom((CodedInputStream)response);
-//                    IMGroupManager.getInstance().onReqChangeGroupMember(groupChangeMemberRsp);
-//                } catch (IOException e) {
-//                    logger.e("reqChangeGroupMember parse error!");
-//                    triggerEvent(new GroupEvent(GroupEvent.Event.CHANGE_GROUP_MEMBER_FAIL));
-//                }
-//            }
-//
-//            @Override
-//            public void onFaild() {
-//                triggerEvent(new GroupEvent(GroupEvent.Event.CHANGE_GROUP_MEMBER_FAIL));
-//            }
-//
-//            @Override
-//            public void onTimeout() {
-//                triggerEvent(new GroupEvent(GroupEvent.Event.CHANGE_GROUP_MEMBER_TIMEOUT));
-//            }
-//        });
-    }
-
-    public void onReqChangeGroupMember(IMGroup.IMGroupChangeMemberRsp groupChangeMemberRsp) {
-        int resultCode = groupChangeMemberRsp.getResultCode();
-        if (0 != resultCode) {
-            triggerEvent(new GroupEvent(GroupEvent.Event.CHANGE_GROUP_MEMBER_FAIL));
-            return;
-        }
-
-        int groupId = groupChangeMemberRsp.getGroupId();
-        List<Integer> changeUserIdList = groupChangeMemberRsp.getChgUserIdListList();
-        IMBaseDefine.GroupModifyType groupModifyType = groupChangeMemberRsp.getChangeType();
-
+    private void onReqAddGroupMember(int groupId, List<UserEntity> addMemberList) {
         GroupEntity groupEntityRet = groupMap.get(groupId);
-        groupEntityRet.setGroupMemberIds(groupChangeMemberRsp.getCurUserIdListList());
+        Set<Integer> retUserIds = groupEntityRet.getGroupMemberIds();
+        List<Integer> addUserIds = new ArrayList<>(addMemberList.size());
+        for (UserEntity userEntity : addMemberList) {
+            addUserIds.add(userEntity.getPeerId());
+        }
+        List<Integer> curUserIds = new ArrayList<>();
+        curUserIds.addAll(retUserIds);
+        curUserIds.addAll(addUserIds);
+
+        groupEntityRet.setGroupMemberIds(curUserIds);
+        groupEntityRet.setUserCount(curUserIds.size());
         groupMap.put(groupId, groupEntityRet);
-//        dbInterface.insertOrUpdateGroup(groupEntityRet);
+        dbInterface.insertOrUpdateGroup(groupEntityRet);
+        // 将新加的成员添加到本地
+        dbInterface.batchInsertOrUpdateUser(addMemberList);
 
         GroupEvent groupEvent = new GroupEvent(GroupEvent.Event.CHANGE_GROUP_MEMBER_SUCCESS);
-        groupEvent.setChangeList(changeUserIdList);
-        groupEvent.setChangeType(ProtoBuf2JavaBean.getGroupChangeType(groupModifyType));
+        groupEvent.setChangeList(addUserIds);
+        groupEvent.setChangeType(DBConstant.GROUP_MODIFY_TYPE_ADD);
         groupEvent.setGroupEntity(groupEntityRet);
         triggerEvent(groupEvent);
     }
@@ -530,9 +552,10 @@ public class IMGroupManager extends IMManager {
             if (groupEntity == null) {
                 continue;
             }
-            if (groupEntity.getGroupType() == DBConstant.GROUP_TYPE_NORMAL) {
-                normalGroupList.add(groupEntity);
-            }
+//            if (groupEntity.getGroupType() == DBConstant.GROUP_TYPE_NORMAL) {
+//                normalGroupList.add(groupEntity);
+//            }
+            normalGroupList.add(groupEntity);
         }
 
         return normalGroupList;

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--已经在群组中，不能再操作-->
+    <item android:drawable="@drawable/cb_rectangle_has_checked" android:state_enabled="false"/>
+    <item android:drawable="@drawable/cb_rectangle_default" android:state_checked="false"/>
+    <item android:drawable="@drawable/cb_rectangle_checked" android:state_checked="true"/>
+</selector>

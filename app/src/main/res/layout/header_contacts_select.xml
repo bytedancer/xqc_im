@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tv_select_group"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:text="选择一个群"
+    android:gravity="center_vertical"
+    android:textSize="16sp"
+    android:textColor="@color/black"
+    android:drawableRight="@mipmap/ic_arrow_right"
+    android:background="@color/white"
+    />

@@ -10,12 +10,15 @@
     android:paddingTop="10dp"
     android:paddingBottom="10dp">
 
-    <ImageView
-        android:id="@+id/iv_select"
+    <CheckBox
+        android:id="@+id/cb_contact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/cb_rectangle_default"
-        android:layout_marginRight="16dp" />
+        android:layout_centerVertical="true"
+        android:button="@drawable/toggle_contact_checkbox_bg"
+        android:layout_marginRight="16dp"
+        android:focusable="false"
+        android:clickable="false" />
 
     <ImageView
         android:id="@+id/iv_avatar"

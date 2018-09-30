@@ -21,6 +21,8 @@ import com.bonade.xxp.xqc_android_im.util.FileUtil;
 import com.bonade.xxp.xqc_android_im.util.Logger;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 
+import java.util.logging.Handler;
+
 public class ImageRenderView extends BaseMsgRenderView {
 
     private Logger logger = Logger.getLogger(ImageRenderView.class);
@@ -33,8 +35,6 @@ public class ImageRenderView extends BaseMsgRenderView {
     private View msgLayout;
     // 图片消息体
     private BubbleImageView msgImage;
-    // 图片状态指示
-    private IMImageProgressbar imageProgress;
 
     public ImageRenderView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -52,8 +52,6 @@ public class ImageRenderView extends BaseMsgRenderView {
         super.onFinishInflate();
         msgLayout = findViewById(R.id.message_layout);
         msgImage = findViewById(R.id.message_image);
-        imageProgress = findViewById(R.id.pb_image);
-        imageProgress.setShowText(false);
     }
 
     /**
@@ -82,18 +80,18 @@ public class ImageRenderView extends BaseMsgRenderView {
                 btnImageListener.onMsgFailure();
             }
         });
+
         if (FileUtil.isFileExist(((ImageMessage) entity).getPath())) {
-            msgImage.setImageUrl("file://" + ((ImageMessage) entity).getPath());
+            msgImage.setImageUrl(((ImageMessage) entity).getPath());
+//            msgImage.setImageUrl("file://" + ((ImageMessage) entity).getPath());
         } else {
             msgImage.setImageUrl(((ImageMessage) entity).getUrl());
         }
-        imageProgress.hideProgress();
     }
 
     @Override
     public void msgStatusError(final MessageEntity entity) {
         super.msgStatusError(entity);
-        imageProgress.hideProgress();
     }
 
     /**
@@ -130,7 +128,8 @@ public class ImageRenderView extends BaseMsgRenderView {
 
                     }
                 });
-                msgImage.setImageUrl("file://" + ((ImageMessage) entity).getPath());
+                msgImage.setImageUrl(((ImageMessage) entity).getPath());
+//                msgImage.setImageUrl("file://" + ((ImageMessage) entity).getPath());
             } else {
                 //todo 文件不存在
             }
@@ -158,6 +157,8 @@ public class ImageRenderView extends BaseMsgRenderView {
             return;
         }
 
+        msgImage.setImageDrawable(null);
+
         switch (loadStatus) {
             case MessageConstant.IMAGE_UNLOAD:
                 msgImage.setImageLoadingCallback(new BubbleImageView.ImageLoadingCallback() {
@@ -166,29 +167,27 @@ public class ImageRenderView extends BaseMsgRenderView {
                         if (imageLoadListener != null) {
                             imageLoadListener.onLoadComplete(imageUrl);
                         }
-                        imageProgress.hideProgress();
                     }
 
                     @Override
                     public void onLoadingStarted(String imageUrl) {
-                        imageProgress.showProgress();
                     }
 
                     @Override
                     public void onLoadingCanceled(String imageUrl) {
-                        imageProgress.hideProgress();
+
                     }
 
                     @Override
                     public void onLoadingFailed(String imageUrl) {
-                        imageProgress.hideProgress();
                         imageLoadListener.onLoadFailed();
                     }
                 });
 
                 if (isMine()) {
                     if (FileUtil.isFileExist(imagePath)) {
-                        msgImage.setImageUrl("file://" + imagePath);
+//                        msgImage.setImageUrl("file://" + imagePath);
+                        msgImage.setImageUrl(imagePath);
                     } else {
                         msgImage.setImageUrl(url);
                     }
@@ -200,12 +199,11 @@ public class ImageRenderView extends BaseMsgRenderView {
                 msgImage.setImageLoadingCallback(new BubbleImageView.ImageLoadingCallback() {
                     @Override
                     public void onLoadingComplete(String imageUrl, GlideDrawable loadedImage) {
-                        imageProgress.hideProgress();
+
                     }
 
                     @Override
                     public void onLoadingStarted(String imageUrl) {
-                        imageProgress.showProgress();
                     }
 
                     @Override
@@ -215,13 +213,14 @@ public class ImageRenderView extends BaseMsgRenderView {
 
                     @Override
                     public void onLoadingFailed(String imageUrl) {
-                        imageProgress.showProgress();
+
                     }
                 });
 
                 if (isMine()) {
                     if (FileUtil.isFileExist(imagePath)) {
-                        msgImage.setImageUrl("file://" + imagePath);
+//                        msgImage.setImageUrl("file://" + imagePath);
+                        msgImage.setImageUrl(imagePath);
                     } else {
                         msgImage.setImageUrl(url);
                     }
@@ -245,13 +244,11 @@ public class ImageRenderView extends BaseMsgRenderView {
 
                     @Override
                     public void onLoadingComplete(String imageUrl, GlideDrawable loadedImage) {
-                        imageProgress.hideProgress();
                         imageLoadListener.onLoadComplete(imageUrl);
                     }
 
                     @Override
                     public void onLoadingStarted(String imageUrl) {
-                        imageProgress.showProgress();
                     }
 
                     @Override
@@ -305,10 +302,6 @@ public class ImageRenderView extends BaseMsgRenderView {
 
     public ImageView getMsgImage() {
         return msgImage;
-    }
-
-    public IMImageProgressbar getImageProgress() {
-        return imageProgress;
     }
 
     public boolean isMine() {

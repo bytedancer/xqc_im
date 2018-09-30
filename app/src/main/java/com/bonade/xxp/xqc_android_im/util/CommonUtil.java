@@ -6,8 +6,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -25,12 +27,13 @@ import java.util.regex.Pattern;
 
 public class CommonUtil {
 
-    private  static Logger logger = Logger.getLogger(CommonUtil.class);
+    private static Logger logger = Logger.getLogger(CommonUtil.class);
+
     /**
-     * @Description 判断是否是顶部activity
      * @param context
      * @param activityName
      * @return
+     * @Description 判断是否是顶部activity
      */
     public static boolean isTopActivy(Context context, String activityName) {
         ActivityManager am = (ActivityManager) context
@@ -44,8 +47,8 @@ public class CommonUtil {
     }
 
     /**
-     * @Description 判断存储卡是否存在
      * @return
+     * @Description 判断存储卡是否存在
      */
     public static boolean checkSDCard() {
         if (Environment.getExternalStorageState().equals(
@@ -57,8 +60,8 @@ public class CommonUtil {
     }
 
     /**
-     * @Description 获取sdcard可用空间的大小
      * @return
+     * @Description 获取sdcard可用空间的大小
      */
     @SuppressWarnings("deprecation")
     public static long getSDFreeSize() {
@@ -72,8 +75,8 @@ public class CommonUtil {
     }
 
     /**
-     * @Description 获取sdcard容量
      * @return
+     * @Description 获取sdcard容量
      */
     @SuppressWarnings({
             "deprecation", "unused"
@@ -137,9 +140,9 @@ public class CommonUtil {
     }
 
     /**
-     * @Description 判断是否是url
      * @param text
      * @return
+     * @Description 判断是否是url
      */
     public static String matchUrl(String text) {
         if (TextUtils.isEmpty(text)) {
@@ -189,6 +192,25 @@ public class CommonUtil {
         return folder;
     }
 
+    public static String getUserAvatarSavePath(int loginId) {
+        String fileName = "avatar_" + loginId + ".jpg";
+        return getImageSavePath(fileName);
+    }
+
+    public static Uri getUriForFile(Context context, File file) {
+        if (context == null || file == null) {
+            throw new NullPointerException();
+        }
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= 24) {
+            uri = FileProvider.getUriForFile(context.getApplicationContext(), "com.bonade.xxp.xqc_android_im.fileprovider", file);
+        } else {
+            uri = Uri.fromFile(file);
+        }
+        return uri;
+    }
+
+
     /**
      * @param uri The Uri to check.
      * @return Whether the Uri authority is ExternalStorageProvider.
@@ -229,9 +251,9 @@ public class CommonUtil {
      * Get the value of the data column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
      *
-     * @param context The context.
-     * @param uri The Uri to query.
-     * @param selection (Optional) Filter used in the query.
+     * @param context       The context.
+     * @param uri           The Uri to query.
+     * @param selection     (Optional) Filter used in the query.
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      */
@@ -289,7 +311,8 @@ public class CommonUtil {
             DisplayMetrics dm = context.getResources().getDisplayMetrics();
             int screenHeight = px2dip(dm.heightPixels, context);
             int screenWidth = px2dip(dm.widthPixels, context);
-            int size = screenWidth / 6;
+//            int size = screenWidth / 6;
+            int size = 80;
             if (screenWidth >= 800) {
                 size = 60;
             } else if (screenWidth >= 650) {
@@ -321,9 +344,9 @@ public class CommonUtil {
         return (int) (pxValue / scale + 0.5f);
     }
 
-    public static int dip2px(Context context, int dip){
+    public static int dip2px(Context context, int dip) {
         float density = context.getResources().getDisplayMetrics().density;
-        return (int)(dip * density + 0.5);
+        return (int) (dip * density + 0.5);
     }
 
     public static String getAudioSavePath(int userId) {
@@ -355,8 +378,8 @@ public class CommonUtil {
     }
 
     /**
-     * @Description 隐藏软键盘
      * @param activity
+     * @Description 隐藏软键盘
      */
     public static void hideInput(Activity activity) {
         View view = activity.getWindow().peekDecorView();
@@ -366,7 +389,6 @@ public class CommonUtil {
             inputmanger.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
-
 
 
     public static long getmem_TOLAL() {
@@ -405,8 +427,7 @@ public class CommonUtil {
         return mTotal;
     }
 
-    public static boolean gifCheck(String url)
-    {
+    public static boolean gifCheck(String url) {
         boolean isGif = !TextUtils.isEmpty(url) && url.equals(CommonUtil.matchUrl(url)) && url.toLowerCase().substring(url.length() - 4, url.length()).equals(".gif");
         return isGif;
     }

@@ -14,7 +14,7 @@ import rx.Observable;
 public interface MessageApi {
 
     @FormUrlEncoded
-    @POST("/im/chatRecord/app/v1/unreadRecordList")
+    @POST("im/chatRecord/app/v1/unreadRecordList")
     Observable<BaseResponse<List<UnreadMessage>>> getUnreadMsgList(@Field("userCode") int userId);
 
 
